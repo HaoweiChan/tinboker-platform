@@ -1,0 +1,29 @@
+[project]
+name = "graphfolio-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi==0.104.1",
+    "finmind>=1.9.2",
+    "firebase-admin>=6.0.0",
+    "google-cloud-storage>=2.18.2",
+    "httpx==0.25.2",
+    "massive>=2.0.3",
+    "pandas>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "pydantic[email]==2.5.0",
+    "pydantic-settings>=2.1.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "python-dotenv>=1.2.1",
+    "python-jose[cryptography]>=3.3.0",
+    "python-multipart==0.0.6",
+    "redis[hiredis]>=5.0.0",
+    "requests>=2.31.0",
+    "sqlalchemy>=2.0.0",
+    "tqdm>=4.67.1",
+    "uvicorn[standard]==0.24.0",
+    "google-auth>=2.23.0",
+]

@@ -1,0 +1,1 @@
+{"nodes": [{"id": "pwa_d", "label": "pwa.d.ts", "file_type": "code", "source_file": "frontend/src/types/pwa.d.ts", "source_location": "L1"}], "edges": [{"source": "pwa_d", "target": "react", "relation": "imports_from", "confidence": "EXTRACTED", "source_file": "frontend/src/types/pwa.d.ts", "source_location": "L4", "weight": 1.0}]}

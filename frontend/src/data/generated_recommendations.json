@@ -1,0 +1,3988 @@
+[
+  {
+    "id": 5,
+    "episode_id": "f595f5ab_cfb2a6aeddd41b7a",
+    "podcast_launch_time": "2026-01-25T16:00:00.000Z",
+    "ticker": "QQQ",
+    "bluf_thesis": "Nasdaq is in a prolonged consolidation phase, with its next major move dependent on upcoming earnings from the Magnificent Seven.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.50",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Four-Month Price Consolidation",
+        "category": "TECHNICAL",
+        "end_time": 111700,
+        "end_index": 53,
+        "start_time": 105920,
+        "description": "The Nasdaq index has been consolidating for nearly four months, unlike the S&P 500 and Dow which have hit new highs.",
+        "start_index": 51
+      },
+      {
+        "title": "Mag 7 Earnings Catalyst",
+        "category": "FUNDAMENTAL",
+        "end_time": 2010474,
+        "end_index": 1100,
+        "start_time": 1998154,
+        "description": "Upcoming earnings from Apple, Microsoft, Meta, and Tesla will likely determine if the index initiates a rotation-based recovery.",
+        "start_index": 1091
+      }
+    ],
+    "risks": [
+      {
+        "title": "Lack of Price Momentum",
+        "end_time": 122920,
+        "severity": "MEDIUM",
+        "end_index": 58,
+        "start_time": 118840,
+        "description": "Despite high trading volume during dips, price has failed to trend higher, suggesting significant resistance or fatigue.",
+        "start_index": 57
+      }
+    ],
+    "created_at": "2026-01-26T10:11:56.726Z"
+  },
+  {
+    "id": 4,
+    "episode_id": "f595f5ab_cfb2a6aeddd41b7a",
+    "podcast_launch_time": "2026-01-25T16:00:00.000Z",
+    "ticker": "SPY",
+    "bluf_thesis": "Maintain a baseline broad market exposure to ensure performance parity with the market while avoiding the pitfalls of over-active trading.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.60",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Baseline Market Tracking",
+        "category": "FUNDAMENTAL",
+        "end_time": 1153490,
+        "end_index": 619,
+        "start_time": 1140784,
+        "description": "Buying the broad index first ensures you keep up with the market before attempting active alpha strategies.",
+        "start_index": 618
+      },
+      {
+        "title": "Time Cost Efficiency",
+        "category": "OPERATIONAL",
+        "end_time": 1136404,
+        "end_index": 614,
+        "start_time": 1123984,
+        "description": "Frequent trading and high concentration often carry excessive risks for results that merely match the index after accounting for effort.",
+        "start_index": 606
+      }
+    ],
+    "risks": [
+      {
+        "title": "Leverage Misalignment",
+        "end_time": 1236150,
+        "severity": "MEDIUM",
+        "end_index": 674,
+        "start_time": 1232330,
+        "description": "Investors often use high leverage (2x-3x) only to achieve baseline index returns, exposing themselves to unnecessary volatility.",
+        "start_index": 673
+      }
+    ],
+    "created_at": "2026-01-26T10:11:56.726Z"
+  },
+  {
+    "id": 3,
+    "episode_id": "f595f5ab_cfb2a6aeddd41b7a",
+    "podcast_launch_time": "2026-01-25T16:00:00.000Z",
+    "ticker": "IWM",
+    "bluf_thesis": "Favor small-cap cyclical stocks over large-cap AI stocks as part of a 1970s-style inflationary cycle rotation.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.68",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Long-term Valuation Laggard",
+        "category": "VALUATION",
+        "end_time": 1038884,
+        "end_index": 553,
+        "start_time": 1026724,
+        "description": "Small-caps (Russell 2000) have significantly lagged the S&P 500 for a long time and are due for a catch-up.",
+        "start_index": 546
+      },
+      {
+        "title": "1970s Cycle Analogy",
+        "category": "MACRO",
+        "end_time": 1015284,
+        "end_index": 538,
+        "start_time": 988964,
+        "description": "Historical data from 1975-1977 shows small-caps paired with gold perform well during high-inflation 'rotation' periods.",
+        "start_index": 523
+      },
+      {
+        "title": "Long Detroit Strategy",
+        "category": "DEMAND",
+        "end_time": 956317,
+        "end_index": 506,
+        "start_time": 948737,
+        "description": "Investors are shifting focus from high-valuation AI tech toward cyclical, inflation-linked assets like 'Detroit' industrial/commodity stocks.",
+        "start_index": 501
+      }
+    ],
+    "risks": [
+      {
+        "title": "Unconventional Macro Context",
+        "end_time": 974117,
+        "severity": "MEDIUM",
+        "end_index": 519,
+        "start_time": 964757,
+        "description": "2026 is not a 'normal' year due to potential interest rate cuts, tax changes, and tariff adjustments complicating the cycle.",
+        "start_index": 513
+      }
+    ],
+    "created_at": "2026-01-26T10:11:56.726Z"
+  },
+  {
+    "id": 7,
+    "episode_id": "87a8b530_dbd98a25367b6dd7",
+    "podcast_launch_time": "2026-01-24T16:00:00.000Z",
+    "ticker": "BAC",
+    "bluf_thesis": "The proposed 10% credit card interest rate cap by the Trump administration poses a significant risk to lending operations and consumer credit availability.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Regulatory Response to Interest Rate Cap",
+        "category": "MACRO",
+        "end_time": 357348,
+        "end_index": 184,
+        "start_time": 349788,
+        "description": "The bank is preparing special 10% interest rate credit cards for a one-year term to symbolically respond to the president's policy direction.",
+        "start_index": 181
+      }
+    ],
+    "risks": [
+      {
+        "title": "Credit Reallocation and Consumption Slowdown",
+        "end_time": 389008,
+        "severity": "HIGH",
+        "end_index": 200,
+        "start_time": 377208,
+        "description": "Formal implementation of the 10% interest rate cap could lead to credit reallocation, slowing down consumption and reducing credit availability.",
+        "start_index": 196
+      }
+    ],
+    "created_at": "2026-01-26T10:13:00.685Z"
+  },
+  {
+    "id": 6,
+    "episode_id": "87a8b530_dbd98a25367b6dd7",
+    "podcast_launch_time": "2026-01-24T16:00:00.000Z",
+    "ticker": "TSM",
+    "bluf_thesis": "TSMC is a primary beneficiary of the global AI technological revolution, driving substantial growth that anchors the broader tech sector.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI Technological Revolution",
+        "category": "DEMAND",
+        "end_time": 984045,
+        "end_index": 512,
+        "start_time": 965197,
+        "description": "TSMC's growth is driven by the human technological revolution and AI breakthroughs, creating immense business opportunities that are still in early stages.",
+        "start_index": 509
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:00.685Z"
+  },
+  {
+    "id": 8,
+    "episode_id": "87a8b530_dbd98a25367b6dd7",
+    "podcast_launch_time": "2026-01-24T16:00:00.000Z",
+    "ticker": "C",
+    "bluf_thesis": "Citigroup faces operational challenges and market criticism regarding potential large-scale credit disruption due to mandated interest rate caps.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Compliance with Presidential Policy",
+        "category": "MACRO",
+        "end_time": 357348,
+        "end_index": 184,
+        "start_time": 350528,
+        "description": "Citi is planning to introduce special credit cards with a 10% interest rate cap to align with executive branch expectations.",
+        "start_index": 182
+      }
+    ],
+    "risks": [
+      {
+        "title": "Large-scale Credit Disruption",
+        "end_time": 374108,
+        "severity": "HIGH",
+        "end_index": 192,
+        "start_time": 366968,
+        "description": "Critics argue that capping credit card rates at 10% may trigger large-scale credit disruptions or 'loan cutting'.",
+        "start_index": 190
+      }
+    ],
+    "created_at": "2026-01-26T10:13:00.685Z"
+  },
+  {
+    "id": 119,
+    "episode_id": "M_05d12f194594d24a",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "COP",
+    "bluf_thesis": "ConocoPhillips is highlighted as a primary beneficiary of the U.S. move to reclaim influence over Venezuelan oil production under the Trump administration's energy policy.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Government-Backed Sector Re-entry",
+        "category": "OPERATIONAL",
+        "end_time": 879402,
+        "end_index": 420,
+        "start_time": 871082,
+        "description": "The U.S. government is actively encouraging large-scale capital expenditure by ConocoPhillips to rebuild the broken Venezuelan oil industry.",
+        "start_index": 416
+      }
+    ],
+    "risks": [
+      {
+        "title": "De-dollarization and Payment Architecture Risks",
+        "end_time": 984194,
+        "severity": "MEDIUM",
+        "end_index": 466,
+        "start_time": 928722,
+        "description": "Ongoing attempts by the Venezuelan regime to bypass the dollar-based financial system create currency and settlement risks.",
+        "start_index": 445
+      }
+    ],
+    "created_at": "2026-01-26T10:12:30.990Z"
+  },
+  {
+    "id": 118,
+    "episode_id": "M_05d12f194594d24a",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "XOM",
+    "bluf_thesis": "ExxonMobil is among the top-tier energy firms being directed by the Trump administration to lead a massive reinvestment campaign in Venezuela to secure future energy supplies.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Strategic Energy Resource Acquisition",
+        "category": "SUPPLY",
+        "end_time": 886501,
+        "end_index": 424,
+        "start_time": 871082,
+        "description": "Securing Venezuelan heavy crude provides a strategic hedge and ensures long-term supply stability for the U.S. energy market.",
+        "start_index": 416
+      },
+      {
+        "title": "Inflation Mitigation Strategy",
+        "category": "MACRO",
+        "end_time": 888601,
+        "end_index": 425,
+        "start_time": 879402,
+        "description": "Increased Venezuelan output is a key part of the U.S. strategy to drive down global oil prices and suppress domestic inflation.",
+        "start_index": 421
+      }
+    ],
+    "risks": [
+      {
+        "title": "Geopolitical Complexity and Rival Influence",
+        "end_time": 928722,
+        "severity": "HIGH",
+        "end_index": 444,
+        "start_time": 898641,
+        "description": "The geopolitical entanglement with Chinese and Russian interests in Venezuela presents a complex operating environment.",
+        "start_index": 431
+      }
+    ],
+    "created_at": "2026-01-26T10:12:30.990Z"
+  },
+  {
+    "id": 117,
+    "episode_id": "M_05d12f194594d24a",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "CVX",
+    "bluf_thesis": "Trump is pushing U.S. energy giants to re-enter Venezuela to tap into the world's largest oil reserves for long-term energy independence and to drive down domestic inflation.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Access to Massive Global Oil Reserves",
+        "category": "SUPPLY",
+        "end_time": 835237,
+        "end_index": 400,
+        "start_time": 789217,
+        "description": "Venezuela possesses the world's largest oil reserves (exceeding 300 billion barrels), which is critical for long-term U.S. energy autonomy.",
+        "start_index": 376
+      },
+      {
+        "title": "Administrative Push for Reinvestment",
+        "category": "OPERATIONAL",
+        "end_time": 879402,
+        "end_index": 420,
+        "start_time": 859696,
+        "description": "Trump has explicitly demanded that U.S. energy majors return to Venezuela to make large-scale investments in the petroleum sector.",
+        "start_index": 411
+      },
+      {
+        "title": "Refining Synergy with Gulf Coast Infrastructure",
+        "category": "FUNDAMENTAL",
+        "end_time": 826037,
+        "end_index": 395,
+        "start_time": 806597,
+        "description": "Venezuelan heavy crude is highly compatible with U.S. Gulf Coast refineries compared to light shale oil produced domestically.",
+        "start_index": 387
+      }
+    ],
+    "risks": [
+      {
+        "title": "Infrastructure Decay and Historical Sanctions",
+        "end_time": 859696,
+        "severity": "HIGH",
+        "end_index": 410,
+        "start_time": 835237,
+        "description": "Decades of political tension and lack of maintenance have caused the Venezuelan oil infrastructure to decay significantly.",
+        "start_index": 401
+      },
+      {
+        "title": "Long Lead Time for Production Recovery",
+        "end_time": 898641,
+        "severity": "MEDIUM",
+        "end_index": 430,
+        "start_time": 879402,
+        "description": "Restoring production to significant levels is a very long-term task and will not provide an immediate supply surge.",
+        "start_index": 421
+      }
+    ],
+    "created_at": "2026-01-26T10:12:30.990Z"
+  },
+  {
+    "id": 15,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "6770.TW",
+    "bluf_thesis": "PSMC (力積電) is strategically shifting its product mix toward AI and advanced manufacturing to improve long-term profitability.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.60",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Strategic Portfolio Pivot",
+        "category": "OPERATIONAL",
+        "end_time": 962803,
+        "end_index": 628,
+        "start_time": 952903,
+        "description": "Shifting production toward AI-related orders and advanced manufacturing (IPC/IPD) to improve the business portfolio.",
+        "start_index": 624
+      }
+    ],
+    "risks": [
+      {
+        "title": "Capacity Transition Lag",
+        "end_time": 1050263,
+        "severity": "MEDIUM",
+        "end_index": 692,
+        "start_time": 1034623,
+        "description": "Transferring production capacity may lead to revenue delays due to necessary re-validation of manufacturing processes.",
+        "start_index": 680
+      }
+    ],
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 14,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "6285.TW",
+    "bluf_thesis": "Wistron NeWeb (啟碁) remains a key player in the Starlink supply chain despite the entry of new competitors.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Stable Router Supply",
+        "category": "FUNDAMENTAL",
+        "end_time": 748711,
+        "end_index": 499,
+        "start_time": 740752,
+        "description": "Maintained its role as a key Starlink router supplier.",
+        "start_index": 495
+      },
+      {
+        "title": "Market Expansion",
+        "category": "MACRO",
+        "end_time": 778352,
+        "end_index": 521,
+        "start_time": 761551,
+        "description": "Overall market growth for satellite systems is expanding enough to accommodate multiple suppliers.",
+        "start_index": 510
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 13,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "PSTG",
+    "bluf_thesis": "Pure Storage (PSTG) is currently facing margin pressure from rising NAND costs, though the long-term AI storage demand remains a potential tailwind.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.48",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "AI Storage Tailwinds",
+        "category": "DEMAND",
+        "end_time": 2615389,
+        "end_index": 1807,
+        "start_time": 2607788,
+        "description": "Potential benefit from expanded cloud storage needs due to AI developments.",
+        "start_index": 1804
+      }
+    ],
+    "risks": [
+      {
+        "title": "Rising Material Costs",
+        "end_time": 2627768,
+        "severity": "MEDIUM",
+        "end_index": 1814,
+        "start_time": 2617508,
+        "description": "Rising NAND flash memory prices are suppressing gross margins in the short term.",
+        "start_index": 1810
+      }
+    ],
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 12,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "Micron (MU) continues to benefit from a persistent supply-demand imbalance and price hikes driven by AI compute needs.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Persistent Price Hikes",
+        "category": "SUPPLY",
+        "end_time": 1090943,
+        "end_index": 721,
+        "start_time": 1062482,
+        "description": "Memory prices are continuing to rise as manufacturers Samsung and Micron push for higher quotes.",
+        "start_index": 702
+      },
+      {
+        "title": "AI Storage Demand",
+        "category": "DEMAND",
+        "end_time": 1121078,
+        "end_index": 737,
+        "start_time": 1111878,
+        "description": "AI compute and storage requirements are causing a significant supply-demand imbalance.",
+        "start_index": 730
+      }
+    ],
+    "risks": [
+      {
+        "title": "Leading Price Peak Risk",
+        "end_time": 1258258,
+        "severity": "HIGH",
+        "end_index": 857,
+        "start_time": 1253418,
+        "description": "Cyclical stock prices often peak and drop months before revenue actually reaches its peak.",
+        "start_index": 854
+      },
+      {
+        "title": "FOMO Risk",
+        "end_time": 1226298,
+        "severity": "MEDIUM",
+        "end_index": 828,
+        "start_time": 1218198,
+        "description": "Investors entering now due to FOMO are at higher risk compared to those with lower cost bases.",
+        "start_index": 822
+      }
+    ],
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 11,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "2313.TW",
+    "bluf_thesis": "Compeq (華通) is set to benefit from increased Starlink orders and a shift in production away from US-based manufacturing.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.72",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Starlink Exposure",
+        "category": "DEMAND",
+        "end_time": 738352,
+        "end_index": 493,
+        "start_time": 724151,
+        "description": "Focus on ground plates with expected future expansion into satellite-side boards.",
+        "start_index": 487
+      },
+      {
+        "title": "Outsourcing Expansion",
+        "category": "MACRO",
+        "end_time": 810887,
+        "end_index": 533,
+        "start_time": 784532,
+        "description": "SpaceX is shifting production overseas to optimize financial reports for a potential IPO, increasing outsourcing volume.",
+        "start_index": 524
+      }
+    ],
+    "risks": [
+      {
+        "title": "NCNT Geographic Strategy",
+        "end_time": 884767,
+        "severity": "MEDIUM",
+        "end_index": 584,
+        "start_time": 855647,
+        "description": "Musk's 'Non-China, Non-Taiwan' (NCNT) policy may force manufacturers to move production to Southeast Asia.",
+        "start_index": 563
+      }
+    ],
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 10,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "3491.TW",
+    "bluf_thesis": "Universal Microwave (昇達科) is a primary beneficiary of the low-earth orbit satellite boom due to its high revenue exposure to the sector.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "High LEO Revenue Concentration",
+        "category": "FUNDAMENTAL",
+        "end_time": 722612,
+        "end_index": 485,
+        "start_time": 714992,
+        "description": "LEO satellite revenue accounts for nearly 70% of the company's total revenue.",
+        "start_index": 483
+      },
+      {
+        "title": "Key Supply Chain Role",
+        "category": "MOAT",
+        "end_time": 714992,
+        "end_index": 482,
+        "start_time": 708752,
+        "description": "The company plays a vital role in the Starlink Bill of Materials (BOM).",
+        "start_index": 478
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 9,
+    "episode_id": "Gooaye_7b049a328eab5da4",
+    "podcast_launch_time": "2026-01-23T16:00:00.000Z",
+    "ticker": "2454.TW",
+    "bluf_thesis": "MediaTek's recent limit-up reflects improved market breadth and anticipation of mass chip production despite potential short-term volatility.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.68",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Market Breadth Expansion",
+        "category": "TECHNICAL",
+        "end_time": 627326,
+        "end_index": 425,
+        "start_time": 614466,
+        "description": "The stock's limit-up is a宣誓 that previously ignored stocks are starting to move as market breadth opens up.",
+        "start_index": 418
+      },
+      {
+        "title": "Chip Volume Ramp-up",
+        "category": "OPERATIONAL",
+        "end_time": 1357523,
+        "end_index": 925,
+        "start_time": 1339563,
+        "description": "Historically, the stock performs well when new chips begin mass production and yields ramp up at the foundry.",
+        "start_index": 911
+      },
+      {
+        "title": "AI TPU Potential",
+        "category": "DEMAND",
+        "end_time": 1494639,
+        "end_index": 1023,
+        "start_time": 1472719,
+        "description": "Potential involvement in Google TPU (V7E) chips as a main export core.",
+        "start_index": 1010
+      }
+    ],
+    "risks": [
+      {
+        "title": "Spin-off Rumor Uncertainty",
+        "end_time": 1384023,
+        "severity": "LOW",
+        "end_index": 945,
+        "start_time": 1365464,
+        "description": "Rumors of a TPU department spin-off are considered low probability.",
+        "start_index": 932
+      },
+      {
+        "title": "Short-term Volatility",
+        "end_time": 1522119,
+        "severity": "MEDIUM",
+        "end_index": 1042,
+        "start_time": 1516539,
+        "description": "History of failing to maintain limit-ups followed by significant sell-offs.",
+        "start_index": 1040
+      }
+    ],
+    "created_at": "2026-01-26T10:11:37.760Z"
+  },
+  {
+    "id": 360,
+    "episode_id": "TheTechMAPodcast_f78d223372c9bc01",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "VITASSI",
+    "bluf_thesis": "Vitassi differentiates itself in the essential infrastructure asset management market through a proactive advisory strategy and highly aligned entrepreneurial management team.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.82",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "High Market Demand for Infrastructure Software",
+        "category": "DEMAND",
+        "end_time": 178419,
+        "end_index": 31,
+        "start_time": 126180,
+        "description": "The infrastructure asset management space is a hot market with broad appeal across multiple essential sectors including oil, gas, mining, transportation, and utilities.",
+        "start_index": 21
+      },
+      {
+        "title": "Advisory-Led Unique Selling Proposition",
+        "category": "MOAT",
+        "end_time": 229182,
+        "end_index": 40,
+        "start_time": 180759,
+        "description": "Unlike traditional organizations, Vitassi provides long-term strategic advice before customers even seek solutions, allowing them to formulate strategy at the outset.",
+        "start_index": 33
+      },
+      {
+        "title": "Aligned Entrepreneurial Management",
+        "category": "OPERATIONAL",
+        "end_time": 286902,
+        "end_index": 55,
+        "start_time": 276362,
+        "description": "The management team consists of key investors, maintaining an entrepreneurial spirit and ensuring strong motivation and alignment during growth and M&A processes.",
+        "start_index": 53
+      }
+    ],
+    "risks": [
+      {
+        "title": "M&A Decision-Making Complexity",
+        "end_time": 294242,
+        "severity": "LOW",
+        "end_index": 56,
+        "start_time": 287382,
+        "description": "The challenge of maintaining clear decision-making and avoiding a 'sell by committee' dynamic when multiple stakeholders are involved in the process.",
+        "start_index": 56
+      }
+    ],
+    "created_at": "2026-01-26T10:14:29.145Z"
+  },
+  {
+    "id": 230,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "UPS",
+    "bluf_thesis": "UPS has reached a cyclical trough and is currently undergoing a significant business transformation that should drive future gains.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Cyclical Trough Reached",
+        "category": "MACRO",
+        "end_time": 2389617,
+        "end_index": 608,
+        "start_time": 2386417,
+        "description": "The economic trough for the business appears to be in the rearview mirror, suggesting an upward trend.",
+        "start_index": 608
+      },
+      {
+        "title": "Transformation Progress",
+        "category": "OPERATIONAL",
+        "end_time": 2396937,
+        "end_index": 610,
+        "start_time": 2389737,
+        "description": "The company is in the midst of a major business transformation that is starting to show in the stock's performance.",
+        "start_index": 609
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 229,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "SBUX",
+    "bluf_thesis": "Buying Starbucks is a bet on CEO Brian Niccol's ability to execute a turnaround, which is beginning to gain traction with Wall Street analysts.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Leadership/CEO Bet",
+        "category": "OPERATIONAL",
+        "end_time": 2507300,
+        "end_index": 638,
+        "start_time": 2499680,
+        "description": "Investors are buying into the leadership of CEO Brian Niccol and his track record of corporate turnarounds.",
+        "start_index": 637
+      },
+      {
+        "title": "Analyst Upgrade Cycle",
+        "category": "TECHNICAL",
+        "end_time": 2520240,
+        "end_index": 642,
+        "start_time": 2514220,
+        "description": "The stock is starting to see a cycle of upgrades from Wall Street analysts, which often leads to more momentum.",
+        "start_index": 641
+      }
+    ],
+    "risks": [
+      {
+        "title": "Turnaround Execution Timing",
+        "end_time": 2512920,
+        "severity": "MEDIUM",
+        "end_index": 639,
+        "start_time": 2507440,
+        "description": "The business turnaround may be taking longer than the CEO or the market initially expected.",
+        "start_index": 639
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 228,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "GM",
+    "bluf_thesis": "GM's operational excellence and strong gross margins are coming into focus as EV-related restructuring moves into the rearview mirror.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Operational Excellence",
+        "category": "OPERATIONAL",
+        "end_time": 2411777,
+        "end_index": 614,
+        "start_time": 2406337,
+        "description": "The company has arguably never been run better, with a strong focus on gross margins and profitability.",
+        "start_index": 614
+      },
+      {
+        "title": "Restructuring Progress",
+        "category": "OPERATIONAL",
+        "end_time": 2406257,
+        "end_index": 613,
+        "start_time": 2398417,
+        "description": "Issues related to EV business restructuring are now largely considered to be in the rearview mirror.",
+        "start_index": 612
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 227,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "BA",
+    "bluf_thesis": "Boeing serves as a barometer for the defense sector and possesses technical room to run following its recent performance.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Defense Sector Barometer",
+        "category": "MACRO",
+        "end_time": 2321897,
+        "end_index": 579,
+        "start_time": 2308477,
+        "description": "Boeing acts as a quasi-barometer for the broader defense sector during a buildup of defense names.",
+        "start_index": 577
+      },
+      {
+        "title": "Technical Momentum",
+        "category": "TECHNICAL",
+        "end_time": 2300597,
+        "end_index": 574,
+        "start_time": 2285874,
+        "description": "The stock has technical momentum and 'room to run' after holding above the 200 level.",
+        "start_index": 573
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 226,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "Intel is currently an early-innings turnaround story rather than a legitimate AI play, with foundry losses and supply constraints justifying a more cautious outlook.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Early Stage Turnaround",
+        "category": "OPERATIONAL",
+        "end_time": 1259310,
+        "end_index": 333,
+        "start_time": 1205970,
+        "description": "Intel is still in the very early stages of a fundamental business turnaround, not a functional AI story yet.",
+        "start_index": 326
+      },
+      {
+        "title": "Supply-Side Issues",
+        "category": "SUPPLY",
+        "end_time": 1289190,
+        "end_index": 344,
+        "start_time": 1284570,
+        "description": "The company is facing significant supply constraints that are hampering its performance.",
+        "start_index": 344
+      }
+    ],
+    "risks": [
+      {
+        "title": "Foundry Business Losses",
+        "end_time": 1245170,
+        "severity": "HIGH",
+        "end_index": 330,
+        "start_time": 1233010,
+        "description": "The foundry business, representing a third of the company, is suffering significant losses and weighing on overall profitability.",
+        "start_index": 329
+      },
+      {
+        "title": "Meme Stock Volatility",
+        "end_time": 1265310,
+        "severity": "HIGH",
+        "end_index": 335,
+        "start_time": 1259630,
+        "description": "Recent price action has been described as 'meme stock' behavior, which may not be supported by fundamentals or EPS.",
+        "start_index": 334
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 225,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "NVO",
+    "bluf_thesis": "The launch of an oral GLP-1 pill is a major strategic win for Novo Nordisk, expanding the market to needle-phobic patients and defending its share against Eli Lilly.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Strong Oral Prescription Data",
+        "category": "DEMAND",
+        "end_time": 1349240,
+        "end_index": 361,
+        "start_time": 1337100,
+        "description": "The oral pill had a very strong launch with over 18,000 prescriptions in its second week, potentially expanding the market to those who avoid injectables.",
+        "start_index": 360
+      },
+      {
+        "title": "Market Share Defense",
+        "category": "MOAT",
+        "end_time": 1561514,
+        "end_index": 407,
+        "start_time": 1543994,
+        "description": "The oral pill allows Novo to defend its turf in a two-man race against Eli Lilly for dominance in the weight-loss market.",
+        "start_index": 404
+      },
+      {
+        "title": "Sustainable Supply Chain",
+        "category": "SUPPLY",
+        "end_time": 1522754,
+        "end_index": 398,
+        "start_time": 1507954,
+        "description": "Pills are more sustainable and easier to transport than injectables, as they do not require cold chain temperature regulation.",
+        "start_index": 397
+      }
+    ],
+    "risks": [
+      {
+        "title": "Margin Compression",
+        "end_time": 1482014,
+        "severity": "MEDIUM",
+        "end_index": 390,
+        "start_time": 1460861,
+        "description": "The oral pill has 10% to 20% lower margins compared to injectable versions of the drug.",
+        "start_index": 390
+      },
+      {
+        "title": "Product Cannibalization",
+        "end_time": 1414180,
+        "severity": "LOW",
+        "end_index": 377,
+        "start_time": 1406501,
+        "description": "The oral pill may cannibalize higher-margin injectable sales.",
+        "start_index": 377
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 224,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "META",
+    "bluf_thesis": "Meta remains an attractive opportunity due to its massive free cash flow growth and a valuation discount relative to its Mag7 peers, despite competitive threats from TikTok.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.68",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Mag7 Valuation Discount",
+        "category": "VALUATION",
+        "end_time": 2328437,
+        "end_index": 584,
+        "start_time": 2325217,
+        "description": "Meta trades at a discount relative to the broader Mag7 complex, providing a margin of safety.",
+        "start_index": 584
+      },
+      {
+        "title": "Free Cash Flow Growth",
+        "category": "FUNDAMENTAL",
+        "end_time": 646120,
+        "end_index": 181,
+        "start_time": 641980,
+        "description": "The company has demonstrated a return to immense free cash flow growth and maintains massive top-line impact.",
+        "start_index": 181
+      },
+      {
+        "title": "Strategic Agility",
+        "category": "OPERATIONAL",
+        "end_time": 675590,
+        "end_index": 188,
+        "start_time": 671250,
+        "description": "The company has a history of successfully pivoting its strategy (from Metaverse back to AI and efficiency) when necessary.",
+        "start_index": 188
+      }
+    ],
+    "risks": [
+      {
+        "title": "TikTok Headwinds",
+        "end_time": 576260,
+        "severity": "HIGH",
+        "end_index": 158,
+        "start_time": 560980,
+        "description": "TikTok represents a significant competitive headwind that analysts continue to doubt Meta's ability to overcome.",
+        "start_index": 155
+      },
+      {
+        "title": "Capital Expenditure Scrutiny",
+        "end_time": 317173,
+        "severity": "MEDIUM",
+        "end_index": 89,
+        "start_time": 310813,
+        "description": "Investors are concerned about Meta's high level of capital expenditure and when it will see a return on that investment.",
+        "start_index": 88
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 223,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "AAPL",
+    "bluf_thesis": "Apple is viewed as a defensive play that has already seen a significant sell-off into earnings, potentially providing a safer entry point despite a lack of AI catalysts.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.55",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Sell-off into Earnings",
+        "category": "TECHNICAL",
+        "end_time": 544160,
+        "end_index": 142,
+        "start_time": 541300,
+        "description": "Apple has seen a sell-off leading into its earnings report, which may limit further downside compared to peers that have run up.",
+        "start_index": 142
+      },
+      {
+        "title": "Safe Haven Play",
+        "category": "TECHNICAL",
+        "end_time": 581100,
+        "end_index": 159,
+        "start_time": 576500,
+        "description": "Apple is considered a safer, more defensive way to play the mega-cap tech earnings week.",
+        "start_index": 159
+      }
+    ],
+    "risks": [
+      {
+        "title": "Lack of AI Proof",
+        "end_time": 384326,
+        "severity": "MEDIUM",
+        "end_index": 103,
+        "start_time": 375226,
+        "description": "The market is not expecting Apple to show significant proof of AI integration or monetization in the upcoming earnings report.",
+        "start_index": 103
+      },
+      {
+        "title": "Memory Industry Impact",
+        "end_time": 588160,
+        "severity": "LOW",
+        "end_index": 160,
+        "start_time": 581720,
+        "description": "Potential negative impacts from rising memory prices and semiconductor supply chain costs.",
+        "start_index": 160
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 222,
+    "episode_id": "CNBCsFastMoney_0bf27998f210b80e",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "MSFT",
+    "bluf_thesis": "Microsoft offers protected downside and attractive valuation (26-27x forward) as it leads the AI flywheel and Azure growth narrative.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Reasonable Valuation Premium",
+        "category": "VALUATION",
+        "end_time": 250133,
+        "end_index": 70,
+        "start_time": 237053,
+        "description": "Microsoft trades at around 26 to 27 times forward earnings, which represents a reasonable valuation premium that is likely to be sustained.",
+        "start_index": 67
+      },
+      {
+        "title": "Azure Growth Engine",
+        "category": "FUNDAMENTAL",
+        "end_time": 265593,
+        "end_index": 74,
+        "start_time": 260033,
+        "description": "Azure growth remains a central pillar of the investment story, and the stock is well-protected on the downside.",
+        "start_index": 74
+      },
+      {
+        "title": "AI Flywheel and Monetization",
+        "category": "DEMAND",
+        "end_time": 298093,
+        "end_index": 84,
+        "start_time": 253693,
+        "description": "The company possesses a significant flywheel effect, particularly as the market looks for continued follow-through from AI monetization.",
+        "start_index": 72
+      }
+    ],
+    "risks": [
+      {
+        "title": "Technical Bear Cross",
+        "end_time": 146099,
+        "severity": "MEDIUM",
+        "end_index": 43,
+        "start_time": 130659,
+        "description": "The stock has shown a technical 'bear cross' or 'death cross' (50-day moving average crossing below the 200-day).",
+        "start_index": 41
+      },
+      {
+        "title": "Azure Deceleration and CapEx Scrutiny",
+        "end_time": 267513,
+        "severity": "HIGH",
+        "end_index": 75,
+        "start_time": 257113,
+        "description": "Investors are closely watching for any signs of deceleration in Azure growth or excessive AI capital expenditure without immediate returns.",
+        "start_index": 73
+      }
+    ],
+    "created_at": "2026-01-26T10:13:29.478Z"
+  },
+  {
+    "id": 216,
+    "episode_id": "ExchangesatGoldmanSachs_012e87ecaa81d26d",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "GS",
+    "bluf_thesis": "Goldman Sachs is positioned to benefit from a historic surge in M&A activity in 2026 while leveraging its 1GS 3.0 initiative to drive significant operational efficiencies through AI.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Robust M&A Pipeline",
+        "category": "DEMAND",
+        "end_time": 438164,
+        "end_index": 90,
+        "start_time": 421824,
+        "description": "2026 is projected to be one of the best years for M&A activity on record, driven by robust deal backlogs and client dialogue.",
+        "start_index": 88
+      },
+      {
+        "title": "AI-Driven Efficiency via 1GS 3.0",
+        "category": "OPERATIONAL",
+        "end_time": 747747,
+        "end_index": 153,
+        "start_time": 697924,
+        "description": "The 1GS 3.0 initiative targets six core firm processes, such as onboarding and KYC, for AI-driven automation to create capacity for growth investment.",
+        "start_index": 147
+      },
+      {
+        "title": "Capital Markets Recovery",
+        "category": "FUNDAMENTAL",
+        "end_time": 494567,
+        "end_index": 104,
+        "start_time": 451484,
+        "description": "Improving conditions in the IPO market and private equity portfolios reaching valuation marks suggest a continued trend of equity issuance growth.",
+        "start_index": 94
+      }
+    ],
+    "risks": [
+      {
+        "title": "Exogenous Geopolitical and Cyber Risks",
+        "end_time": 1146498,
+        "severity": "HIGH",
+        "end_index": 255,
+        "start_time": 1118998,
+        "description": "Unforeseen exogenous events originating from geopolitics or cyber threats could disrupt the current constructive macro trajectory and market sentiment.",
+        "start_index": 251
+      },
+      {
+        "title": "Enterprise Implementation Friction",
+        "end_time": 766867,
+        "severity": "MEDIUM",
+        "end_index": 159,
+        "start_time": 761887,
+        "description": "The process of implementing AI and changing workflows within a large-scale enterprise is difficult and requires significant time to realize gains.",
+        "start_index": 158
+      }
+    ],
+    "created_at": "2026-01-26T10:13:23.629Z"
+  },
+  {
+    "id": 201,
+    "episode_id": "BloombergMastersinBusinessPodc_e9844dad811ec16c",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "LSEG",
+    "bluf_thesis": "The London Stock Exchange Group is excellently managing the global index franchise, maintaining its status as a premier provider in the financial ecosystem.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Index Business Excellence",
+        "category": "OPERATIONAL",
+        "end_time": 1020633,
+        "end_index": 185,
+        "start_time": 1005813,
+        "description": "The firm is described as doing a 'magnificent job' owning and scaling the former Russell index business, continuing to benefit from the global brand aura.",
+        "start_index": 185
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:11.598Z"
+  },
+  {
+    "id": 200,
+    "episode_id": "BloombergMastersinBusinessPodc_e9844dad811ec16c",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "LLY",
+    "bluf_thesis": "Eli Lilly is a high-quality company that can serve as a strong long-term investment, though it should be part of a broader diversified strategy.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Fundamental Corporate Quality",
+        "category": "FUNDAMENTAL",
+        "end_time": 2475834,
+        "end_index": 447,
+        "start_time": 2471434,
+        "description": "The podcaster explicitly identifies Eli Lilly as a 'great company' suitable for long-term appreciation in family or retirement accounts.",
+        "start_index": 447
+      }
+    ],
+    "risks": [
+      {
+        "title": "Single Stock Concentration",
+        "end_time": 2462354,
+        "severity": "MEDIUM",
+        "end_index": 444,
+        "start_time": 2445745,
+        "description": "Concentrated exposure in a single stock is riskier than a diversified approach, particularly for retirement and long-term milestone accounts.",
+        "start_index": 444
+      }
+    ],
+    "created_at": "2026-01-26T10:13:11.598Z"
+  },
+  {
+    "id": 199,
+    "episode_id": "BloombergMastersinBusinessPodc_e9844dad811ec16c",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "SPY",
+    "bluf_thesis": "The S&P 500 is the most effective long-term vehicle for retirement security, offering superior compounding returns compared to fixed income assets.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Long-Term Compounding Superiority",
+        "category": "FUNDAMENTAL",
+        "end_time": 2509574,
+        "end_index": 453,
+        "start_time": 2493275,
+        "description": "Equity markets historically provide significantly better returns than treasury bonds, essential for capturing the power of compounding over decades.",
+        "start_index": 451
+      },
+      {
+        "title": "Diversified Market Exposure",
+        "category": "MACRO",
+        "end_time": 2481354,
+        "end_index": 448,
+        "start_time": 2442725,
+        "description": "A broader, diversified approach through indices like the S&P 500 is recommended for milestone accounts and retirement to mitigate individual stock risk.",
+        "start_index": 443
+      }
+    ],
+    "risks": [
+      {
+        "title": "Short-Term Volatility",
+        "end_time": 2788432,
+        "severity": "MEDIUM",
+        "end_index": 498,
+        "start_time": 2775404,
+        "description": "Short-term market fluctuations and volatility are the 'price of admission' for higher long-term returns and often lead to poor behavioral decisions.",
+        "start_index": 497
+      }
+    ],
+    "created_at": "2026-01-26T10:13:11.598Z"
+  },
+  {
+    "id": 191,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "2408.TW",
+    "bluf_thesis": "While Nanya Technology benefits from TSMC technology transfers, there are concerns regarding its inability to rally despite positive news and high financing levels.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.50",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "TSMC Technology Transfer",
+        "category": "TECHNICAL",
+        "end_time": 1000501,
+        "end_index": 561,
+        "start_time": 983181,
+        "description": "The company is receiving technology transfer from TSMC for packaging and middle layers to improve its DRAM stacking capabilities.",
+        "start_index": 551
+      }
+    ],
+    "risks": [
+      {
+        "title": "Weak Price Sensitivity to News",
+        "end_time": 1058151,
+        "severity": "MEDIUM",
+        "end_index": 589,
+        "start_time": 1048831,
+        "description": "The stock failed to rally significantly even with major positive news, suggesting weak momentum.",
+        "start_index": 584
+      },
+      {
+        "title": "High Margin/Financing usage",
+        "end_time": 1120651,
+        "severity": "HIGH",
+        "end_index": 633,
+        "start_time": 1117651,
+        "description": "High financing usage rates and retail sentiment concerns pose a risk to the stock's stability.",
+        "start_index": 632
+      }
+    ],
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 190,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "2303.TW",
+    "bluf_thesis": "UMC is expected to see continued growth due to the spillover effect from TSMC's massive expansion and its relatively lower valuation base.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "TSMC Capacity Spillover",
+        "category": "TECHNICAL",
+        "end_time": 1187971,
+        "end_index": 671,
+        "start_time": 1169631,
+        "description": "As TSMC expands production due to AI demand, a spillover effect is benefiting secondary foundries like UMC.",
+        "start_index": 661
+      },
+      {
+        "title": "Lagging Valuation Opportunity",
+        "category": "VALUATION",
+        "end_time": 1205791,
+        "end_index": 682,
+        "start_time": 1193331,
+        "description": "UMC is identified as a laggard with potential for catch-up growth compared to other tech sector leaders.",
+        "start_index": 676
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 189,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "8110.TW",
+    "bluf_thesis": "Formosa Advanced Technologies is a primary beneficiary of the Meta AI glasses supply chain as the designated packaging and testing provider for the associated chips.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI Glasses Packaging Orders",
+        "category": "OPERATIONAL",
+        "end_time": 1022551,
+        "end_index": 566,
+        "start_time": 1000501,
+        "description": "FAT secures the packaging and testing orders for Meta's AI glasses products, leading to a limit-up price reaction.",
+        "start_index": 562
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 188,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "3260.TW",
+    "bluf_thesis": "ADATA stands to benefit from the tightening NAND supply environment and its holdings of low-cost inventory amid growing AI server storage requirements.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "NAND Market Dynamics",
+        "category": "SUPPLY",
+        "end_time": 1098991,
+        "end_index": 613,
+        "start_time": 1071911,
+        "description": "While HBM and DRAM production increases, NAND supply is being reduced, which benefits ADATA as AI servers require massive storage.",
+        "start_index": 597
+      },
+      {
+        "title": "Low-cost Inventory Advantage",
+        "category": "FUNDAMENTAL",
+        "end_time": 1109171,
+        "end_index": 622,
+        "start_time": 1102451,
+        "description": "The company maintains a strong advantage due to its significant holdings of low-cost inventory.",
+        "start_index": 618
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 187,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "META",
+    "bluf_thesis": "Meta's strong performance among tech giants and its AI glasses project are driving demand for specific supply chain partners like MediaTek and memory makers.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Meta AI Glasses Demand",
+        "category": "DEMAND",
+        "end_time": 1014411,
+        "end_index": 562,
+        "start_time": 1000501,
+        "description": "Meta's AI glasses project, utilizing chips from the Qualcomm-MediaTek partnership, is creating significant downstream demand.",
+        "start_index": 562
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 186,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "TSLA",
+    "bluf_thesis": "SpaceX's upcoming IPO and the priority subscription offer for Tesla shareholders are acting as major catalysts for Tesla's stock performance.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "SpaceX IPO Priority Subscription",
+        "category": "TECHNICAL",
+        "end_time": 207879,
+        "end_index": 111,
+        "start_time": 187060,
+        "description": "Elon Musk's plan to allow Tesla shareholders priority subscription in the SpaceX IPO creates a strong 'bundle' effect for investors.",
+        "start_index": 99
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 185,
+    "episode_id": "87a8b530_316687ef93ed9f2f",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "2454.TW",
+    "bluf_thesis": "MediaTek's expansion into AI ASIC business, particularly with Google TPU orders, is expected to significantly drive revenue growth through 2028.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.90",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI ASIC Market Growth",
+        "category": "DEMAND",
+        "end_time": 94900,
+        "end_index": 48,
+        "start_time": 81319,
+        "description": "MediaTek targets a 10-15% market share in the AI ASIC market, which is projected to reach $50 billion by 2028.",
+        "start_index": 42
+      },
+      {
+        "title": "Google TPU Partnership",
+        "category": "OPERATIONAL",
+        "end_time": 129020,
+        "end_index": 68,
+        "start_time": 108180,
+        "description": "MediaTek is assisting Google with TPU ASIC development, with revenue contributions starting this year and scaling significantly by 2027.",
+        "start_index": 56
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:03.508Z"
+  },
+  {
+    "id": 184,
+    "episode_id": "87a8b530_8bc9737eb0ccdba4",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "英特爾受困於先進製程良率瓶頸與低迷財測，造成訂單無法如期交貨且營運虧損壓力大。",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "第一季財測失色",
+        "category": "OPERATIONAL",
+        "end_time": 674043,
+        "end_index": 403,
+        "start_time": 665463,
+        "description": "第一季財測讓市場失望，美股盈餘預估僅在損益兩平邊緣，遠低於投資者期待。",
+        "start_index": 400
+      },
+      {
+        "title": "生產良率瓶頸",
+        "category": "OPERATIONAL",
+        "end_time": 718723,
+        "end_index": 427,
+        "start_time": 711043,
+        "description": "先進製程良率低落，導致手握訂單卻無貨可賣，產能利用與成本控制面臨巨大挑戰。",
+        "start_index": 423
+      }
+    ],
+    "risks": [
+      {
+        "title": "成本結構與獲利風險",
+        "end_time": 827203,
+        "severity": "HIGH",
+        "end_index": 483,
+        "start_time": 815723,
+        "description": "低良率導致生產成本高昂，即使大量投產也難以獲利，最終可能被迫增加對台積電的委外依賴。",
+        "start_index": 476
+      }
+    ],
+    "created_at": "2026-01-26T10:13:01.890Z"
+  },
+  {
+    "id": 183,
+    "episode_id": "87a8b530_8bc9737eb0ccdba4",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "2330.TW",
+    "bluf_thesis": "台積電先進製程良率極高且基本面無懈可擊，但因目前股價乖離率過高，建議待黑K分批拉回布局。",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "先進製程良率優勢",
+        "category": "MOAT",
+        "end_time": 788463,
+        "end_index": 459,
+        "start_time": 767983,
+        "description": "台積電2奈米與3奈米的良率提升速度遠超市場預期，展現極強的技術領先與獲利能力。",
+        "start_index": 451
+      },
+      {
+        "title": "展望無懈可擊",
+        "category": "FUNDAMENTAL",
+        "end_time": 583951,
+        "end_index": 356,
+        "start_time": 570491,
+        "description": "法說會釋出展望極佳，各項數據優於預期，顯示AI與大客戶對於先進製程的需求持續強勁。",
+        "start_index": 350
+      }
+    ],
+    "risks": [
+      {
+        "title": "短線技術指標過熱",
+        "end_time": 924035,
+        "severity": "MEDIUM",
+        "end_index": 540,
+        "start_time": 909003,
+        "description": "股價與年線乖離率高達41%，創下罕見高點，短線追高風險顯著增加。",
+        "start_index": 538
+      },
+      {
+        "title": "ADR溢價率縮減",
+        "end_time": 966915,
+        "severity": "MEDIUM",
+        "end_index": 563,
+        "start_time": 951395,
+        "description": "ADR溢價率從年初的28%大幅縮減至約15%，顯示股價上攻動能可能面臨停滯。",
+        "start_index": 556
+      }
+    ],
+    "created_at": "2026-01-26T10:13:01.890Z"
+  },
+  {
+    "id": 154,
+    "episode_id": "e55a9f33_7449ade66386aed9",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "英特爾雖 Q4 表現優於預期，但因 2026 Q1 指引顯著低於市場期待，特別是毛利率與獲利能力展望疲軟，導致股價重挫。",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.20",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Q4 財報優於預期",
+        "category": "FUNDAMENTAL",
+        "end_time": 1429723,
+        "end_index": 677,
+        "start_time": 1425383,
+        "description": "第四季營收與獲利其實皆優於市場預期，顯示過去一度有正向表現。",
+        "start_index": 675
+      }
+    ],
+    "risks": [
+      {
+        "title": "財務指引疲軟",
+        "end_time": 1508883,
+        "severity": "HIGH",
+        "end_index": 720,
+        "start_time": 1478783,
+        "description": "2026 第一季指引在營收、EPS 及毛利率方面均低於市場預期。",
+        "start_index": 703
+      },
+      {
+        "title": "良率與獲利能力危機",
+        "end_time": 1422203,
+        "severity": "CRITICAL",
+        "end_index": 673,
+        "start_time": 1406557,
+        "description": "製程良率與毛利率仍無法給出令市場滿意的交代，新製程初期處於燒錢階段。",
+        "start_index": 672
+      }
+    ],
+    "created_at": "2026-01-26T10:12:48.150Z"
+  },
+  {
+    "id": 153,
+    "episode_id": "e55a9f33_7449ade66386aed9",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "META",
+    "bluf_thesis": "Meta 被分析師認為 AI 潛力被低估且利空出盡，加上其 AI 驅動的廣告工具變現能力強勁，目標價看高至 910 美元。",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "估值折價優勢",
+        "category": "VALUATION",
+        "end_time": 1172877,
+        "end_index": 538,
+        "start_time": 1162877,
+        "description": "相較於其他科技巨頭，Meta 股價跌幅較深且估值相對便宜，具備補漲空間。",
+        "start_index": 533
+      },
+      {
+        "title": "AI 廣告變現能力證明",
+        "category": "DEMAND",
+        "end_time": 1213217,
+        "end_index": 556,
+        "start_time": 1205577,
+        "description": "AI 驅動的廣告工具變現能力強，年營收運行率已突破 600 億美元。",
+        "start_index": 554
+      }
+    ],
+    "risks": [
+      {
+        "title": "資本支出回報疑慮",
+        "end_time": 1179177,
+        "severity": "MEDIUM",
+        "end_index": 542,
+        "start_time": 1174017,
+        "description": "市場擔憂資本支出能否換回足夠的投資報酬率。",
+        "start_index": 540
+      }
+    ],
+    "created_at": "2026-01-26T10:12:48.150Z"
+  },
+  {
+    "id": 152,
+    "episode_id": "e55a9f33_7449ade66386aed9",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "TSLA",
+    "bluf_thesis": "特斯拉正從純電動車製造商轉型為 AI 與機器人巨頭，其長期價值將由 Optimus 機器人、Robotaxi 及太空經濟藍圖支撐。",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "轉型 AI 與機器人巨頭",
+        "category": "OPERATIONAL",
+        "end_time": 573579,
+        "end_index": 266,
+        "start_time": 549999,
+        "description": "馬斯克描繪涵蓋 AI、人型機器人、自駕及太空探索的藍圖，特斯拉正轉型為 AI 巨頭。",
+        "start_index": 254
+      },
+      {
+        "title": "人型機器人商業化潛力",
+        "category": "DEMAND",
+        "end_time": 721937,
+        "end_index": 328,
+        "start_time": 703397,
+        "description": "Optimus 機器人預計在 2027 年公開銷售，未來將貢獻公司 80% 的企業價值。",
+        "start_index": 321
+      },
+      {
+        "title": "技術面形態轉強",
+        "category": "TECHNICAL",
+        "end_time": 971544,
+        "end_index": 445,
+        "start_time": 961624,
+        "description": "技術面上，股價反彈趨勢未變，拉回未破前低且維持上升趨勢。",
+        "start_index": 442
+      }
+    ],
+    "risks": [
+      {
+        "title": "估值偏高風險",
+        "end_time": 614459,
+        "severity": "MEDIUM",
+        "end_index": 286,
+        "start_time": 610999,
+        "description": "以目前估值衡量，特斯拉股價處於較昂貴的水準。",
+        "start_index": 285
+      }
+    ],
+    "created_at": "2026-01-26T10:12:48.150Z"
+  },
+  {
+    "id": 151,
+    "episode_id": "e55a9f33_7449ade66386aed9",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "ANET",
+    "bluf_thesis": "Arista 受惠於 AI 基礎設施建設及大型科技巨頭客戶的強勁需求，雖然股價波動大且偶有高估，但修正是良好的布局時機。",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI 基礎設施與後端網絡需求",
+        "category": "DEMAND",
+        "end_time": 497659,
+        "end_index": 224,
+        "start_time": 480953,
+        "description": "AI 基礎設施需求推動後端網路業務持續發展，且客戶多為大型科技巨頭與營運商。",
+        "start_index": 222
+      }
+    ],
+    "risks": [
+      {
+        "title": "股價波動與估值過高",
+        "end_time": 510019,
+        "severity": "MEDIUM",
+        "end_index": 230,
+        "start_time": 503219,
+        "description": "股價波動較大且有時會出現估值偏高的狀況。",
+        "start_index": 228
+      }
+    ],
+    "created_at": "2026-01-26T10:12:48.150Z"
+  },
+  {
+    "id": 150,
+    "episode_id": "e55a9f33_7449ade66386aed9",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "美光獲分析師調高評級，預期受惠於人工智慧推動的記憶體超級週期及供不應求帶動的漲價潮，今年表現有望優於大盤。",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI 推動記憶體超級週期",
+        "category": "DEMAND",
+        "end_time": 458653,
+        "end_index": 207,
+        "start_time": 454613,
+        "description": "人工智慧趨勢推動記憶體晶片進入超級週期，帶動需求持續上升。",
+        "start_index": 206
+      },
+      {
+        "title": "缺貨帶動漲價與獲利提升",
+        "category": "SUPPLY",
+        "end_time": 465193,
+        "end_index": 211,
+        "start_time": 458653,
+        "description": "市場處於缺貨狀態，使公司具備議價能力並調高售價，提升獲利能力。",
+        "start_index": 208
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:12:48.150Z"
+  },
+  {
+    "id": 63,
+    "episode_id": "f595f5ab_09c819378aedc5a8",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "NVDA",
+    "bluf_thesis": "受惠於GP200與GP300架構的全面放量，AI基礎設施需求將在2026年迎來翻倍以上的增長。",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "硬體出貨爆發性成長",
+        "category": "DEMAND",
+        "end_time": 789671,
+        "end_index": 419,
+        "start_time": 778231,
+        "description": "預估2026年GP200/GP300出貨量將從2.5萬櫃衝高至7萬櫃，成長幅度達三倍。",
+        "start_index": 413
+      },
+      {
+        "title": "壓倒性的獲利能力",
+        "category": "FUNDAMENTAL",
+        "end_time": 412633,
+        "end_index": 199,
+        "start_time": 410813,
+        "description": "輝達是目前AI浪潮中少數能確保實質獲利的高品質公司。",
+        "start_index": 199
+      }
+    ],
+    "risks": [
+      {
+        "title": "避險意識缺乏",
+        "end_time": 552579,
+        "severity": "MEDIUM",
+        "end_index": 274,
+        "start_time": 537679,
+        "description": "市場情緒過於亢奮，多數基金經理人完全沒有針對大跌做避險，存在市場回檔風險。",
+        "start_index": 266
+      }
+    ],
+    "created_at": "2026-01-26T10:11:58.451Z"
+  },
+  {
+    "id": 62,
+    "episode_id": "f595f5ab_09c819378aedc5a8",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "GOOGL",
+    "bluf_thesis": "Waymo持續擴張至全美第六大城市邁阿密，技術趨於成熟，將與特斯拉共同做大無人駕駛市場。",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Waymo城市擴張",
+        "category": "OPERATIONAL",
+        "end_time": 1141725,
+        "end_index": 629,
+        "start_time": 1123305,
+        "description": "Waymo正式登陸邁阿密並開放付費服務，顯示其2026年的重點擴張計劃正穩步進行。",
+        "start_index": 618
+      },
+      {
+        "title": "市場規模擴大",
+        "category": "DEMAND",
+        "end_time": 1165291,
+        "end_index": 634,
+        "start_time": 1141725,
+        "description": "無人駕駛市場並非零和競爭，Waymo與特斯拉正共同擴大市場規模，排擠傳統車廠。",
+        "start_index": 630
+      }
+    ],
+    "risks": [
+      {
+        "title": "軟體端回收等待期",
+        "end_time": 767472,
+        "severity": "MEDIUM",
+        "end_index": 406,
+        "start_time": 760972,
+        "description": "AI軟體端的終端營收回收進度仍需觀察市場接受度與監管環境變化。",
+        "start_index": 403
+      }
+    ],
+    "created_at": "2026-01-26T10:11:58.451Z"
+  },
+  {
+    "id": 61,
+    "episode_id": "f595f5ab_09c819378aedc5a8",
+    "podcast_launch_time": "2026-01-22T16:00:00.000Z",
+    "ticker": "TSLA",
+    "bluf_thesis": "特斯拉在奧斯汀正式推動無人監督的Robotaxi服務，象徵其自駕佈局進入終端營收回收的關鍵階段。",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "奧斯汀Robotaxi正式上路",
+        "category": "OPERATIONAL",
+        "end_time": 1185211,
+        "end_index": 644,
+        "start_time": 1165291,
+        "description": "特斯拉在奧斯汀全面取消安全監控員，正式推動自駕載客服務，是其自駕佈局的重要一步。",
+        "start_index": 635
+      },
+      {
+        "title": "終端營收回收",
+        "category": "DEMAND",
+        "end_time": 1200151,
+        "end_index": 652,
+        "start_time": 1194791,
+        "description": "自駕服務的落地代表AI市場已開始產生終端營收回收，對股價具有發酵作用。",
+        "start_index": 650
+      }
+    ],
+    "risks": [
+      {
+        "title": "資本支出回收風險",
+        "end_time": 896398,
+        "severity": "HIGH",
+        "end_index": 474,
+        "start_time": 891698,
+        "description": "超大型雲端業者與AI廠商的資本支出能否如期回收，仍存在不確定性。",
+        "start_index": 472
+      }
+    ],
+    "created_at": "2026-01-26T10:11:58.451Z"
+  },
+  {
+    "id": 349,
+    "episode_id": "InsidetheStrategyRoom_c276d75cc17427dd",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "IBM",
+    "bluf_thesis": "IBM has successfully transitioned to a software-centric business model with strong revenue growth ambitions, leveraging AI for internal productivity and leading the next wave of quantum computing innovation.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Software Revenue Growth and Portfolio Shift",
+        "category": "FUNDAMENTAL",
+        "end_time": 1686352,
+        "end_index": 427,
+        "start_time": 1660672,
+        "description": "IBM has shifted its portfolio from 22% software to 45% software, with the software segment growing at 10% and driving overall company growth to 5%.",
+        "start_index": 421
+      },
+      {
+        "title": "AI-Driven Productivity and Operational Efficiency",
+        "category": "OPERATIONAL",
+        "end_time": 742142,
+        "end_index": 202,
+        "start_time": 707323,
+        "description": "Internal AI implementation (Project Lessups) aims to automate 50% of back-office functions and has already achieved 45% productivity increases among developers.",
+        "start_index": 195
+      },
+      {
+        "title": "Quantum Computing Leadership",
+        "category": "MOAT",
+        "end_time": 1257332,
+        "end_index": 326,
+        "start_time": 1205972,
+        "description": "IBM is positioned for a quantum computing breakthrough in 3 to 7 years, drawing parallels to the GPU and AI growth cycle seen in 2015.",
+        "start_index": 320
+      },
+      {
+        "title": "Strategic Portfolio Reconfiguration",
+        "category": "OPERATIONAL",
+        "end_time": 1644392,
+        "end_index": 412,
+        "start_time": 1513389,
+        "description": "Aggressive portfolio management including the spinoff of Kyndryl and strategic acquisitions has created a virtuous flywheel for organic growth.",
+        "start_index": 381
+      }
+    ],
+    "risks": [
+      {
+        "title": "Cultural and Talent Integration Risk",
+        "end_time": 1863815,
+        "severity": "MEDIUM",
+        "end_index": 470,
+        "start_time": 1836635,
+        "description": "Bringing in top-tier leadership from the outside carries a significant failure rate (estimated at 50%) due to interpersonal and cultural alignment challenges.",
+        "start_index": 461
+      },
+      {
+        "title": "Transformation Execution Difficulty",
+        "end_time": 1467366,
+        "severity": "MEDIUM",
+        "end_index": 373,
+        "start_time": 1445965,
+        "description": "The transition requires making extremely difficult decisions about resource allocation and upsetting stakeholders while managing a significant business model transformation.",
+        "start_index": 372
+      }
+    ],
+    "created_at": "2026-01-26T10:14:19.846Z"
+  },
+  {
+    "id": 236,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "SII",
+    "bluf_thesis": "Sprott Inc. is a primary beneficiary of the accelerating institutional and government demand for precious metals like gold and silver.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Institutional Scramble",
+        "category": "DEMAND",
+        "end_time": 2113291,
+        "end_index": 573,
+        "start_time": 2097372,
+        "description": "There is a scramble in the institutional investment community for exposure to precious metals.",
+        "start_index": 572
+      },
+      {
+        "title": "Central Bank Buying",
+        "category": "MACRO",
+        "end_time": 2306876,
+        "end_index": 604,
+        "start_time": 2280394,
+        "description": "Global central banks (Poland, China) are significantly increasing gold reserves due to geopolitical mistrust.",
+        "start_index": 601
+      }
+    ],
+    "risks": [
+      {
+        "title": "Momentum Volatility",
+        "end_time": 2340236,
+        "severity": "MEDIUM",
+        "end_index": 611,
+        "start_time": 2325376,
+        "description": "Precious metals have been a 'hot momentum trade' recently, which could lead to volatility.",
+        "start_index": 609
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 235,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "BAC",
+    "bluf_thesis": "Bank of America is viewed as a preferred banking trade due to savvy promotional moves and a better positioning for a deregulatory environment.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Smart Promotional Strategy",
+        "category": "OPERATIONAL",
+        "end_time": 1761987,
+        "end_index": 488,
+        "start_time": 1748587,
+        "description": "Using a 10% teaser rate to draw in highly profitable credit card business.",
+        "start_index": 486
+      },
+      {
+        "title": "Deregulation Tailwinds",
+        "category": "MACRO",
+        "end_time": 1787467,
+        "end_index": 492,
+        "start_time": 1775347,
+        "description": "The environment remains conducive to deal flow and deregulation despite political rhetoric.",
+        "start_index": 491
+      }
+    ],
+    "risks": [
+      {
+        "title": "Political/Regulatory Intervention",
+        "end_time": 1748587,
+        "severity": "MEDIUM",
+        "end_index": 485,
+        "start_time": 1730987,
+        "description": "Potential political targeting of bank fees or interest rate caps from the administration.",
+        "start_index": 483
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 234,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "BABA",
+    "bluf_thesis": "Alibaba is a top pick in China due to its dominance in cloud and e-commerce, plus the major catalyst of an IPO for its AI chip arm.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Compelling Valuation",
+        "category": "VALUATION",
+        "end_time": 1413361,
+        "end_index": 403,
+        "start_time": 1374020,
+        "description": "Alibaba is very cheap, especially relative to its cloud and AI potential and its peer Tencent.",
+        "start_index": 388
+      },
+      {
+        "title": "AI Chip IPO Catalyst",
+        "category": "MOAT",
+        "end_time": 1349601,
+        "end_index": 379,
+        "start_time": 1318061,
+        "description": "Planning an IPO for its AI chip arm (T-Head), which some analysts call 'NVIDIA Lite'.",
+        "start_index": 371
+      },
+      {
+        "title": "Jack Ma Re-engagement",
+        "category": "OPERATIONAL",
+        "end_time": 1409960,
+        "end_index": 402,
+        "start_time": 1397320,
+        "description": "Jack Ma's involvement in 'deep seek' operations signals alignment with Chinese government and growth objectives.",
+        "start_index": 397
+      }
+    ],
+    "risks": [
+      {
+        "title": "Regulatory Risk in China",
+        "end_time": 1397160,
+        "severity": "HIGH",
+        "end_index": 396,
+        "start_time": 1390660,
+        "description": "The company historically operates under the scrutiny and control of the Chinese government.",
+        "start_index": 395
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 233,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "META",
+    "bluf_thesis": "Meta offers an attractive risk-reward profile with a valuation discount to Google and long-term monetization catalysts from WhatsApp and AI.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Multiple Discount",
+        "category": "VALUATION",
+        "end_time": 995416,
+        "end_index": 265,
+        "start_time": 977363,
+        "description": "Meta trades at a significant multiple discount compared to Google.",
+        "start_index": 264
+      },
+      {
+        "title": "WhatsApp Monetization",
+        "category": "DEMAND",
+        "end_time": 1106556,
+        "end_index": 302,
+        "start_time": 1040736,
+        "description": "Potential for significant monetization of WhatsApp through 2029.",
+        "start_index": 282
+      }
+    ],
+    "risks": [
+      {
+        "title": "High Capital Expenditure",
+        "end_time": 1153410,
+        "severity": "MEDIUM",
+        "end_index": 311,
+        "start_time": 1133596,
+        "description": "Significant increases in CapEx and spending on AI hires and infrastructure are putting pressure on the balance sheet.",
+        "start_index": 308
+      },
+      {
+        "title": "Unclear AI Monetization",
+        "end_time": 1037056,
+        "severity": "MEDIUM",
+        "end_index": 280,
+        "start_time": 1027356,
+        "description": "The monetization of new AI models remains unclear compared to competitors like Google.",
+        "start_index": 278
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 232,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "BA",
+    "bluf_thesis": "Boeing is showing strong momentum driven by accelerating deliveries, a robust order book from commercial airlines, and a favorable technical setup.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Delivery Acceleration",
+        "category": "OPERATIONAL",
+        "end_time": 858463,
+        "end_index": 220,
+        "start_time": 847403,
+        "description": "Deliveries are moving and the company has significant regulatory support.",
+        "start_index": 219
+      },
+      {
+        "title": "Strong Order Book",
+        "category": "DEMAND",
+        "end_time": 863563,
+        "end_index": 221,
+        "start_time": 858463,
+        "description": "Commercial airlines continue to place orders and the core business remains dependent on Boeing's products.",
+        "start_index": 221
+      },
+      {
+        "title": "Positive Chart Setup",
+        "category": "TECHNICAL",
+        "end_time": 884203,
+        "end_index": 227,
+        "start_time": 868583,
+        "description": "Breaking through the 260-265 resistance level suggests further upside for the stock.",
+        "start_index": 223
+      }
+    ],
+    "risks": [
+      {
+        "title": "Extended Price Action",
+        "end_time": 924343,
+        "severity": "LOW",
+        "end_index": 249,
+        "start_time": 922383,
+        "description": "The stock has already experienced a significant run-up recently.",
+        "start_index": 248
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 231,
+    "episode_id": "CNBCsFastMoney_032490eb002dfc89",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "Intel is currently viewed as a 'meme stock' with a valuation disconnected from its low growth fundamentals and ongoing supply constraints.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Data Center Performance",
+        "category": "FUNDAMENTAL",
+        "end_time": 219993,
+        "end_index": 63,
+        "start_time": 217713,
+        "description": "The data center business performed well during the last quarter.",
+        "start_index": 63
+      }
+    ],
+    "risks": [
+      {
+        "title": "Supply Constraints",
+        "end_time": 69819,
+        "severity": "HIGH",
+        "end_index": 21,
+        "start_time": 60219,
+        "description": "Intel warned that supply constraints would peak in the current first quarter.",
+        "start_index": 19
+      },
+      {
+        "title": "Weak Gross Margins",
+        "end_time": 87680,
+        "severity": "MEDIUM",
+        "end_index": 26,
+        "start_time": 77239,
+        "description": "Gross margins are weaker than expected due to costs associated with the Panther Lake PC processor.",
+        "start_index": 24
+      },
+      {
+        "title": "Foundry Customer Delays",
+        "end_time": 1278610,
+        "severity": "CRITICAL",
+        "end_index": 355,
+        "start_time": 1254130,
+        "description": "There are no immediate customer announcements for the 14A process, potentially delaying growth until 2027.",
+        "start_index": 351
+      }
+    ],
+    "created_at": "2026-01-26T10:13:31.472Z"
+  },
+  {
+    "id": 198,
+    "episode_id": "87a8b530_8f56b9a33cb272b6",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "8299.TW",
+    "bluf_thesis": "Memory controllers and flash products are benefiting from the global memory shortage, though intraday volatility is increasing.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Global Memory Sector Correlation",
+        "category": "DEMAND",
+        "end_time": 974532,
+        "end_index": 463,
+        "start_time": 970571,
+        "description": "Benefiting from the global surge in memory prices and the massive rally in US-listed memory components.",
+        "start_index": 461
+      }
+    ],
+    "risks": [
+      {
+        "title": "High Intraday Volatility",
+        "end_time": 980371,
+        "severity": "MEDIUM",
+        "end_index": 466,
+        "start_time": 974532,
+        "description": "Despite hitting the daily limit, the price opened up at the end of the session with significant volatility.",
+        "start_index": 464
+      }
+    ],
+    "created_at": "2026-01-26T10:13:07.351Z"
+  },
+  {
+    "id": 197,
+    "episode_id": "87a8b530_8f56b9a33cb272b6",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "Global memory stocks are seeing a historic rally driven by long-term supply shortages and AI demand extending through 2027.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Long-Term Cycle Expansion",
+        "category": "DEMAND",
+        "end_time": 1081268,
+        "end_index": 519,
+        "start_time": 1070627,
+        "description": "Memory demand and growth momentum remain extremely strong, with industry analysts estimating shortages lasting until 2027 or 2028.",
+        "start_index": 515
+      },
+      {
+        "title": "Price Breakout to Record Highs",
+        "category": "TECHNICAL",
+        "end_time": 964192,
+        "end_index": 457,
+        "start_time": 960792,
+        "description": "Stock price hit record highs, showing strength even when broader markets were volatile due to geopolitical events.",
+        "start_index": 456
+      }
+    ],
+    "risks": [
+      {
+        "title": "Short-Term Market Overheating",
+        "end_time": 1070627,
+        "severity": "MEDIUM",
+        "end_index": 514,
+        "start_time": 1058607,
+        "description": "Recent price action is described as 'crazy' or 'insane', suggesting a high risk of short-term overheating and chasing highs.",
+        "start_index": 509
+      }
+    ],
+    "created_at": "2026-01-26T10:13:07.351Z"
+  },
+  {
+    "id": 196,
+    "episode_id": "87a8b530_8f56b9a33cb272b6",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "1519.TW",
+    "bluf_thesis": "The AI wave is driving massive dollar-denominated infrastructure investments, combined with favorable Taiwan-US tariff policies benefiting power equipment manufacturers.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI Infrastructure Investment",
+        "category": "DEMAND",
+        "end_time": 710231,
+        "end_index": 327,
+        "start_time": 697251,
+        "description": "NVIDIA CEO Jensen Huang emphasizes AI-driven demand for massive infrastructure investment, particularly in transformers.",
+        "start_index": 322
+      },
+      {
+        "title": "Taiwan-US Reciprocal Tariffs",
+        "category": "MACRO",
+        "end_time": 706631,
+        "end_index": 325,
+        "start_time": 702751,
+        "description": "Taiwan-US reciprocal tariff effects are starting to take hold, acting as a tailwind for domestic heavy electric stocks.",
+        "start_index": 324
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:07.351Z"
+  },
+  {
+    "id": 195,
+    "episode_id": "87a8b530_8f56b9a33cb272b6",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "2330.TW",
+    "bluf_thesis": "TSMC's growth trajectory has fundamentally shifted from Apple's dominance to AI-driven demand, with high-end server chips becoming the primary priority.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Shift from Apple to AI Priority",
+        "category": "FUNDAMENTAL",
+        "end_time": 203120,
+        "end_index": 95,
+        "start_time": 173139,
+        "description": "NVIDIA and AI demand are undergoing explosive growth, replacing Apple as the most prioritized customer segment.",
+        "start_index": 80
+      },
+      {
+        "title": "Technical Bullish Rebound",
+        "category": "TECHNICAL",
+        "end_time": 140939,
+        "end_index": 63,
+        "start_time": 106480,
+        "description": "Stock price has regained bullish momentum, approaching historical highs near 1780.",
+        "start_index": 49
+      }
+    ],
+    "risks": [
+      {
+        "title": "Weakening Apple Device Demand",
+        "end_time": 214520,
+        "severity": "LOW",
+        "end_index": 101,
+        "start_time": 204800,
+        "description": "Apple's influence is declining as its edge AI capabilities are currently deemed insufficient compared to the server-side AI boom.",
+        "start_index": 97
+      }
+    ],
+    "created_at": "2026-01-26T10:13:07.351Z"
+  },
+  {
+    "id": 194,
+    "episode_id": "87a8b530_a05a9bbe0b30e567",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "2540",
+    "bluf_thesis": "Aisalin's stock price has experienced a massive crash of over 80% from its high, reflecting the severe downturn and 'primary decline phase' of the real estate market.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.30",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Extreme Valuation Reset",
+        "category": "TECHNICAL",
+        "end_time": 1374104,
+        "end_index": 728,
+        "start_time": 1366104,
+        "description": "Stock price crashed from a peak of 234 in July 2024 to approximately 40 in early 2026.",
+        "start_index": 725
+      }
+    ],
+    "risks": [
+      {
+        "title": "Primary Market Downtrend",
+        "end_time": 677748,
+        "severity": "CRITICAL",
+        "end_index": 356,
+        "start_time": 667488,
+        "description": "The overall property market is entering its 'main decline phase' from Q4 2025 through the first half of 2026.",
+        "start_index": 352
+      }
+    ],
+    "created_at": "2026-01-26T10:13:05.619Z"
+  },
+  {
+    "id": 193,
+    "episode_id": "87a8b530_a05a9bbe0b30e567",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "2348",
+    "bluf_thesis": "As a leading indicator for the construction industry, Hiyes has already peaked and is currently undergoing a deep technical correction amid poor sales visibility.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Significant Price Correction",
+        "category": "TECHNICAL",
+        "end_time": 1295644,
+        "end_index": 685,
+        "start_time": 1291544,
+        "description": "The stock price has plummeted from a peak of 200-300 dollars down to tens of dollars, indicating the 'head' has been formed.",
+        "start_index": 684
+      },
+      {
+        "title": "Leading Indicator for Property Market",
+        "category": "FUNDAMENTAL",
+        "end_time": 1347804,
+        "end_index": 714,
+        "start_time": 1342764,
+        "description": "The agency/brokerage industry serves as a leading indicator; a decline here signals falling sales rates for developers.",
+        "start_index": 713
+      }
+    ],
+    "risks": [
+      {
+        "title": "Weakening Sales Momentum",
+        "end_time": 1358344,
+        "severity": "HIGH",
+        "end_index": 719,
+        "start_time": 1347804,
+        "description": "Declining sales rates directly impact the revenue and EPS of property agencies and construction companies.",
+        "start_index": 715
+      }
+    ],
+    "created_at": "2026-01-26T10:13:05.619Z"
+  },
+  {
+    "id": 192,
+    "episode_id": "87a8b530_a05a9bbe0b30e567",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "2330",
+    "bluf_thesis": "TSMC provides significantly higher returns and better liquidity compared to the currently cooling real estate market.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Superior Short-Term Growth",
+        "category": "FUNDAMENTAL",
+        "end_time": 600908,
+        "end_index": 308,
+        "start_time": 595948,
+        "description": "TSMC's stock rose 13% in less than a month in early 2026, outperforming the slow appreciation of property.",
+        "start_index": 306
+      },
+      {
+        "title": "Investment Efficiency and Liquidity",
+        "category": "TECHNICAL",
+        "end_time": 603248,
+        "end_index": 309,
+        "start_time": 600908,
+        "description": "Real estate investment requires a long 'holding' period to earn the same return that stocks like TSMC can provide much faster.",
+        "start_index": 309
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:05.619Z"
+  },
+  {
+    "id": 160,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "GOOGL",
+    "bluf_thesis": "Google's integrated model from TPUs to search applications provides a faster path to AI monetization compared to peers.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "TPU Efficiency",
+        "category": "OPERATIONAL",
+        "end_time": 1562581,
+        "end_index": 760,
+        "start_time": 1554641,
+        "description": "Google's TPU development provides specialized efficiency for their specific AI workloads.",
+        "start_index": 756
+      },
+      {
+        "title": "Rapid AI Monetization",
+        "category": "MOAT",
+        "end_time": 1605046,
+        "end_index": 781,
+        "start_time": 1581221,
+        "description": "Google's massive user base and search dominance allow for quicker monetization of AI features compared to competitors.",
+        "start_index": 775
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 159,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "AMZN",
+    "bluf_thesis": "Amazon is securing its AI dominance through massive investments in nuclear energy and cost-efficient custom silicon to improve long-term margins.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.68",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Energy Infrastructure Investment",
+        "category": "SUPPLY",
+        "end_time": 1431036,
+        "end_index": 693,
+        "start_time": 1421876,
+        "description": "Amazon is aggressively investing in nuclear and renewable energy to ensure a stable power supply for its expanding data centers.",
+        "start_index": 691
+      },
+      {
+        "title": "Custom Silicon Advantage",
+        "category": "OPERATIONAL",
+        "end_time": 1553301,
+        "end_index": 755,
+        "start_time": 1533821,
+        "description": "Self-developed chips like Graviton and Trainium (AWS) help lower power consumption and improve price-performance ratios.",
+        "start_index": 742
+      },
+      {
+        "title": "Infrastructure Scale Effects",
+        "category": "FUNDAMENTAL",
+        "end_time": 1693226,
+        "end_index": 824,
+        "start_time": 1653446,
+        "description": "AWS infrastructure investments are planned for 25-30 year lifespans, aimed at becoming long-term cash flow machines as scale effects kick in.",
+        "start_index": 801
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 158,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "NVDA",
+    "bluf_thesis": "NVIDIA remains the primary vehicle for AI exposure as the industry shift is viewed as a long-term secular trend rather than a bubble.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "AI Secular Trend",
+        "category": "MACRO",
+        "end_time": 594439,
+        "end_index": 269,
+        "start_time": 588679,
+        "description": "CEO Jensen Huang emphasizes that AI is in its early stages and represents a long-term trend, not a temporary bubble.",
+        "start_index": 267
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 157,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "AVGO",
+    "bluf_thesis": "Broadcom is currently in a transitional restructuring phase towards integrated systems, which may create short-term volatility but leaves long-term fundamentals intact.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.52",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Strategic Transformation",
+        "category": "OPERATIONAL",
+        "end_time": 540919,
+        "end_index": 243,
+        "start_time": 528479,
+        "description": "The company is evolving from a network chip provider to a more integrated system solution provider.",
+        "start_index": 236
+      },
+      {
+        "title": "Stable Long-term Outlook",
+        "category": "FUNDAMENTAL",
+        "end_time": 564739,
+        "end_index": 254,
+        "start_time": 551679,
+        "description": "Despite recent stock underperformance, there are no significant negative changes to the company's long-term business outlook.",
+        "start_index": 249
+      }
+    ],
+    "risks": [
+      {
+        "title": "Restructuring Uncertainty",
+        "end_time": 551679,
+        "severity": "MEDIUM",
+        "end_index": 248,
+        "start_time": 540919,
+        "description": "The restructuring process may lead to lower profit margins and increased uncertainty in the immediate future.",
+        "start_index": 244
+      }
+    ],
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 156,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "Intel is undergoing a valuation re-rating driven by CPU price hikes, manufacturing process improvements, and significant political backing from the U.S. government.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.78",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Low Relative Valuation",
+        "category": "VALUATION",
+        "end_time": 928264,
+        "end_index": 458,
+        "start_time": 904924,
+        "description": "Despite hitting a four-year high, Intel's valuation remains relatively low compared to peers, with upcoming earnings acting as a potential catalyst.",
+        "start_index": 446
+      },
+      {
+        "title": "Process & Margin Optimization",
+        "category": "OPERATIONAL",
+        "end_time": 961584,
+        "end_index": 477,
+        "start_time": 948244,
+        "description": "Continuous process optimization and cost efficiency improvements are expected to drive higher EPS and better forward guidance.",
+        "start_index": 471
+      },
+      {
+        "title": "Apple Foundry Partnership",
+        "category": "DEMAND",
+        "end_time": 976924,
+        "end_index": 485,
+        "start_time": 964904,
+        "description": "Intel is expected to secure foundry orders from Apple for MacBook and iPad processors starting in 2027.",
+        "start_index": 479
+      },
+      {
+        "title": "Government Strategic Support",
+        "category": "MACRO",
+        "end_time": 1118391,
+        "end_index": 540,
+        "start_time": 1096411,
+        "description": "The U.S. government (Trump administration) taking a 10% stake provides a massive safety net and has already generated significant returns.",
+        "start_index": 532
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 155,
+    "episode_id": "e55a9f33_499d396710b764bb",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "AMD",
+    "bluf_thesis": "AMD is a key beneficiary of the upcoming CPU price hike theme due to severe capacity shortages through 2026 and strong technical momentum.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "CPU Capacity Shortage",
+        "category": "SUPPLY",
+        "end_time": 724618,
+        "end_index": 338,
+        "start_time": 630879,
+        "description": "CPU capacity for 2026 is nearly sold out as cloud giants lock in supply for data centers, leading to expected price increases.",
+        "start_index": 295
+      },
+      {
+        "title": "Technical Breakout",
+        "category": "TECHNICAL",
+        "end_time": 751217,
+        "end_index": 350,
+        "start_time": 728278,
+        "description": "The stock has seen seven consecutive days of gains and has broken through a range high, suggesting it may challenge its previous all-time high.",
+        "start_index": 341
+      }
+    ],
+    "risks": [
+      {
+        "title": "Technical Reversal Risk",
+        "end_time": 829244,
+        "severity": "MEDIUM",
+        "end_index": 398,
+        "start_time": 813438,
+        "description": "If the upward momentum fails to continue after reaching new highs, investors using technical entry points must maintain strict stop-loss discipline.",
+        "start_index": 396
+      }
+    ],
+    "created_at": "2026-01-26T10:12:49.703Z"
+  },
+  {
+    "id": 95,
+    "episode_id": "547e2c56_f8e694fd5e9cff32",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "6770.TW",
+    "bluf_thesis": "The sale of the P5 plant serves as a critical stop-loss measure for PSMC to mitigate the impact of poor utilization and past financial losses.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.55",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Stop-Loss Asset Disposition",
+        "category": "OPERATIONAL",
+        "end_time": 292086,
+        "end_index": 188,
+        "start_time": 282806,
+        "description": "Selling underutilized assets to Micron helps PSMC stop financial bleeding and exit a losing facility at a reasonable price.",
+        "start_index": 182
+      }
+    ],
+    "risks": [
+      {
+        "title": "Persistently Low Utilization",
+        "end_time": 129800,
+        "severity": "MEDIUM",
+        "end_index": 79,
+        "start_time": 115560,
+        "description": "PSMC has struggled with low plant utilization rates across multiple sites during the current memory downturn.",
+        "start_index": 70
+      }
+    ],
+    "created_at": "2026-01-26T10:12:13.471Z"
+  },
+  {
+    "id": 94,
+    "episode_id": "547e2c56_f8e694fd5e9cff32",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "Micron's strategic acquisition of PSMC's P5 plant enables rapid cleanroom capacity expansion for profitable DRAM production, bypassing long construction cycles.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Rapid Capacity Expansion",
+        "category": "SUPPLY",
+        "end_time": 204366,
+        "end_index": 121,
+        "start_time": 178246,
+        "description": "Acquiring a ready-made plant/cleanroom from PSMC allows Micron to install equipment immediately and secure capacity without waiting for civil construction.",
+        "start_index": 104
+      },
+      {
+        "title": "DRAM Market Recovery",
+        "category": "DEMAND",
+        "end_time": 243666,
+        "end_index": 154,
+        "start_time": 232286,
+        "description": "DRAM profitability is currently outpacing NAND, prompting manufacturers to shift production lines to capture higher margins.",
+        "start_index": 147
+      }
+    ],
+    "risks": [
+      {
+        "title": "Equipment Integration Uncertainty",
+        "end_time": 213026,
+        "severity": "LOW",
+        "end_index": 130,
+        "start_time": 204366,
+        "description": "Uncertainty regarding how much of the existing PSMC equipment can be reused for Micron's specific memory manufacturing processes.",
+        "start_index": 122
+      }
+    ],
+    "created_at": "2026-01-26T10:12:13.471Z"
+  },
+  {
+    "id": 93,
+    "episode_id": "547e2c56_f8e694fd5e9cff32",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "2330.TW",
+    "bluf_thesis": "TSMC's aggressive expansion into N2 nodes and record-high capital expenditure signify absolute dominance in meeting massive AI semiconductor demand.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "N2 Advanced Node Demand",
+        "category": "DEMAND",
+        "end_time": 804229,
+        "end_index": 535,
+        "start_time": 774970,
+        "description": "Strong early adoption and optimistic market sentiment for the 2nm (N2) node, driven by high demand from AI and major clients like Apple.",
+        "start_index": 511
+      },
+      {
+        "title": "Record Capital Expenditure",
+        "category": "FUNDAMENTAL",
+        "end_time": 824236,
+        "end_index": 544,
+        "start_time": 804229,
+        "description": "A significant upward revision of capital expenditure to over $50 billion (exceeding initial expectations of $48 billion) confirms high growth trajectory.",
+        "start_index": 536
+      }
+    ],
+    "risks": [
+      {
+        "title": "High Valuation Sensitivity",
+        "end_time": 1847297,
+        "severity": "MEDIUM",
+        "end_index": 1227,
+        "start_time": 1838537,
+        "description": "Current stock valuations are historically high based on growth rates, making them sensitive to any future slowdown in expansion.",
+        "start_index": 1220
+      },
+      {
+        "title": "AI Bubble Burst",
+        "end_time": 1863097,
+        "severity": "HIGH",
+        "end_index": 1243,
+        "start_time": 1851197,
+        "description": "Historical patterns suggest AI and inventory cycles eventually reach a bubble point or overbooking phase that leads to corrections.",
+        "start_index": 1234
+      }
+    ],
+    "created_at": "2026-01-26T10:12:13.471Z"
+  },
+  {
+    "id": 65,
+    "episode_id": "f595f5ab_45db51f1e20b148c",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "MAGS",
+    "bluf_thesis": "Select Magnificent Seven stocks are becoming attractive as their P/E ratios decline despite high market levels, fitting a low-base value investment strategy.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Declining P/E Ratios",
+        "category": "VALUATION",
+        "end_time": 1242490,
+        "end_index": 678,
+        "start_time": 1237590,
+        "description": "While the broader market is at high levels, the P/E ratios of some 'Seven Giants' companies are actually decreasing, presenting a valuation opportunity.",
+        "start_index": 676
+      },
+      {
+        "title": "Low-Base Selection Logic",
+        "category": "TECHNICAL",
+        "end_time": 1231510,
+        "end_index": 671,
+        "start_time": 1223870,
+        "description": "Preference for stocks at a 'low base' (low starting valuation) rather than chasing high-base stocks where earnings research might be less impactful.",
+        "start_index": 669
+      }
+    ],
+    "risks": [
+      {
+        "title": "Sector Rotation",
+        "end_time": 1170490,
+        "severity": "LOW",
+        "end_index": 627,
+        "start_time": 1159130,
+        "description": "Market rotation may shift focus from hardware growth back to broader value stocks or different sectors within the Nasdaq.",
+        "start_index": 624
+      }
+    ],
+    "created_at": "2026-01-26T10:12:00.335Z"
+  },
+  {
+    "id": 64,
+    "episode_id": "f595f5ab_45db51f1e20b148c",
+    "podcast_launch_time": "2026-01-21T16:00:00.000Z",
+    "ticker": "SOX",
+    "bluf_thesis": "The Philadelphia Semiconductor Index is leading the current market rally, entering a massive breakout phase in 2025 after a stagnant 2024.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Index Leadership",
+        "category": "TECHNICAL",
+        "end_time": 1050624,
+        "end_index": 559,
+        "start_time": 1039204,
+        "description": "The Philadelphia Semiconductor Index (SOX) is leading the market charge and has regained strength after being suppressed for most of 2024.",
+        "start_index": 554
+      },
+      {
+        "title": "2025 Growth Explosion",
+        "category": "DEMAND",
+        "end_time": 1054784,
+        "end_index": 562,
+        "start_time": 1050624,
+        "description": "After a year of little movement, the semiconductor sector is experiencing an explosion in growth in 2025.",
+        "start_index": 560
+      }
+    ],
+    "risks": [
+      {
+        "title": "Earnings Volatility",
+        "end_time": 1059264,
+        "severity": "MEDIUM",
+        "end_index": 566,
+        "start_time": 1057084,
+        "description": "Future performance depends heavily on the upcoming technology sector earnings reports and whether they meet market expectations.",
+        "start_index": 565
+      }
+    ],
+    "created_at": "2026-01-26T10:12:00.335Z"
+  },
+  {
+    "id": 241,
+    "episode_id": "CNBCsFastMoney_33603d5915c9635f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "MSFT",
+    "bluf_thesis": "Microsoft offers a strong tactical setup for a bounce following a significant sell-off since October and ahead of January earnings.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.60",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Attractive Tactical Entry",
+        "category": "TECHNICAL",
+        "end_time": 802090,
+        "end_index": 239,
+        "start_time": 785769,
+        "description": "The setup for Microsoft is the best it has been in a long time given the 20% sell-off seen since October.",
+        "start_index": 237
+      },
+      {
+        "title": "Pair Trade Opportunity",
+        "category": "TECHNICAL",
+        "end_time": 810850,
+        "end_index": 241,
+        "start_time": 805949,
+        "description": "Microsoft is a prime candidate for a convergence pair trade between lagging software and extended semiconductors.",
+        "start_index": 241
+      }
+    ],
+    "risks": [
+      {
+        "title": "Unfilled Chart Gap",
+        "end_time": 805949,
+        "severity": "MEDIUM",
+        "end_index": 240,
+        "start_time": 802090,
+        "description": "There is a large gap in the technical chart that still remains to be filled on the downside.",
+        "start_index": 240
+      }
+    ],
+    "created_at": "2026-01-26T10:13:34.070Z"
+  },
+  {
+    "id": 240,
+    "episode_id": "CNBCsFastMoney_33603d5915c9635f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "NFLX",
+    "bluf_thesis": "Netflix is a tactical buy at current levels due to strong engagement and a clear path to 40% margins, provided the WBD deal overhang clears.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Superior Margin Trajectory",
+        "category": "FUNDAMENTAL",
+        "end_time": 2022230,
+        "end_index": 551,
+        "start_time": 2005011,
+        "description": "Netflix has a clear path to 40% margins in the next few years and currently generates seven times the EBITDA of Disney streaming.",
+        "start_index": 549
+      },
+      {
+        "title": "Technical Support Level",
+        "category": "TECHNICAL",
+        "end_time": 2329446,
+        "end_index": 615,
+        "start_time": 2320586,
+        "description": "The stock is trading at a mid-20s multiple and is expected to bounce from current technical levels near $84.",
+        "start_index": 612
+      }
+    ],
+    "risks": [
+      {
+        "title": "M&A Overhang",
+        "end_time": 2313066,
+        "severity": "MEDIUM",
+        "end_index": 608,
+        "start_time": 2308826,
+        "description": "The rumored acquisition of Warner Brothers Discovery is an overhang that is currently pressuring the stock price.",
+        "start_index": 608
+      },
+      {
+        "title": "AI Content Disruption",
+        "end_time": 2163338,
+        "severity": "HIGH",
+        "end_index": 579,
+        "start_time": 2113331,
+        "description": "Professionally generated AI content could reduce the value of Netflix's large content budget by lowering production costs for competitors.",
+        "start_index": 574
+      }
+    ],
+    "created_at": "2026-01-26T10:13:34.070Z"
+  },
+  {
+    "id": 237,
+    "episode_id": "CNBCsFastMoney_33603d5915c9635f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "Micron is a compelling buy due to its high-margin HBM chips being sold out through 2026 and strong DRAM weightings.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Extended Sold-Out Backlog",
+        "category": "DEMAND",
+        "end_time": 843163,
+        "end_index": 246,
+        "start_time": 832723,
+        "description": "The company's memory chips and HBM capacity are completely sold out until late 2026 or early 2027.",
+        "start_index": 245
+      },
+      {
+        "title": "Strong Gross Margins",
+        "category": "FUNDAMENTAL",
+        "end_time": 851923,
+        "end_index": 248,
+        "start_time": 843163,
+        "description": "High Bandwidth Memory (HBM) chips are delivering exceptionally high 70% gross margins.",
+        "start_index": 247
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:34.070Z"
+  },
+  {
+    "id": 238,
+    "episode_id": "CNBCsFastMoney_33603d5915c9635f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "NVDA",
+    "bluf_thesis": "NVIDIA remains a strong long-term hold as its valuation is relatively inexpensive relative to its 50% earnings and sales growth.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.70",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Attractive Valuation Relative to Growth",
+        "category": "VALUATION",
+        "end_time": 963263,
+        "end_index": 275,
+        "start_time": 937383,
+        "description": "At 24 times forward earnings with 50% growth in earnings and sales, the stock is considered relatively inexpensive.",
+        "start_index": 271
+      },
+      {
+        "title": "Operational Excellence",
+        "category": "FUNDAMENTAL",
+        "end_time": 1006076,
+        "end_index": 285,
+        "start_time": 1000116,
+        "description": "The company continues to deliver excellent performance, particularly with its new generation of chips.",
+        "start_index": 283
+      }
+    ],
+    "risks": [
+      {
+        "title": "Margin and Competition Risk",
+        "end_time": 988876,
+        "severity": "MEDIUM",
+        "end_index": 278,
+        "start_time": 963263,
+        "description": "Market concerns regarding the sustainability of high gross margins and competition from custom ASIC solutions.",
+        "start_index": 276
+      }
+    ],
+    "created_at": "2026-01-26T10:13:34.070Z"
+  },
+  {
+    "id": 239,
+    "episode_id": "CNBCsFastMoney_33603d5915c9635f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "AAPL",
+    "bluf_thesis": "Apple is a sleeper play for the second half of 2026, positioned to benefit from its massive installed base and the upcoming Siri AI revamp.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Massive Ecosystem Leverage",
+        "category": "MOAT",
+        "end_time": 1184030,
+        "end_index": 332,
+        "start_time": 1176570,
+        "description": "Apple can leverage its nearly two billion installed device base to deploy new AI products like Gemini-integrated Siri.",
+        "start_index": 331
+      },
+      {
+        "title": "CapEx Efficiency",
+        "category": "FUNDAMENTAL",
+        "end_time": 1222370,
+        "end_index": 344,
+        "start_time": 1209810,
+        "description": "Apple is likely to be rewarded for its lack of aggressive AI capital expenditure compared to peers who are spending heavily.",
+        "start_index": 342
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:34.070Z"
+  },
+  {
+    "id": 163,
+    "episode_id": "e55a9f33_8f7caed70e415dc2",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "NFLX",
+    "bluf_thesis": "Netflix is undergoing a strategic transition involving a massive all-cash acquisition of Warner Bros. and a shift toward advertising, which creates short-term financial friction but solidifies its long-term content dominance.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Robust Subscriber Growth",
+        "category": "DEMAND",
+        "end_time": 1298617,
+        "end_index": 641,
+        "start_time": 1290617,
+        "description": "Global subscribers have surpassed the 325 million mark, indicating continued growth despite market saturation concerns.",
+        "start_index": 639
+      },
+      {
+        "title": "Advertising Revenue Momentum",
+        "category": "FUNDAMENTAL",
+        "end_time": 1460741,
+        "end_index": 725,
+        "start_time": 1451681,
+        "description": "Advertising revenue is projected to double by 2026, reaching approximately $3 billion, providing a higher-margin revenue stream.",
+        "start_index": 721
+      },
+      {
+        "title": "Warner Bros. Acquisition Synergy",
+        "category": "MOAT",
+        "end_time": 1579705,
+        "end_index": 783,
+        "start_time": 1541221,
+        "description": "The acquisition of Warner Bros. provides a massive content library, reducing the need for high-risk original content production.",
+        "start_index": 770
+      }
+    ],
+    "risks": [
+      {
+        "title": "Merger Costs and Guidance Miss",
+        "end_time": 1516441,
+        "severity": "MEDIUM",
+        "end_index": 755,
+        "start_time": 1500181,
+        "description": "The company missed margin guidance for 2026 due to $275 million in merger-related expenses.",
+        "start_index": 749
+      },
+      {
+        "title": "Suspension of Buybacks",
+        "end_time": 1522401,
+        "severity": "MEDIUM",
+        "end_index": 758,
+        "start_time": 1516441,
+        "description": "Netflix has suspended its stock buyback program to allocate funds for the acquisition, removing a key support for the stock price.",
+        "start_index": 756
+      },
+      {
+        "title": "Debt Pressure from Cash Deal",
+        "end_time": 1639526,
+        "severity": "MEDIUM",
+        "end_index": 813,
+        "start_time": 1604725,
+        "description": "Switching to an all-cash acquisition to beat Paramount's bid increases the debt burden and limits financial flexibility for expansion elsewhere.",
+        "start_index": 799
+      },
+      {
+        "title": "Attention Economy Competition",
+        "end_time": 1685010,
+        "severity": "HIGH",
+        "end_index": 833,
+        "start_time": 1661385,
+        "description": "Intense competition for user attention from platforms like YouTube and TikTok remains a structural threat to user engagement and ad value.",
+        "start_index": 825
+      }
+    ],
+    "created_at": "2026-01-26T10:12:51.491Z"
+  },
+  {
+    "id": 162,
+    "episode_id": "e55a9f33_8f7caed70e415dc2",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "SANDISK",
+    "bluf_thesis": "Sandisk is experiencing significant momentum as a key beneficiary of the transition from AI training to inference, which drives massive demand for storage, though current price action reflects some short-term FOMO.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.78",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Institutional Price Target Upgrades",
+        "category": "VALUATION",
+        "end_time": 1120251,
+        "end_index": 553,
+        "start_time": 1071351,
+        "description": "Major investment banks have significantly raised their price targets for the stock (e.g., Citi to $490).",
+        "start_index": 532
+      },
+      {
+        "title": "AI Infrastructure Demand",
+        "category": "DEMAND",
+        "end_time": 1130991,
+        "end_index": 557,
+        "start_time": 1121111,
+        "description": "The shift toward AI inference requires significantly more storage capacity, creating a long-term demand tailwind.",
+        "start_index": 555
+      },
+      {
+        "title": "Advanced Technical Research",
+        "category": "MOAT",
+        "end_time": 1153657,
+        "end_index": 562,
+        "start_time": 1133151,
+        "description": "Development of HBF technology as a complement or alternative to HBM provides future technical optionality and competitive advantage.",
+        "start_index": 560
+      },
+      {
+        "title": "Strong Pricing Power",
+        "category": "FUNDAMENTAL",
+        "end_time": 1204617,
+        "end_index": 593,
+        "start_time": 1198877,
+        "description": "Customers are increasingly willing to accept higher prices for memory and flash capacity, boosting profit potential.",
+        "start_index": 591
+      }
+    ],
+    "risks": [
+      {
+        "title": "Short-term Overheating",
+        "end_time": 1167417,
+        "severity": "MEDIUM",
+        "end_index": 570,
+        "start_time": 1100491,
+        "description": "The stock has risen nearly 90% in less than a month, suggesting a high level of speculative heat and potential short-term pullback.",
+        "start_index": 546
+      },
+      {
+        "title": "Rising Capital Expenditure Requirements",
+        "end_time": 1241977,
+        "severity": "LOW",
+        "end_index": 610,
+        "start_time": 1238557,
+        "description": "Maintaining momentum requires sustained increases in capital expenditure to support the strong stock valuation.",
+        "start_index": 609
+      }
+    ],
+    "created_at": "2026-01-26T10:12:51.491Z"
+  },
+  {
+    "id": 161,
+    "episode_id": "e55a9f33_8f7caed70e415dc2",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "DHI",
+    "bluf_thesis": "D.R. Horton faces a challenging environment where rising interest rates are forcing the use of price cuts and promotions to sustain volume, potentially threatening future profit margins despite recent earnings beats.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.48",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Earnings Beat",
+        "category": "FUNDAMENTAL",
+        "end_time": 925484,
+        "end_index": 460,
+        "start_time": 922244,
+        "description": "The company reported recent revenue and EPS that exceeded market expectations.",
+        "start_index": 459
+      },
+      {
+        "title": "Cyclical Industry Strength",
+        "category": "FUNDAMENTAL",
+        "end_time": 918224,
+        "end_index": 455,
+        "start_time": 911584,
+        "description": "D.R. Horton has benefited from a period of high demand and cyclical prosperity in the housing market.",
+        "start_index": 453
+      }
+    ],
+    "risks": [
+      {
+        "title": "Rising Yields",
+        "end_time": 958204,
+        "severity": "HIGH",
+        "end_index": 476,
+        "start_time": 882304,
+        "description": "Rising bond yields are putting downward pressure on the real estate sector and dampening buyer interest.",
+        "start_index": 440
+      },
+      {
+        "title": "Margin Pressure from Promotions",
+        "end_time": 974504,
+        "severity": "MEDIUM",
+        "end_index": 482,
+        "start_time": 933924,
+        "description": "The current sales volume is being propped up by temporary promotions and price cuts, which may not be sustainable if rates remain high.",
+        "start_index": 465
+      },
+      {
+        "title": "Weak New Orders",
+        "end_time": 967304,
+        "severity": "MEDIUM",
+        "end_index": 480,
+        "start_time": 959944,
+        "description": "New orders are performing below market expectations due to high yields and reduced buyer purchasing power.",
+        "start_index": 478
+      }
+    ],
+    "created_at": "2026-01-26T10:12:51.491Z"
+  },
+  {
+    "id": 67,
+    "episode_id": "f595f5ab_932160f451e6569f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "TSM",
+    "bluf_thesis": "TSMC is facing a localized 'foreign vs. domestic' sentiment battle, where significant institutional selling is being countered by a strong, mysterious domestic support force and a decent technical cushion.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.55",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Technical Buffer",
+        "category": "TECHNICAL",
+        "end_time": 312846,
+        "end_index": 163,
+        "start_time": 308066,
+        "description": "Despite recent price reversals, TSMC maintains a safe distance from most major moving averages, preventing immediate panic among investors.",
+        "start_index": 161
+      },
+      {
+        "title": "Mysterious Domestic Support Hand",
+        "category": "FUNDAMENTAL",
+        "end_time": 390693,
+        "end_index": 205,
+        "start_time": 365353,
+        "description": "A 'mysterious hand' or strong domestic capital sentiment is supporting the stock price at current levels despite selling by the three major institutional categories.",
+        "start_index": 192
+      },
+      {
+        "title": "Price Resilience Sentiment",
+        "category": "TECHNICAL",
+        "end_time": 397173,
+        "end_index": 209,
+        "start_time": 395053,
+        "description": "The stock exhibits a psychological resilience described as the 'incapability to fall' disease, suggesting strong underlying support and dip-buying behavior.",
+        "start_index": 209
+      }
+    ],
+    "risks": [
+      {
+        "title": "Foreign Selling and ETF Withdrawal",
+        "end_time": 362273,
+        "severity": "MEDIUM",
+        "end_index": 189,
+        "start_time": 314566,
+        "description": "Foreign institutional selling has been persistent, and the withdrawal of ETF buying power (18 days of selling) could eventually break domestic sentiment and support.",
+        "start_index": 165
+      }
+    ],
+    "created_at": "2026-01-26T10:12:01.624Z"
+  },
+  {
+    "id": 66,
+    "episode_id": "f595f5ab_932160f451e6569f",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "NVDA",
+    "bluf_thesis": "NVIDIA is experiencing a necessary technical valuation correction following a period of high deviation, but it remains the indispensable core of the AI structural trend where the risk of exclusion outweighs valuation concerns.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Mean Reversion Correction",
+        "category": "TECHNICAL",
+        "end_time": 35179,
+        "end_index": 19,
+        "start_time": 27500,
+        "description": "The current market decline is a normal regression and valuation adjustment following a period of high deviation from the mean, rather than a fundamental collapse.",
+        "start_index": 16
+      },
+      {
+        "title": "AI Structural Imperative",
+        "category": "DEMAND",
+        "end_time": 1717972,
+        "end_index": 934,
+        "start_time": 1713772,
+        "description": "In the current market era, the psychological sentiment has shifted such that avoiding AI exposure is perceived as a greater risk than high price-to-earnings ratios or valuation premiums.",
+        "start_index": 933
+      },
+      {
+        "title": "Healthy Regression from High Deviation",
+        "category": "TECHNICAL",
+        "end_time": 127340,
+        "end_index": 63,
+        "start_time": 123079,
+        "description": "From a macro perspective, the current pullback in the semiconductor sector is seen as a normal cooling off period from high levels with moving averages still trending upwards.",
+        "start_index": 62
+      }
+    ],
+    "risks": [
+      {
+        "title": "Technical Breakdown Risk",
+        "end_time": 226646,
+        "severity": "HIGH",
+        "end_index": 114,
+        "start_time": 216426,
+        "description": "NVIDIA has fallen below its month, quarter, and half-year moving averages; failure to bounce back quickly could trigger a test of the 200-day (yearly) moving average, reverting prices to mid-2023 levels.",
+        "start_index": 111
+      },
+      {
+        "title": "AI CAPEX Undershoot",
+        "end_time": 196706,
+        "severity": "MEDIUM",
+        "end_index": 99,
+        "start_time": 190406,
+        "description": "Market concerns that upcoming tech earnings may reveal AI-related capital expenditure levels that do not meet high investor expectations.",
+        "start_index": 96
+      }
+    ],
+    "created_at": "2026-01-26T10:12:01.624Z"
+  },
+  {
+    "id": 22,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "4540.TW",
+    "bluf_thesis": "TBI Motion is part of a broader rally in the machine tool and traditional manufacturing sectors due to shifting global trade dynamics.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Tariff Negotiation Tailwinds",
+        "category": "MACRO",
+        "end_time": 1334389,
+        "end_index": 915,
+        "start_time": 1309928,
+        "description": "Tariff negotiations and trade talks are potentially benefiting traditional manufacturing hubs in Central and Southern Taiwan.",
+        "start_index": 899
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 21,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "1597.TW",
+    "bluf_thesis": "PMTC is benefiting from the capital rotation into traditional machinery and industrial components in the Taiwan market.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Traditional Sector Momentum",
+        "category": "FUNDAMENTAL",
+        "end_time": 1334389,
+        "end_index": 915,
+        "start_time": 1313868,
+        "description": "Traditional industrial factories and component makers are showing strong stock price performance after a long period of weakness.",
+        "start_index": 901
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 20,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "2049.TW",
+    "bluf_thesis": "The machine tool sector in Taiwan, led by Hiwin, is seeing a recovery as market breadth expands beyond technology stocks.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Expanding Market Breadth",
+        "category": "TECHNICAL",
+        "end_time": 1324689,
+        "end_index": 908,
+        "start_time": 1302928,
+        "description": "Market breadth is opening up, with capital rotating from narrow tech leaders into previously underperforming traditional industrial sectors.",
+        "start_index": 894
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 19,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "RYAAY",
+    "bluf_thesis": "Ryanair dominates the European market due to its extreme cost-competitiveness and clear focus on price-sensitive consumers.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Low Cost Leadership",
+        "category": "MOAT",
+        "end_time": 967336,
+        "end_index": 642,
+        "start_time": 937390,
+        "description": "The company has an unshakable market position because it prioritizes low costs over services, matching the primary demand of the mass market.",
+        "start_index": 625
+      },
+      {
+        "title": "Market Awareness and Pricing Power",
+        "category": "OPERATIONAL",
+        "end_time": 1175762,
+        "end_index": 794,
+        "start_time": 1163302,
+        "description": "Ryanair understands its customer profile perfectly, focusing on price sensitivity and ignoring online criticism that doesn't affect sales.",
+        "start_index": 785
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 18,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "TSM",
+    "bluf_thesis": "TSMC remains a high-conviction buy due to its long-term valuation advantages, even in the face of geopolitical fears.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Attractive Long-term Valuation",
+        "category": "VALUATION",
+        "end_time": 326292,
+        "end_index": 204,
+        "start_time": 308266,
+        "description": "Geopolitical fears have depressed its valuation, making it an attractive long-term entry point for those willing to embrace risk.",
+        "start_index": 199
+      }
+    ],
+    "risks": [
+      {
+        "title": "Geopolitical and War Risk",
+        "end_time": 315066,
+        "severity": "CRITICAL",
+        "end_index": 203,
+        "start_time": 311286,
+        "description": "The persistent threat of conflict involving Taiwan remains a primary concern for international investors.",
+        "start_index": 201
+      }
+    ],
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 17,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "AVGO",
+    "bluf_thesis": "Broadcom is identified as a top-tier semiconductor play alongside NVIDIA for the evolving AI market.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Key Infrastructure Provider",
+        "category": "FUNDAMENTAL",
+        "end_time": 308266,
+        "end_index": 198,
+        "start_time": 302586,
+        "description": "Identified as a critical 'second stage' AI stock that investors should hold.",
+        "start_index": 196
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 16,
+    "episode_id": "Gooaye_54637eb1f05b812b",
+    "podcast_launch_time": "2026-01-20T16:00:00.000Z",
+    "ticker": "NVDA",
+    "bluf_thesis": "NVIDIA is recommended as a core holding for the second stage of the AI development cycle.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.85",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Second Stage AI Leadership",
+        "category": "FUNDAMENTAL",
+        "end_time": 308266,
+        "end_index": 198,
+        "start_time": 302586,
+        "description": "Podcaster suggests that NVIDIA and Broadcom are the primary choices for the second stage of the AI trend.",
+        "start_index": 196
+      },
+      {
+        "title": "Practical AI Integration",
+        "category": "DEMAND",
+        "end_time": 330612,
+        "end_index": 207,
+        "start_time": 315066,
+        "description": "AI application is already assisting professional fields like law, indicating real-world utility and demand.",
+        "start_index": 204
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:11:42.037Z"
+  },
+  {
+    "id": 328,
+    "episode_id": "InvestLiketheBest_de42d4badab72687",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "ORCL",
+    "bluf_thesis": "Larry Ellison's aggressive media strategy and personality-driven branding successfully repositioned Oracle from a niche database provider to a premier global brand compared with the world's best companies.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.68",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Strategic Brand Elevation",
+        "category": "MOAT",
+        "end_time": 4644706,
+        "end_index": 1187,
+        "start_time": 4631386,
+        "description": "Ellison's deliberate use of media conflict and public positioning allowed Oracle to transcend its category and achieve a valuation and brand status comparable to the best companies globally.",
+        "start_index": 1173
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:14:09.009Z"
+  },
+  {
+    "id": 327,
+    "episode_id": "InvestLiketheBest_de42d4badab72687",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "SPOT",
+    "bluf_thesis": "Daniel Ek's software development and strategic resource allocation principles at Spotify are cited as world-class benchmarks that drive spectacular operational success.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.82",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Excellence in Software Development",
+        "category": "OPERATIONAL",
+        "end_time": 3772079,
+        "end_index": 949,
+        "start_time": 3706858,
+        "description": "The principles Daniel Ek used to build Spotify's software and manage strategic direction are highlighted as some of the most effective in the industry, leading to high-quality outputs.",
+        "start_index": 940
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:14:09.009Z"
+  },
+  {
+    "id": 249,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "UAL",
+    "bluf_thesis": "Strong quarterly performance and free cash flow generation make it a solid hold, though macro-economic risks linger.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Strong Cash Flow and Earnings",
+        "category": "FUNDAMENTAL",
+        "end_time": 2310058,
+        "end_index": 591,
+        "start_time": 2283978,
+        "description": "The company reported a great quarter with strong free cash flow yields around 8.5 times forward.",
+        "start_index": 581
+      }
+    ],
+    "risks": [
+      {
+        "title": "Macroeconomic Sensitivity",
+        "end_time": 2332698,
+        "severity": "MEDIUM",
+        "end_index": 600,
+        "start_time": 2329178,
+        "description": "Rising unemployment rates would significantly negatively impact airline demand and stock performance.",
+        "start_index": 600
+      }
+    ],
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 246,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "INTC",
+    "bluf_thesis": "The recent rally is viewed as fundamentally disconnected from actual PC demand and an AI upgrade cycle that has yet to materialize.",
+    "time_horizon": "SHORT_TERM",
+    "sentiment_score": "0.35",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Sentiment-Driven Disconnect",
+        "category": "TECHNICAL",
+        "end_time": 1399000,
+        "end_index": 349,
+        "start_time": 1383299,
+        "description": "Government interest and manufacturing news sparked a rally that analysts believe is 'dumb' relative to fundamentals.",
+        "start_index": 344
+      }
+    ],
+    "risks": [
+      {
+        "title": "Weak PC Demand Environment",
+        "end_time": 1425860,
+        "severity": "HIGH",
+        "end_index": 356,
+        "start_time": 1411220,
+        "description": "PC demand remains weak, and the expected AI PC upgrade cycle is not yet apparent in sales data.",
+        "start_index": 353
+      }
+    ],
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 245,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "LNG",
+    "bluf_thesis": "Attractive valuation play in the energy sector after the stock has fully priced in concerns over capacity and bad news.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Deep Value in LNG",
+        "category": "VALUATION",
+        "end_time": 1327000,
+        "end_index": 326,
+        "start_time": 1318039,
+        "description": "The stock is considered cheap after pricing in overcapacity and negative industry sentiment.",
+        "start_index": 325
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 244,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "NFLX",
+    "bluf_thesis": "A transformative acquisition of Warner Brothers and high-growth advertising revenue justify staying long despite near-term margin pressure and regulatory hurdles.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.75",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Transformative IP Acquisition",
+        "category": "MOAT",
+        "end_time": 1861460,
+        "end_index": 476,
+        "start_time": 1826380,
+        "description": "The acquisition of Warner Brothers IP is seen as a transformative move similar to Disney's purchase of Marvel and Lucasfilm.",
+        "start_index": 472
+      },
+      {
+        "title": "Ad Business Acceleration",
+        "category": "DEMAND",
+        "end_time": 1100776,
+        "end_index": 263,
+        "start_time": 1096016,
+        "description": "Advertising revenue is showing significant strength with growth rates projected north of 50 percent.",
+        "start_index": 263
+      }
+    ],
+    "risks": [
+      {
+        "title": "Operating Margin Compression",
+        "end_time": 1066896,
+        "severity": "MEDIUM",
+        "end_index": 254,
+        "start_time": 919443,
+        "description": "The company is guiding to lower margins (32% vs 34%) due to production costs and a highly competitive streaming landscape.",
+        "start_index": 213
+      },
+      {
+        "title": "Antitrust and Regulatory Risk",
+        "end_time": 1740346,
+        "severity": "HIGH",
+        "end_index": 451,
+        "start_time": 1730006,
+        "description": "There is significant uncertainty regarding whether regulators will approve the Warner Brothers acquisition.",
+        "start_index": 451
+      }
+    ],
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 243,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "TSM",
+    "bluf_thesis": "Strong fundamental performance is being offset by concerns that the stock has moved too far ahead of its peers and valuation expectations.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.50",
+    "sentiment": "NEUTRAL",
+    "reasons": [
+      {
+        "title": "Strong Fundamental Growth",
+        "category": "FUNDAMENTAL",
+        "end_time": 880463,
+        "end_index": 196,
+        "start_time": 876303,
+        "description": "The company reported great numbers and provided positive commentary in its most recent earnings report.",
+        "start_index": 196
+      }
+    ],
+    "risks": [
+      {
+        "title": "Stretched Valuation and Sentiment",
+        "end_time": 887003,
+        "severity": "MEDIUM",
+        "end_index": 197,
+        "start_time": 880783,
+        "description": "The stock may have overextended itself in terms of market sentiment and valuation compared to its major customers like Nvidia and Microsoft.",
+        "start_index": 197
+      }
+    ],
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 242,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "AMZN",
+    "bluf_thesis": "Buying the dip as the stock falls below 230, viewing it as an opportunity to increase position size in a core holding.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.65",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Tactical Dip Buying",
+        "category": "TECHNICAL",
+        "end_time": 431886,
+        "end_index": 102,
+        "start_time": 427766,
+        "description": "The stock dropped approximately $9, providing a tactical entry point below the 230 level.",
+        "start_index": 102
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 248,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "DAL",
+    "bluf_thesis": "Leading the airline sector through superior margin extraction and premium demand, with a clear path to $100.",
+    "time_horizon": "LONG_TERM",
+    "sentiment_score": "0.80",
+    "sentiment": "BULLISH",
+    "reasons": [
+      {
+        "title": "Premium Margin Extraction",
+        "category": "OPERATIONAL",
+        "end_time": 2283798,
+        "end_index": 580,
+        "start_time": 2268004,
+        "description": "The airline is successfully extracting money from every part of the cabin and expanding margins effectively.",
+        "start_index": 579
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 247,
+    "episode_id": "CNBCsFastMoney_6954de04c3bad39e",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "MU",
+    "bluf_thesis": "Rejection of the 'this time is different' narrative for memory stocks, anticipating a return to historical cyclicality and commodity-like behavior.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.30",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Extreme Price Overextension",
+        "category": "TECHNICAL",
+        "end_time": 1509873,
+        "end_index": 382,
+        "start_time": 1503753,
+        "description": "The stock has seen an extreme run from $90 to $365 in less than a year, which the trader views as unsustainable.",
+        "start_index": 381
+      }
+    ],
+    "risks": [
+      {
+        "title": "Cyclicality and Commodity Risk",
+        "end_time": 1522553,
+        "severity": "HIGH",
+        "end_index": 386,
+        "start_time": 1512273,
+        "description": "The memory industry remains highly cyclical and commoditized, despite current market beliefs to the contrary.",
+        "start_index": 384
+      }
+    ],
+    "created_at": "2026-01-26T10:13:36.690Z"
+  },
+  {
+    "id": 219,
+    "episode_id": "ExchangesatGoldmanSachs_8fbae86476ea0328",
+    "podcast_launch_time": "2026-01-19T16:00:00.000Z",
+    "ticker": "USD",
+    "bluf_thesis": "The US dollar is expected to undergo a 3% trade-weighted depreciation in 2026 as it remains significantly overvalued in a pro-cyclical global economic environment.",
+    "time_horizon": "MEDIUM_TERM",
+    "sentiment_score": "0.40",
+    "sentiment": "BEARISH",
+    "reasons": [
+      {
+        "title": "Currency Overvaluation",
+        "category": "VALUATION",
+        "end_time": 488779,
+        "end_index": 80,
+        "start_time": 475359,
+        "description": "Despite recent depreciation, the US dollar remains approximately 15% overvalued on a trade-weighted basis.",
+        "start_index": 77
+      },
+      {
+        "title": "Pro-cyclical Global Backdrop",
+        "category": "MACRO",
+        "end_time": 517799,
+        "end_index": 85,
+        "start_time": 489019,
+        "description": "A positive global growth outlook creates a pro-cyclical environment where cyclical currencies tend to outperform the dollar.",
+        "start_index": 81
+      }
+    ],
+    "risks": null,
+    "created_at": "2026-01-26T10:13:24.680Z"
+  }
+]

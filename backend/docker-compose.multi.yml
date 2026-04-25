@@ -1,0 +1,178 @@
+# Multi-Environment Docker Compose
+# Runs all three environments (prod, dev, staging) simultaneously
+#
+# Usage:
+#   docker compose -f docker-compose.multi.yml up -d
+#   docker compose -f docker-compose.multi.yml restart backend-prod
+#   docker compose -f docker-compose.multi.yml pull backend-prod && docker compose -f docker-compose.multi.yml up -d --no-deps backend-prod
+
+services:
+  # Production Backend - Port 8000
+  backend-prod:
+    image: ghcr.io/graphfolio/graphfolio-backend:${PROD_IMAGE_TAG:-main}
+    container_name: graphfolio-backend-prod
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: production
+      USE_POSTGRES: "true"
+      REDIS_URL: redis://redis:6379/0
+      PORT: "8000"
+      HOST: 0.0.0.0
+      GCP_PROJECT_ID: gen-lang-client-0901363254
+      GOOGLE_APPLICATION_CREDENTIALS: /app/gcp-service-account.json
+      GCP_CREDENTIALS_PATH: /app/gcp-service-account.json
+      POSTGRES_HOST: docker-db_postgres-1
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: podcast_db
+      POSTGRES_USER: podcast_user
+      POSTGRES_PASSWORD: buxwLXrmK4a20fKCSvPTdpySs
+      FIRESTORE_DATABASE_ID: graphfolio-db
+      CORS_ORIGINS: '["https://tinboker.com","https://www.tinboker.com"]'
+    volumes:
+      - ./gcp-service-account.json:/app/gcp-service-account.json:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+
+  # Development Backend - Port 8001
+  backend-dev:
+    image: ghcr.io/graphfolio/graphfolio-backend:${DEV_IMAGE_TAG:-develop}
+    container_name: graphfolio-backend-dev
+    ports:
+      - "8001:8000"
+    environment:
+      ENVIRONMENT: development
+      USE_POSTGRES: "true"
+      REDIS_URL: redis://redis:6379/0
+      PORT: "8000"
+      HOST: 0.0.0.0
+      GCP_PROJECT_ID: gen-lang-client-0901363254
+      GOOGLE_APPLICATION_CREDENTIALS: /app/gcp-service-account.json
+      GCP_CREDENTIALS_PATH: /app/gcp-service-account.json
+      POSTGRES_HOST: docker-db_postgres-1
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: podcast_db
+      POSTGRES_USER: podcast_user
+      POSTGRES_PASSWORD: buxwLXrmK4a20fKCSvPTdpySs
+      FIRESTORE_DATABASE_ID: graphfolio-db
+      CORS_ORIGINS: '["https://dev.tinboker.com","http://localhost:5173","http://localhost:3000"]'
+    volumes:
+      - ./gcp-service-account.json:/app/gcp-service-account.json:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+
+  # Staging Backend - Port 8002
+  backend-staging:
+    image: ghcr.io/graphfolio/graphfolio-backend:${STAGING_IMAGE_TAG:-develop}
+    container_name: graphfolio-backend-staging
+    ports:
+      - "8002:8000"
+    environment:
+      ENVIRONMENT: staging
+      USE_POSTGRES: "true"
+      REDIS_URL: redis://redis:6379/0
+      PORT: "8000"
+      HOST: 0.0.0.0
+      GCP_PROJECT_ID: gen-lang-client-0901363254
+      GOOGLE_APPLICATION_CREDENTIALS: /app/gcp-service-account.json
+      GCP_CREDENTIALS_PATH: /app/gcp-service-account.json
+      POSTGRES_HOST: docker-db_postgres-1
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: podcast_db
+      POSTGRES_USER: podcast_user
+      POSTGRES_PASSWORD: buxwLXrmK4a20fKCSvPTdpySs
+      FIRESTORE_DATABASE_ID: graphfolio-db
+      CORS_ORIGINS: '["https://tinboker.com","https://dev.tinboker.com","https://staging.tinboker.com","https://graphfolio-webui.pages.dev","http://localhost:5173","http://localhost:3000"]'
+    volumes:
+      - ./gcp-service-account.json:/app/gcp-service-account.json:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+
+  # Shared Redis
+  redis:
+    image: redis:7-alpine
+    container_name: graphfolio-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: redis-server --appendonly no --maxmemory 2gb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Shared Netdata Monitoring
+  netdata:
+    image: netdata/netdata:stable
+    container_name: graphfolio-netdata
+    hostname: tinboker-vps
+    ports:
+      - "127.0.0.1:19999:19999"
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=
+      - DOCKER_HOST=/var/run/docker.sock
+      - NETDATA_DISABLE_TELEMETRY=1
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:19999/api/v1/info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis-data:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
+
+networks:
+  default:
+    name: app_default
+    external: true

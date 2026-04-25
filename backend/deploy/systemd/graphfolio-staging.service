@@ -1,0 +1,15 @@
+[Unit]
+Description=Graphfolio Staging Backend
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/app
+ExecStart=/usr/bin/docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+ExecStop=/usr/bin/docker compose -f docker-compose.yml -f docker-compose.staging.yml down
+ExecReload=/usr/bin/docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d --force-recreate
+
+[Install]
+WantedBy=multi-user.target

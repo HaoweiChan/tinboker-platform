@@ -1,0 +1,122 @@
+# Caddyfile for TinBoker Backend API
+# Includes admin dashboard and Netdata monitoring proxy
+
+# Production API
+api.tinboker.com {
+    # TLS with automatic HTTPS
+    tls {
+        protocols tls1.2 tls1.3
+    }
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+
+    # Health check (no auth required)
+    handle /health {
+        reverse_proxy localhost:8000
+    }
+
+    # Netdata monitoring dashboard (admin access only)
+    # Accessible at /netdata/
+    handle_path /netdata/* {
+        # Allow iframe embedding from admin dashboard
+        header {
+            X-Frame-Options "ALLOW-FROM https://tinboker.com"
+            Content-Security-Policy "frame-ancestors 'self' https://tinboker.com https://www.tinboker.com"
+        }
+        
+        # Proxy to Netdata container
+        reverse_proxy localhost:19999 {
+            # Strip /netdata prefix when forwarding
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    # Admin API endpoints (JWT protected at application level)
+    handle /api/admin/* {
+        reverse_proxy localhost:8000
+    }
+
+    # All other API requests
+    handle {
+        reverse_proxy localhost:8000
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/api.tinboker.com.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json
+    }
+}
+
+# Development API
+dev-api.tinboker.com {
+    tls {
+        protocols tls1.2 tls1.3
+    }
+
+    handle /health {
+        reverse_proxy localhost:8001
+    }
+
+    handle_path /netdata/* {
+        header {
+            X-Frame-Options "ALLOW-FROM https://dev.tinboker.com"
+            Content-Security-Policy "frame-ancestors 'self' https://dev.tinboker.com"
+        }
+        reverse_proxy localhost:19997 {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle {
+        reverse_proxy localhost:8001
+    }
+
+    log {
+        output file /var/log/caddy/dev-api.tinboker.com.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}
+
+# Staging API (optional)
+api-staging.tinboker.com {
+    tls {
+        protocols tls1.2 tls1.3
+    }
+
+    handle /health {
+        reverse_proxy localhost:8002
+    }
+
+    handle_path /netdata/* {
+        header {
+            X-Frame-Options "ALLOW-FROM https://staging.tinboker.com"
+            Content-Security-Policy "frame-ancestors 'self' https://staging.tinboker.com"
+        }
+        reverse_proxy localhost:19998 {
+            header_up Host {upstream_hostport}
+        }
+    }
+
+    handle {
+        reverse_proxy localhost:8002
+    }
+
+    log {
+        output file /var/log/caddy/api-staging.tinboker.com.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+    }
+}

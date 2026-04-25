@@ -1,0 +1,4099 @@
+openapi: 3.1.0
+info:
+  title: Graphfolio Backend API
+  description: Backend API for Graphfolio - Company network visualization
+  version: 1.0.0
+servers:
+- url: https://api.tinboker.com
+  description: Production server
+- url: https://staging-api.tinboker.com
+  description: Staging server
+- url: https://dev-api.tinboker.com
+  description: Development server
+- url: http://localhost:8000
+  description: Local development
+paths:
+  /api/graphs:
+    get:
+      tags:
+      - graphs
+      summary: Get Sorted Graphs
+      description: 'Get sorted graphs list
+
+
+        Query params:
+
+        - sort_by: Sort field (concept_id, created_at, updated_at)'
+      operationId: get_sorted_graphs_api_graphs_get
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          default: concept_id
+          title: Sort By
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                title: Response Get Sorted Graphs Api Graphs Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - graphs
+      summary: Create Graph
+      description: 'Create new graph
+
+
+        Creates a graph with nodes and edges. Stock information will be fetched for
+        nodes.'
+      operationId: create_graph_api_graphs_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/graphs/{graph_id}:
+    get:
+      tags:
+      - graphs
+      summary: Get Graph By Id
+      description: 'Get graph by ID
+
+
+        Returns complete graph with nodes and edges'
+      operationId: get_graph_by_id_api_graphs__graph_id__get
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraphData'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - graphs
+      summary: Delete Graph
+      description: 'Delete graph
+
+
+        Deletes graph and all its nodes and edges'
+      operationId: delete_graph_api_graphs__graph_id__delete
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/graphs/{graph_id}/nodes/{node_id}:
+    put:
+      tags:
+      - graphs
+      summary: Modify Node
+      description: 'Modify node in graph
+
+
+        Updates node position and/or data'
+      operationId: modify_node_api_graphs__graph_id__nodes__node_id__put
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Node ID
+          title: Node Id
+        description: Node ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NodeUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - graphs
+      summary: Delete Node
+      description: 'Delete node from graph
+
+
+        Deletes node and all connected edges'
+      operationId: delete_node_api_graphs__graph_id__nodes__node_id__delete
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Node ID
+          title: Node Id
+        description: Node ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/graphs/{graph_id}/edges/{edge_id}:
+    put:
+      tags:
+      - graphs
+      summary: Modify Edge
+      description: 'Modify edge in graph
+
+
+        Updates edge data'
+      operationId: modify_edge_api_graphs__graph_id__edges__edge_id__put
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      - name: edge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Edge ID
+          title: Edge Id
+        description: Edge ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - graphs
+      summary: Delete Edge
+      description: Delete edge from graph
+      operationId: delete_edge_api_graphs__graph_id__edges__edge_id__delete
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Graph ID
+          title: Graph Id
+        description: Graph ID
+      - name: edge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Edge ID
+          title: Edge Id
+        description: Edge ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/stocks:
+    get:
+      tags:
+      - stocks
+      summary: Get Sorted Stocks
+      description: 'Get sorted stocks list with optional search
+
+
+        Query params:
+
+        - sort_by: Sort field (ticker, name, price, change_percent, market_cap)
+
+        - limit: Maximum number of stocks to return (default: 50, max: 200)
+
+        - q: Optional search query to filter by ticker or name (case-insensitive)'
+      operationId: get_sorted_stocks_api_stocks_get
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort field
+          default: ticker
+          title: Sort By
+        description: Sort field
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of stocks to return (1-200)
+          default: 50
+          title: Limit
+        description: Maximum number of stocks to return (1-200)
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search query (filters by ticker or name)
+          title: Q
+        description: Search query (filters by ticker or name)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                title: Response Get Sorted Stocks Api Stocks Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/stocks/{ticker}:
+    get:
+      tags:
+      - stocks
+      summary: Get Stock By Ticker
+      description: "Get stock by ticker\n\nReturns full stock information including\
+        \ chart data filtered by timeframe.\n\nQuery Parameters:\n- timeframe: Optional\
+        \ timeframe filter. Valid options:\n  - 1H: Last 1 hour (limited data availability\
+        \ with daily aggregates)\n  - 1D: Last 24 hours\n  - 1W: Last 7 days\n  -\
+        \ 1M: Last 30 days\n  - 3M: Last 90 days\n  - 6M: Last 180 days\n  - 1Y: Last\
+        \ 365 days\n  - YTD: Year to date (from January 1st)\n  - ALL: All available\
+        \ data (default if not specified)\n- before: Optional Unix timestamp (ms).\
+        \ Fetch historical data ending before this time.\n  Used for infinite scroll\
+        \ / lazy loading of older data."
+      operationId: get_stock_by_ticker_api_stocks__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: timeframe
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            pattern: ^(1H|1D|1W|1M|3M|6M|1Y|YTD|ALL)$
+          - type: 'null'
+          description: 'Timeframe filter: 1H, 1D, 1W, 1M, 3M, 6M, 1Y, YTD, ALL'
+          title: Timeframe
+        description: 'Timeframe filter: 1H, 1D, 1W, 1M, 3M, 6M, 1Y, YTD, ALL'
+      - name: before
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Fetch data before this Unix timestamp (ms) for infinite scroll
+          title: Before
+        description: Fetch data before this Unix timestamp (ms) for infinite scroll
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetail'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/stocks/{ticker}/basic:
+    get:
+      tags:
+      - stocks
+      summary: Get Stock Basic Info
+      description: Get basic stock information only (no chart data)
+      operationId: get_stock_basic_info_api_stocks__ticker__basic_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/stocks/{ticker}/history:
+    get:
+      tags:
+      - stocks
+      summary: Get Stock History
+      description: "Get stock price history for sparklines\n\nReturns lightweight\
+        \ price history data extracted from chart data.\n\nQuery Parameters:\n- timeframe:\
+        \ Optional timeframe filter. Valid options:\n  - 1H: Last 1 hour\n  - 1D:\
+        \ Last 24 hours\n  - 1W: Last 7 days\n  - 1M: Last 30 days\n  - 3M: Last 90\
+        \ days\n  - 6M: Last 180 days\n  - 1Y: Last 365 days\n  - YTD: Year to date\n\
+        \  - ALL: All available data (default)"
+      operationId: get_stock_history_api_stocks__ticker__history_get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: timeframe
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            pattern: ^(1H|1D|1W|1M|3M|6M|1Y|YTD|ALL)$
+          - type: 'null'
+          description: 'Timeframe filter: 1H, 1D, 1W, 1M, 3M, 6M, 1Y, YTD, ALL'
+          title: Timeframe
+        description: 'Timeframe filter: 1H, 1D, 1W, 1M, 3M, 6M, 1Y, YTD, ALL'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/content/index:
+    get:
+      tags:
+      - content
+      summary: List Content
+      operationId: list_content_api_content_index_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/content/{ticker}:
+    get:
+      tags:
+      - content
+      summary: Get Ticker Content
+      operationId: get_ticker_content_api_content__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/news:
+    get:
+      tags:
+      - news
+      summary: Get Sorted News
+      description: 'Get sorted news list
+
+
+        Query params:
+
+        - sort_by: Sort field (date, created_at, updated_at, title)
+
+
+        CDN Cache: 10 minutes'
+      operationId: get_sorted_news_api_news_get
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort field
+          default: date
+          title: Sort By
+        description: Sort field
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockEvent'
+                title: Response Get Sorted News Api News Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/news/{news_id}:
+    get:
+      tags:
+      - news
+      summary: Get News By Id
+      description: 'Get news by ID
+
+
+        Returns complete news event with related tickers
+
+
+        CDN Cache: 10 minutes'
+      operationId: get_news_by_id_api_news__news_id__get
+      parameters:
+      - name: news_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: News ID
+          title: News Id
+        description: News ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockEvent'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/news/fetch/{ticker}:
+    post:
+      tags:
+      - news
+      summary: Fetch News From Massive
+      description: "Fetch news from Massive API for a ticker and save to database\n\
+        \nArgs:\n    ticker: Stock ticker symbol (e.g., \"NVDA\", \"AAPL\")\n    limit:\
+        \ Maximum number of articles to fetch (default: 10)\n    \nReturns:\n    Dict\
+        \ with count of news articles fetched and their IDs"
+      operationId: fetch_news_from_massive_api_news_fetch__ticker__post
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker symbol
+          title: Ticker
+        description: Stock ticker symbol
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Maximum number of articles to fetch
+          default: 10
+          title: Limit
+        description: Maximum number of articles to fetch
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Fetch News From Massive Api News Fetch  Ticker  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/visuals/supply-chain:
+    get:
+      tags:
+      - visuals
+      summary: Get Supply Chain
+      description: 'Get supply chain visualization graph
+
+
+        Returns layered supply chain visualization graph data with real financial
+        data'
+      operationId: get_supply_chain_api_visuals_supply_chain_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/visuals/ownership:
+    get:
+      tags:
+      - visuals
+      summary: Get Ownership
+      description: 'Get ownership tree visualization graph
+
+
+        Returns hierarchical ownership visualization data with real financial data'
+      operationId: get_ownership_api_visuals_ownership_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/visuals/cluster:
+    get:
+      tags:
+      - visuals
+      summary: Get Cluster
+      description: 'Get cluster visualization graph
+
+
+        Returns cluster/force-directed visualization data with real financial data'
+      operationId: get_cluster_api_visuals_cluster_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/visuals/interactive-models:
+    get:
+      tags:
+      - visuals
+      summary: Get Interactive Models
+      description: 'Get interactive models
+
+
+        Returns list of interactive article/visualization models for the homepage/news
+        experience'
+      operationId: get_interactive_models_api_visuals_interactive_models_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/podcast:
+    get:
+      tags:
+      - podcast
+      summary: Get Sorted Podcasts
+      description: 'Get sorted podcasts list
+
+
+        Query params:
+
+        - sort_by: Sort field (name, episode_count, created_at, updated_at)
+
+        - order: Sort order (asc, desc)
+
+        - limit: Maximum number of podcasts to return (1-200)
+
+        - offset: Pagination offset
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_sorted_podcasts_api_podcast_get
+      parameters:
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort field (name, episode_count, created_at, updated_at)
+          default: name
+          title: Sort By
+        description: Sort field (name, episode_count, created_at, updated_at)
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort order (asc, desc)
+          default: asc
+          title: Order
+        description: Sort order (asc, desc)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of podcasts to return (1-200)
+          default: 50
+          title: Limit
+        description: Maximum number of podcasts to return (1-200)
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Podcast'
+                title: Response Get Sorted Podcasts Api Podcast Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/podcast/{podcast_name}:
+    get:
+      tags:
+      - podcast
+      summary: Get Podcast By Name
+      description: 'Get podcast by name
+
+
+        Returns podcast metadata including episode count and timestamps
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_podcast_by_name_api_podcast__podcast_name__get
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Podcast'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/podcast/{podcast_name}/episodes:
+    get:
+      tags:
+      - podcast
+      summary: Get Podcast Episodes
+      description: 'Get episodes for a podcast
+
+
+        Query params:
+
+        - sort_by: Sort field (created_time, episode_number, episode_title)
+
+        - order: Sort order (asc, desc)
+
+        - limit: Maximum number of episodes to return (1-200)
+
+        - offset: Pagination offset
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_podcast_episodes_api_podcast__podcast_name__episodes_get
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort field (created_time, episode_number, episode_title)
+          default: created_time
+          title: Sort By
+        description: Sort field (created_time, episode_number, episode_title)
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort order (asc, desc)
+          default: desc
+          title: Order
+        description: Sort order (asc, desc)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of episodes to return (1-200)
+          default: 50
+          title: Limit
+        description: Maximum number of episodes to return (1-200)
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: include_content
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include heavy content fields (transcript, summary)
+          default: false
+          title: Include Content
+        description: Include heavy content fields (transcript, summary)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Episode'
+                title: Response Get Podcast Episodes Api Podcast  Podcast Name  Episodes
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/podcast/{podcast_name}/episodes/{episode_id}:
+    get:
+      tags:
+      - podcast
+      summary: Get Episode By Id
+      description: 'Get specific episode by ID
+
+
+        Returns complete episode data including transcript, summary, and related tickers
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_episode_by_id_api_podcast__podcast_name__episodes__episode_id__get
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      - name: episode_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Episode ID
+          title: Episode Id
+        description: Episode ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Episode'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/podcast/{podcast_name}/episodes/{episode_id}/summary:
+    put:
+      tags:
+      - podcast
+      summary: Update Episode Summary
+      description: "Update episode summary with modified content\n\nNote: This endpoint\
+        \ is always available on the backend, but the frontend \nonly exposes it when\
+        \ VITE_STAGE != PRODUCTION\n\nArgs:\n    podcast_name: Podcast name\n    episode_id:\
+        \ Episode ID\n    content: Modified summary markdown content\n    modified_by:\
+        \ Optional user identifier (email or ID)\n\nReturns:\n    Updated Episode\
+        \ object\n    \nRaises:\n    HTTPException(404): If episode not found\n  \
+        \  HTTPException(500): If GCS or Firestore operation fails"
+      operationId: update_episode_summary_api_podcast__podcast_name__episodes__episode_id__summary_put
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      - name: episode_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Episode ID
+          title: Episode Id
+        description: Episode ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_update_episode_summary_api_podcast__podcast_name__episodes__episode_id__summary_put'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Episode'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - podcast
+      summary: Delete Episode Summary
+      description: "Delete modified episode summary and revert to original\n\nNote:\
+        \ This endpoint is always available on the backend, but the frontend \nonly\
+        \ exposes it when VITE_STAGE != PRODUCTION\n\nArgs:\n    podcast_name: Podcast\
+        \ name\n    episode_id: Episode ID\n\nReturns:\n    Success message\n    \n\
+        Raises:\n    HTTPException(404): If episode not found\n    HTTPException(500):\
+        \ If GCS or Firestore operation fails"
+      operationId: delete_episode_summary_api_podcast__podcast_name__episodes__episode_id__summary_delete
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      - name: episode_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Episode ID
+          title: Episode Id
+        description: Episode ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/podcast/{podcast_name}/episodes/{episode_id}/regenerate:
+    post:
+      tags:
+      - podcast
+      summary: Regenerate Episode Summary
+      description: "Trigger episode summary regeneration.\n\n- Calls external API\
+        \ to start regeneration\n- Spawns background task to poll status and clear\
+        \ cache\n- Returns immediately so user can navigate away\n\nArgs:\n    podcast_name:\
+        \ Podcast name\n    episode_id: Episode ID\n\nReturns:\n    Status message\
+        \ indicating regeneration has started\n    \nRaises:\n    HTTPException(500):\
+        \ If external API call fails"
+      operationId: regenerate_episode_summary_api_podcast__podcast_name__episodes__episode_id__regenerate_post
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Podcast name
+          title: Podcast Name
+        description: Podcast name
+      - name: episode_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Episode ID
+          title: Episode Id
+        description: Episode ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/episodes/recent:
+    get:
+      tags:
+      - episodes
+      summary: Get Recent Episodes
+      description: 'Get recent episodes across all podcasts, sorted by created_time
+        descending
+
+
+        Query params:
+
+        - limit: Maximum number of episodes to return (default: 20, max: 200)
+
+        - offset: Pagination offset
+
+        - podcast_name: Optional filter by podcast name
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_recent_episodes_api_episodes_recent_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of episodes to return (1-200)
+          default: 20
+          title: Limit
+        description: Maximum number of episodes to return (1-200)
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: podcast_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional filter by podcast name
+          title: Podcast Name
+        description: Optional filter by podcast name
+      - name: include_content
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include heavy content fields (transcript, summary)
+          default: false
+          title: Include Content
+        description: Include heavy content fields (transcript, summary)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/episodes/by-ticker/{ticker}:
+    get:
+      tags:
+      - episodes
+      summary: Get Episodes By Ticker
+      description: 'Get episodes that mention a specific stock ticker
+
+
+        Path params:
+
+        - ticker: Stock ticker symbol (e.g., "NVDA", "AAPL")
+
+
+        Query params:
+
+        - limit: Maximum number of episodes to return (default: 50, max: 200)
+
+        - offset: Pagination offset
+
+
+        CDN Cache: 30 minutes'
+      operationId: get_episodes_by_ticker_api_episodes_by_ticker__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker symbol
+          title: Ticker
+        description: Stock ticker symbol
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of episodes to return (1-200)
+          default: 50
+          title: Limit
+        description: Maximum number of episodes to return (1-200)
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: include_content
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include heavy content fields (transcript, summary)
+          default: false
+          title: Include Content
+        description: Include heavy content fields (transcript, summary)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/tags:
+    get:
+      tags:
+      - mock-data
+      summary: Get Tags
+      description: 'Get list of available tags/topics with episode counts
+
+
+        Returns real tag data from Firestore subcollections'
+      operationId: get_tags_api_tags_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagsResponse'
+  /api/episodes/by-tag/{tag}:
+    get:
+      tags:
+      - mock-data
+      summary: Get Episodes By Tag
+      description: 'Get episodes with a specific tag
+
+
+        Returns real episode data from Firestore subcollections filtered by tag'
+      operationId: get_episodes_by_tag_api_episodes_by_tag__tag__get
+      parameters:
+      - name: tag
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Tag name or ID
+          title: Tag
+        description: Tag name or ID
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Maximum number of episodes to return
+          default: 50
+          title: Limit
+        description: Maximum number of episodes to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Pagination offset
+          default: 0
+          title: Offset
+        description: Pagination offset
+      - name: include_content
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include heavy content fields (transcript, summary)
+          default: false
+          title: Include Content
+        description: Include heavy content fields (transcript, summary)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EpisodesByTagResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/market/indices:
+    get:
+      tags:
+      - mock-data
+      summary: Get Market Indices
+      description: 'Get current market index values (MOCK DATA)
+
+
+        Returns mock market indices data until real implementation is available'
+      operationId: get_market_indices_api_market_indices_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MarketIndex'
+                type: array
+                title: Response Get Market Indices Api Market Indices Get
+  /api/concepts:
+    get:
+      tags:
+      - mock-data
+      summary: Get Concepts
+      description: 'Get list of available industry concepts/themes (MOCK DATA)
+
+
+        Returns mock concept metadata until real implementation is available'
+      operationId: get_concepts_api_concepts_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ConceptMetadata'
+                type: array
+                title: Response Get Concepts Api Concepts Get
+  /api/top-movers:
+    get:
+      tags:
+      - mock-data
+      summary: Get Top Movers
+      description: 'Get list of top moving stocks by price change percentage (MOCK
+        DATA)
+
+
+        Returns mock top movers data until real implementation is available.
+
+        Alternatively, can be derived from GET /api/stocks?sort_by=change_percent&order=desc&limit={limit}'
+      operationId: get_top_movers_api_top_movers_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 50
+          minimum: 1
+          description: Maximum number of top movers to return
+          default: 10
+          title: Limit
+        description: Maximum number of top movers to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TopMover'
+                title: Response Get Top Movers Api Top Movers Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/auth/google:
+    post:
+      tags:
+      - authentication
+      summary: Google Login
+      description: "Authenticate user with Google ID token or Access Token\n\nRequest\
+        \ body (one of):\n{\n    \"idToken\": \"google-id-token-string\"\n}\nOR\n\
+        {\n    \"accessToken\": \"google-access-token-string\"\n}"
+      operationId: google_login_api_auth_google_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/auth/me:
+    get:
+      tags:
+      - authentication
+      summary: Get Current User
+      description: "Get current authenticated user from JWT token\n\nHeaders:\n  \
+        \  Authorization: Bearer <jwt-token>\n\nReturns:\n    User information"
+      operationId: get_current_user_api_auth_me_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/auth/logout:
+    post:
+      tags:
+      - authentication
+      summary: Logout
+      description: 'Logout endpoint (client-side token removal)
+
+
+        Note: Since we''re using stateless JWT tokens, logout is handled
+
+        client-side by removing the token. This endpoint exists for
+
+        consistency and future token blacklisting if needed.'
+      operationId: logout_api_auth_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/user/watchlist:
+    get:
+      tags:
+      - user
+      summary: Get Watchlist
+      description: Get user's watchlist
+      operationId: get_watchlist_api_user_watchlist_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/watchlist/{ticker}/toggle:
+    post:
+      tags:
+      - user
+      summary: Toggle Watchlist Item
+      description: Toggle watchlist item
+      operationId: toggle_watchlist_item_api_user_watchlist__ticker__toggle_post
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/podcasts:
+    get:
+      tags:
+      - user
+      summary: Get Podcast Subscriptions
+      description: Get subscribed podcasters
+      operationId: get_podcast_subscriptions_api_user_subscriptions_podcasts_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/podcasts/{podcast_name}/toggle:
+    post:
+      tags:
+      - user
+      summary: Toggle Podcast Subscription Item
+      description: Toggle podcast subscription
+      operationId: toggle_podcast_subscription_item_api_user_subscriptions_podcasts__podcast_name__toggle_post
+      parameters:
+      - name: podcast_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Podcast Name
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/episodes:
+    get:
+      tags:
+      - user
+      summary: Get Episode Bookmarks
+      description: Get bookmarked episodes
+      operationId: get_episode_bookmarks_api_user_subscriptions_episodes_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/episodes/toggle:
+    post:
+      tags:
+      - user
+      summary: Toggle Episode Bookmark Item
+      description: Toggle episode bookmark
+      operationId: toggle_episode_bookmark_item_api_user_subscriptions_episodes_toggle_post
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/tags:
+    get:
+      tags:
+      - user
+      summary: Get Tag Subscriptions
+      description: Get subscribed tags
+      operationId: get_tag_subscriptions_api_user_subscriptions_tags_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/user/subscriptions/tags/{tag_name}/toggle:
+    post:
+      tags:
+      - user
+      summary: Toggle Tag Subscription Item
+      description: Toggle tag subscription
+      operationId: toggle_tag_subscription_item_api_user_subscriptions_tags__tag_name__toggle_post
+      parameters:
+      - name: tag_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Tag Name
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/search:
+    get:
+      tags:
+      - search
+      summary: Search
+      description: 'Unified search endpoint.
+
+        Returns results for stocks, podcasts, episodes, and tags matching the query.'
+      operationId: search_api_search_get
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          description: Search query
+          title: Q
+        description: Search query
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          description: Max results per category
+          default: 5
+          title: Limit
+        description: Max results per category
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/search/suggest:
+    get:
+      tags:
+      - search
+      summary: Suggest
+      description: 'Fast typeahead suggestions.
+
+        Returns instant suggestions for autocomplete. Target <50ms.'
+      operationId: suggest_api_search_suggest_get
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          description: Prefix query
+          title: Q
+        description: Prefix query
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          default: 8
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/search/popular:
+    get:
+      tags:
+      - search
+      summary: Get Popular
+      description: 'Get popular/trending items for search suggestions.
+
+        Returns categorized popular items (Stocks and Podcasts).
+
+
+        CDN Cache: 1 hour'
+      operationId: get_popular_api_search_popular_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /api/recommendations/by-ticker/{ticker}:
+    get:
+      tags:
+      - recommendations
+      summary: Get Recommendations By Ticker
+      description: 'Get recommendations for the given ticker in the date range.
+
+        Default timeframe: last 7 days.
+
+
+        CDN Cache: 5 minutes'
+      operationId: get_recommendations_by_ticker_api_recommendations_by_ticker__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'ISO date (YYYY-MM-DD); default: today − 7 days'
+          title: Start Date
+        description: 'ISO date (YYYY-MM-DD); default: today − 7 days'
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'ISO date (YYYY-MM-DD); default: today'
+          title: End Date
+        description: 'ISO date (YYYY-MM-DD); default: today'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                title: Response Get Recommendations By Ticker Api Recommendations
+                  By Ticker  Ticker  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/recommendations/by-podcaster/{podcaster_name}:
+    get:
+      tags:
+      - recommendations
+      summary: Get Recommendations By Podcaster
+      description: 'Get recommendations from the given podcaster in the date range.
+
+        Default timeframe: last 7 days. Pass podcast_slug to also match by episode_id
+        (e.g. slug in episode_id).
+
+
+        CDN Cache: 5 minutes'
+      operationId: get_recommendations_by_podcaster_api_recommendations_by_podcaster__podcaster_name__get
+      parameters:
+      - name: podcaster_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Podcaster Name
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'ISO date (YYYY-MM-DD); default: today − 7 days'
+          title: Start Date
+        description: 'ISO date (YYYY-MM-DD); default: today − 7 days'
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'ISO date (YYYY-MM-DD); default: today'
+          title: End Date
+        description: 'ISO date (YYYY-MM-DD); default: today'
+      - name: podcast_slug
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional slug; also matches episode_id ILIKE %slug%
+          title: Podcast Slug
+        description: Optional slug; also matches episode_id ILIKE %slug%
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                title: Response Get Recommendations By Podcaster Api Recommendations
+                  By Podcaster  Podcaster Name  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/recommendations/buzz:
+    get:
+      tags:
+      - recommendations
+      summary: Get Buzz
+      description: 'Get most-discussed tickers in the last `days` days.
+
+        Returns ticker, count, sentiment_score (avg), last_mentioned.
+
+
+        CDN Cache: 5 minutes'
+      operationId: get_buzz_api_recommendations_buzz_get
+      parameters:
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 365
+          minimum: 1
+          description: Number of days to look back
+          default: 30
+          title: Days
+        description: Number of days to look back
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Max number of tickers to return
+          default: 10
+          title: Limit
+        description: Max number of tickers to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                title: Response Get Buzz Api Recommendations Buzz Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/analytics/click:
+    post:
+      tags:
+      - analytics
+      summary: Track Click
+      description: 'Track user clicks for trending analytics.
+
+        Fire-and-forget style.'
+      operationId: track_click_api_analytics_click_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClickEvent'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/stocks/translations/{ticker}:
+    get:
+      tags:
+      - translations
+      summary: Get Translation
+      description: 'Get translation for a stock ticker.
+
+        If not found and auto_create=True, creates a pending entry for admin review.'
+      operationId: get_translation_api_stocks_translations__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Ticker
+      - name: market
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Market code (US, TW, JP)
+          title: Market
+        description: Market code (US, TW, JP)
+      - name: name_en
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: English name hint for auto-creation
+          title: Name En
+        description: English name hint for auto-creation
+      - name: auto_create
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Auto-create pending entry if not found
+          default: true
+          title: Auto Create
+        description: Auto-create pending entry if not found
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationPublicResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/admin/auth/login:
+    post:
+      tags:
+      - admin
+      summary: Admin Login
+      description: 'Authenticate admin user with password.
+
+        Returns JWT token on success.'
+      operationId: admin_login_api_admin_auth_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/admin/translations/stats:
+    get:
+      tags:
+      - admin
+      summary: Get Translation Stats
+      description: Get translation statistics.
+      operationId: get_translation_stats_api_admin_translations_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+  /api/admin/translations/missing:
+    get:
+      tags:
+      - admin
+      summary: Get Missing Translations
+      description: Get translations without ZH-TW name.
+      operationId: get_missing_translations_api_admin_translations_missing_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: market
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by market
+          title: Market
+        description: Filter by market
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          description: Max items to return
+          default: 100
+          title: Limit
+        description: Max items to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingTranslationsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/admin/translations:
+    get:
+      tags:
+      - admin
+      summary: List Translations
+      description: List translations with optional filters and pagination.
+      operationId: list_translations_api_admin_translations_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: market
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by market
+          title: Market
+        description: Filter by market
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by translation status
+          title: Status
+        description: Filter by translation status
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Search in ticker/name
+          title: Search
+        description: Search in ticker/name
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Limit
+        description: Items per page
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - admin
+      summary: Create Translation
+      description: Create a new translation.
+      operationId: create_translation_api_admin_translations_post
+      security:
+      - HTTPBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/admin/translations/{translation_id}:
+    get:
+      tags:
+      - admin
+      summary: Get Translation
+      description: Get a single translation by ID.
+      operationId: get_translation_api_admin_translations__translation_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: translation_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Translation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - admin
+      summary: Update Translation
+      description: Update an existing translation.
+      operationId: update_translation_api_admin_translations__translation_id__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: translation_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Translation Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - admin
+      summary: Delete Translation
+      description: Delete a translation.
+      operationId: delete_translation_api_admin_translations__translation_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: translation_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Translation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/admin/translations/bulk-import:
+    post:
+      tags:
+      - admin
+      summary: Bulk Import Translations
+      description: 'Bulk import translations from CSV file.
+
+        Expected columns: ticker, market, name_en, name_zh_tw
+
+        Optional column: translation_status (defaults to ''auto'')'
+      operationId: bulk_import_translations_api_admin_translations_bulk_import_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_bulk_import_translations_api_admin_translations_bulk_import_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /api/admin/translations/bulk-json:
+    post:
+      tags:
+      - admin
+      summary: Bulk Import Json
+      description: Bulk import translations from JSON array.
+      operationId: bulk_import_json_api_admin_translations_bulk_json_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/BulkImportItem'
+              type: array
+              title: Items
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkImportResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /api/admin/system/status:
+    get:
+      tags:
+      - admin
+      - system
+      summary: System Status
+      description: 'Get system status for admin dashboard.
+
+
+        Returns health metrics for:
+
+        - Backend service (uptime, version)
+
+        - Redis (connection status, memory usage)
+
+        - PostgreSQL (connection pool status)
+
+        - System metrics (CPU, memory, disk - if psutil available)'
+      operationId: system_status_api_admin_system_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemStatusResponse'
+      security:
+      - HTTPBearer: []
+  /health:
+    get:
+      summary: Health Check
+      description: Health check endpoint with component status.
+      operationId: health_check_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health/redis:
+    get:
+      summary: Redis Diagnostic
+      description: Detailed Redis diagnostic endpoint
+      operationId: redis_diagnostic_health_redis_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /:
+    get:
+      summary: Root
+      description: Root endpoint
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    AuthResponse:
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - user
+      - token
+      title: AuthResponse
+      description: Authentication response model
+    BackendStatus:
+      properties:
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - unhealthy
+          title: Status
+        uptime_seconds:
+          type: number
+          title: Uptime Seconds
+        version:
+          type: string
+          title: Version
+          default: 1.0.0
+      type: object
+      required:
+      - status
+      - uptime_seconds
+      title: BackendStatus
+      description: Backend service status.
+    Body_bulk_import_translations_api_admin_translations_bulk_import_post:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+          description: CSV file with translations
+      type: object
+      required:
+      - file
+      title: Body_bulk_import_translations_api_admin_translations_bulk_import_post
+    Body_update_episode_summary_api_podcast__podcast_name__episodes__episode_id__summary_put:
+      properties:
+        content:
+          type: string
+          title: Content
+          description: Modified summary markdown content
+        modified_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified By
+          description: User identifier (email or ID)
+      type: object
+      required:
+      - content
+      title: Body_update_episode_summary_api_podcast__podcast_name__episodes__episode_id__summary_put
+    BulkImportItem:
+      properties:
+        ticker:
+          type: string
+          maxLength: 20
+          title: Ticker
+          description: Stock ticker symbol
+        market:
+          type: string
+          maxLength: 10
+          title: Market
+          description: Market code (US, TW, JP)
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+          description: English name
+        name_zh_tw:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Zh Tw
+          description: Chinese Traditional name
+        translation_status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - auto
+          title: Translation Status
+          default: auto
+      type: object
+      required:
+      - ticker
+      - market
+      title: BulkImportItem
+      description: Schema for a single item in bulk import.
+    BulkImportResponse:
+      properties:
+        imported:
+          type: integer
+          title: Imported
+        updated:
+          type: integer
+          title: Updated
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+          default: []
+      type: object
+      required:
+      - imported
+      - updated
+      title: BulkImportResponse
+      description: Schema for bulk import response.
+    ChartDataPoint:
+      properties:
+        timestamp:
+          type: integer
+          title: Timestamp
+          description: Unix timestamp in milliseconds
+        price:
+          type: number
+          title: Price
+          description: Closing price (for backward compatibility)
+        date:
+          type: string
+          title: Date
+          description: ISO date string (YYYY-MM-DD)
+        open:
+          type: number
+          title: Open
+          description: Opening price
+        high:
+          type: number
+          title: High
+          description: Highest price
+        low:
+          type: number
+          title: Low
+          description: Lowest price
+        close:
+          type: number
+          title: Close
+          description: Closing price
+        volume:
+          type: integer
+          title: Volume
+          description: Trading volume
+      type: object
+      required:
+      - timestamp
+      - price
+      - date
+      - open
+      - high
+      - low
+      - close
+      - volume
+      title: ChartDataPoint
+      description: Single OHLCV data point for stock chart
+    ClickEvent:
+      properties:
+        type:
+          type: string
+          title: Type
+        id:
+          type: string
+          title: Id
+      type: object
+      required:
+      - type
+      - id
+      title: ClickEvent
+    CompanyDetail:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+          description: Stock ticker symbol
+        name:
+          type: string
+          title: Name
+          description: Company name
+        price:
+          type: number
+          title: Price
+          description: Current stock price
+        change:
+          type: number
+          title: Change
+          description: Price change (absolute)
+        changePercent:
+          type: number
+          title: Changepercent
+          description: Price change (percentage)
+        marketCap:
+          type: integer
+          title: Marketcap
+          description: Market capitalization
+        revenue:
+          type: integer
+          title: Revenue
+          description: Annual revenue
+        pe:
+          type: number
+          title: Pe
+          description: Price-to-earnings ratio
+        dividendYield:
+          type: number
+          title: Dividendyield
+          description: Dividend yield
+        about:
+          type: string
+          title: About
+          description: Company description
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/StockStats'
+          description: Additional statistics
+        chartData:
+          items:
+            $ref: '#/components/schemas/ChartDataPoint'
+          type: array
+          title: Chartdata
+          description: Historical OHLCV data
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+          description: Icon URL (PNG format)
+        logo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo Url
+          description: Logo URL (SVG format)
+        icon_image:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Image
+          description: Base64 encoded icon image (PNG format)
+        logo_image:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo Image
+          description: Base64 encoded logo image (SVG format)
+      type: object
+      required:
+      - ticker
+      - name
+      - price
+      - change
+      - changePercent
+      - marketCap
+      - revenue
+      - pe
+      - dividendYield
+      - about
+      - stats
+      - chartData
+      title: CompanyDetail
+      description: Detailed company/stock information
+    ConceptMetadata:
+      properties:
+        id:
+          type: string
+          title: Id
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        icon:
+          type: string
+          title: Icon
+        gradient:
+          type: string
+          title: Gradient
+      type: object
+      required:
+      - id
+      - title
+      - description
+      - icon
+      - gradient
+      title: ConceptMetadata
+    Edge:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique edge identifier
+        source:
+          type: string
+          title: Source
+          description: Source node ID (ticker)
+        target:
+          type: string
+          title: Target
+          description: Target node ID (ticker)
+        label:
+          type: string
+          title: Label
+          description: Display label for the edge
+        data:
+          allOf:
+          - $ref: '#/components/schemas/EdgeData'
+          description: Edge data payload
+      type: object
+      required:
+      - id
+      - source
+      - target
+      - label
+      - data
+      title: Edge
+      description: Graph edge representing relationship between stocks
+    EdgeCreate:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique edge identifier
+        source:
+          type: string
+          title: Source
+          description: Source node ID (ticker)
+        target:
+          type: string
+          title: Target
+          description: Target node ID (ticker)
+        label:
+          type: string
+          title: Label
+          description: Display label for the edge
+        category:
+          type: string
+          title: Category
+          description: Edge category
+      type: object
+      required:
+      - id
+      - source
+      - target
+      - label
+      - category
+      title: EdgeCreate
+      description: Edge creation model
+    EdgeData:
+      properties:
+        category:
+          type: string
+          title: Category
+          description: Edge category (e.g., 'aiChips', 'automation', 'components')
+      type: object
+      required:
+      - category
+      title: EdgeData
+      description: Data payload for graph edge
+    EdgeUpdate:
+      properties:
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+          description: Source node ID (ticker)
+        target:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target
+          description: Target node ID (ticker)
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+          description: Display label for the edge
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Edge category
+      type: object
+      title: EdgeUpdate
+      description: Edge update model - all fields optional
+    Episode:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique episode identifier
+        podcast_name:
+          type: string
+          title: Podcast Name
+          description: Podcast name
+        episode_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Episode Title
+          description: Episode title
+        episode_number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Episode Number
+          description: Episode number
+        transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript
+          description: Episode transcript
+        summary_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Content
+          description: Summary markdown content
+        summary_image:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Image
+          description: Summary SVG image
+        related_tickers:
+          items:
+            type: string
+          type: array
+          title: Related Tickers
+          description: Related stock tickers
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Topic tags
+        created_time:
+          type: integer
+          title: Created Time
+          description: Creation timestamp (Unix milliseconds)
+        number_click:
+          type: integer
+          title: Number Click
+          description: Number of clicks
+          default: 0
+        num_likes:
+          type: integer
+          title: Num Likes
+          description: Number of likes
+          default: 0
+        key_insights:
+          items:
+            type: string
+          type: array
+          title: Key Insights
+          description: Key insights for the episode
+        raw_mp3:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Raw Mp3
+          description: Raw MP3 file path (local, not in Firebase)
+        mp3_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mp3 Url
+          description: GCS URL for MP3 file (gs://...)
+        transcript_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript Url
+          description: GCS URL for transcript file (gs://...)
+        summary_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Url
+          description: GCS URL for summary markdown file (gs://...)
+        summary_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Image Url
+          description: GCS URL for SVG image file (gs://...)
+        events_markdown_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Events Markdown Url
+          description: GCS URL for events markdown file (gs://...)
+        sentences_markdown_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sentences Markdown Url
+          description: GCS URL for sentences markdown file (gs://...)
+        marp_markdown_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marp Markdown Url
+          description: GCS URL for Marp markdown file (gs://...)
+        mp3_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mp3 Public Url
+          description: Public HTTPS URL for MP3
+        transcript_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Transcript Public Url
+          description: Public HTTPS URL for transcript
+        summary_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Public Url
+          description: Public HTTPS URL for summary
+        summary_image_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary Image Public Url
+          description: Public HTTPS URL for SVG image
+        events_markdown_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Events Markdown Public Url
+          description: Public HTTPS URL for events markdown
+        sentences_markdown_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sentences Markdown Public Url
+          description: Public HTTPS URL for sentences markdown
+        marp_markdown_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marp Markdown Public Url
+          description: Public HTTPS URL for Marp markdown
+        events_markdown_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Events Markdown Content
+          description: Events markdown content
+        sentences_markdown_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sentences Markdown Content
+          description: Sentences markdown content
+        marp_markdown_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marp Markdown Content
+          description: Marp markdown content
+        ticker_marp_markdown_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Marp Markdown Url
+          description: GCS URL for ticker-specific Marp markdown file (gs://...)
+        ticker_marp_markdown_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Marp Markdown Public Url
+          description: Public HTTPS URL for ticker-specific Marp markdown
+        ticker_marp_markdown_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Marp Markdown Content
+          description: Ticker-specific Marp markdown content
+        ticker_recommendations_public_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Recommendations Public Url
+          description: Public HTTPS URL for ticker recommendations JSON
+        ticker_recommendations_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker Recommendations Content
+          description: Ticker recommendations JSON content (cached)
+        spotify_embed_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spotify Embed Url
+          description: Spotify embed URL
+        spotify_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spotify Id
+          description: Spotify episode ID
+        spotify_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spotify Url
+          description: Spotify episode URL
+        spotify_release_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spotify Release Date
+          description: Release date from Spotify (YYYY-MM-DD)
+        spotify_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spotify Description
+          description: Episode description from Spotify
+        spotify_duration_ms:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Spotify Duration Ms
+          description: Episode duration in milliseconds
+        spotify_images:
+          items:
+            type: string
+          type: array
+          title: Spotify Images
+          description: List of image URLs from Spotify
+        modified_summary_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified Summary Url
+          description: GCS URL for modified summary markdown file (gs://...)
+        modified_summary_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified Summary Content
+          description: Modified summary markdown content
+        modified_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified By
+          description: User who modified the summary (email or ID)
+        modified_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Modified At
+          description: Timestamp when summary was modified (Unix milliseconds)
+      type: object
+      required:
+      - id
+      - podcast_name
+      - created_time
+      title: Episode
+      description: Podcast episode model
+    EpisodesByTagResponse:
+      properties:
+        tag:
+          type: string
+          title: Tag
+        episodes:
+          items:
+            type: object
+          type: array
+          title: Episodes
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - tag
+      - episodes
+      - total
+      title: EpisodesByTagResponse
+    GraphCreate:
+      properties:
+        conceptId:
+          type: string
+          enum:
+          - robotics
+          - ai
+          - energy
+          title: Conceptid
+          description: Concept identifier
+        nodes:
+          items:
+            $ref: '#/components/schemas/NodeCreate'
+          type: array
+          title: Nodes
+          description: List of nodes
+        edges:
+          items:
+            $ref: '#/components/schemas/EdgeCreate'
+          type: array
+          title: Edges
+          description: List of edges
+      type: object
+      required:
+      - conceptId
+      - nodes
+      - edges
+      title: GraphCreate
+      description: Graph creation model
+    GraphData:
+      properties:
+        nodes:
+          items:
+            $ref: '#/components/schemas/Node'
+          type: array
+          title: Nodes
+          description: List of graph nodes
+        edges:
+          items:
+            $ref: '#/components/schemas/Edge'
+          type: array
+          title: Edges
+          description: List of graph edges
+      type: object
+      required:
+      - nodes
+      - edges
+      title: GraphData
+      description: Complete graph structure with nodes and edges
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    LoginRequest:
+      properties:
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+      - password
+      title: LoginRequest
+      description: Request schema for admin login.
+    LoginResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+          default: bearer
+        expires_in:
+          type: integer
+          title: Expires In
+      type: object
+      required:
+      - access_token
+      - expires_in
+      title: LoginResponse
+      description: Response schema for admin login.
+    MarketIndex:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        ticker:
+          type: string
+          title: Ticker
+        value:
+          type: string
+          title: Value
+        change:
+          type: string
+          title: Change
+        isPositive:
+          type: boolean
+          title: Ispositive
+      type: object
+      required:
+      - id
+      - name
+      - ticker
+      - value
+      - change
+      - isPositive
+      title: MarketIndex
+    MissingTranslation:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        market:
+          type: string
+          title: Market
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+      type: object
+      required:
+      - ticker
+      - market
+      title: MissingTranslation
+      description: Schema for missing translation report.
+    MissingTranslationsResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        items:
+          items:
+            $ref: '#/components/schemas/MissingTranslation'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - items
+      title: MissingTranslationsResponse
+      description: Schema for missing translations list.
+    Node:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique node identifier (ticker)
+        type:
+          type: string
+          title: Type
+          description: Node type (e.g., 'stock')
+        data:
+          allOf:
+          - $ref: '#/components/schemas/NodeData'
+          description: Node data payload
+        position:
+          allOf:
+          - $ref: '#/components/schemas/Position'
+          description: Node position in graph
+      type: object
+      required:
+      - id
+      - type
+      - data
+      - position
+      title: Node
+      description: Graph node representing a stock
+    NodeCreate:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique node identifier (ticker)
+        type:
+          type: string
+          title: Type
+          description: Node type
+          default: stock
+        label:
+          type: string
+          title: Label
+          description: Display label for the node
+        ticker:
+          type: string
+          title: Ticker
+          description: Stock ticker symbol
+        marketCapTier:
+          type: string
+          title: Marketcaptier
+          description: Market capitalization tier
+        positionX:
+          type: number
+          title: Positionx
+          description: X coordinate
+        positionY:
+          type: number
+          title: Positiony
+          description: Y coordinate
+      type: object
+      required:
+      - id
+      - label
+      - ticker
+      - marketCapTier
+      - positionX
+      - positionY
+      title: NodeCreate
+      description: Node creation model
+    NodeData:
+      properties:
+        label:
+          type: string
+          title: Label
+          description: Display label for the node
+        ticker:
+          type: string
+          title: Ticker
+          description: Stock ticker symbol
+        marketCapTier:
+          type: string
+          title: Marketcaptier
+          description: Market capitalization tier (large/medium/small)
+      type: object
+      required:
+      - label
+      - ticker
+      - marketCapTier
+      title: NodeData
+      description: Data payload for graph node
+    NodeUpdate:
+      properties:
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+          description: Display label for the node
+        ticker:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ticker
+          description: Stock ticker symbol
+        marketCapTier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marketcaptier
+          description: Market capitalization tier
+        positionX:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Positionx
+          description: X coordinate
+        positionY:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Positiony
+          description: Y coordinate
+      type: object
+      title: NodeUpdate
+      description: Node update model - all fields optional
+    Podcast:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Podcast identifier (podcast_name)
+        name:
+          type: string
+          title: Name
+          description: Podcast name
+        episode_count:
+          type: integer
+          title: Episode Count
+          description: Total number of episodes
+          default: 0
+        created_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Created At
+          description: First episode creation timestamp (Unix milliseconds)
+        updated_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Updated At
+          description: Most recent episode timestamp (Unix milliseconds)
+        image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Image Url
+          description: Podcast cover image URL (from most recent episode)
+      type: object
+      required:
+      - id
+      - name
+      title: Podcast
+      description: Podcast metadata model (aggregated from episodes)
+    Position:
+      properties:
+        x:
+          type: number
+          title: X
+          description: X coordinate
+        y:
+          type: number
+          title: Y
+          description: Y coordinate
+      type: object
+      required:
+      - x
+      - y
+      title: Position
+      description: 2D position coordinates
+    PostgresStatus:
+      properties:
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - unhealthy
+          title: Status
+        connected:
+          type: boolean
+          title: Connected
+        pool_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pool Size
+        active_connections:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Active Connections
+        idle_connections:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Idle Connections
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - connected
+      title: PostgresStatus
+      description: PostgreSQL connection pool status.
+    RedisStatus:
+      properties:
+        status:
+          type: string
+          enum:
+          - healthy
+          - unhealthy
+          title: Status
+        connected:
+          type: boolean
+          title: Connected
+        memory_mb:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Memory Mb
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      - connected
+      title: RedisStatus
+      description: Redis connection status.
+    SearchResponse:
+      properties:
+        stocks:
+          items:
+            $ref: '#/components/schemas/SearchResultItem'
+          type: array
+          title: Stocks
+          default: []
+        podcasts:
+          items:
+            $ref: '#/components/schemas/SearchResultItem'
+          type: array
+          title: Podcasts
+          default: []
+        episodes:
+          items:
+            $ref: '#/components/schemas/SearchResultItem'
+          type: array
+          title: Episodes
+          default: []
+        tags:
+          items:
+            $ref: '#/components/schemas/SearchResultItem'
+          type: array
+          title: Tags
+          default: []
+      type: object
+      title: SearchResponse
+    SearchResultItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        type:
+          type: string
+          title: Type
+        title:
+          type: string
+          title: Title
+        subtitle:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subtitle
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        link:
+          type: string
+          title: Link
+        metadata:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - id
+      - type
+      - title
+      - link
+      title: SearchResultItem
+    ServiceHealth:
+      properties:
+        status:
+          type: string
+          enum:
+          - healthy
+          - degraded
+          - unhealthy
+          title: Status
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - status
+      title: ServiceHealth
+      description: Health status for a single service.
+    StockEvent:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Unique event identifier
+        type:
+          type: string
+          enum:
+          - earnings
+          - conference
+          - news
+          - dividend
+          title: Type
+          description: Event type
+        date:
+          type: integer
+          title: Date
+          description: Event date (Unix timestamp in milliseconds)
+        title:
+          type: string
+          title: Title
+          description: Event title
+        description:
+          type: string
+          title: Description
+          description: Event description
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+          description: Event content
+        relatedTickers:
+          items:
+            type: string
+          type: array
+          title: Relatedtickers
+          description: List of related stock tickers
+      type: object
+      required:
+      - id
+      - type
+      - date
+      - title
+      - description
+      - relatedTickers
+      title: StockEvent
+      description: Stock-related event (earnings, news, etc.)
+    StockStats:
+      properties:
+        volume:
+          type: integer
+          title: Volume
+          description: Trading volume
+        beta:
+          type: number
+          title: Beta
+          description: Beta coefficient (volatility relative to market)
+        volatility:
+          type: number
+          title: Volatility
+          description: Stock volatility
+      type: object
+      required:
+      - volume
+      - beta
+      - volatility
+      title: StockStats
+      description: Additional stock statistics
+    SystemMetrics:
+      properties:
+        cpu_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cpu Percent
+        memory_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Memory Percent
+        disk_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Disk Percent
+      type: object
+      title: SystemMetrics
+      description: VPS system metrics (basic, more detailed in Netdata).
+    SystemStatusResponse:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+        services:
+          additionalProperties:
+            $ref: '#/components/schemas/ServiceHealth'
+          type: object
+          title: Services
+          description: Summary health of each service
+        backend:
+          $ref: '#/components/schemas/BackendStatus'
+        redis:
+          $ref: '#/components/schemas/RedisStatus'
+        postgres:
+          $ref: '#/components/schemas/PostgresStatus'
+        system:
+          anyOf:
+          - $ref: '#/components/schemas/SystemMetrics'
+          - type: 'null'
+      type: object
+      required:
+      - backend
+      - redis
+      - postgres
+      title: SystemStatusResponse
+      description: Complete system status response.
+    Tag:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        episode_count:
+          type: integer
+          title: Episode Count
+      type: object
+      required:
+      - id
+      - name
+      - episode_count
+      title: Tag
+    TagsResponse:
+      properties:
+        tags:
+          items:
+            $ref: '#/components/schemas/Tag'
+          type: array
+          title: Tags
+      type: object
+      required:
+      - tags
+      title: TagsResponse
+    TopMover:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        name:
+          type: string
+          title: Name
+        price:
+          type: number
+          title: Price
+        change:
+          type: number
+          title: Change
+        changePercent:
+          type: number
+          title: Changepercent
+      type: object
+      required:
+      - ticker
+      - name
+      - price
+      - change
+      - changePercent
+      title: TopMover
+    TranslationCreate:
+      properties:
+        ticker:
+          type: string
+          maxLength: 20
+          title: Ticker
+          description: Stock ticker symbol
+        market:
+          type: string
+          maxLength: 10
+          title: Market
+          description: Market code (US, TW, JP)
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+          description: English name
+        name_zh_tw:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Zh Tw
+          description: Chinese Traditional name
+        translation_status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - auto
+          title: Translation Status
+          default: pending
+      type: object
+      required:
+      - ticker
+      - market
+      title: TranslationCreate
+      description: Schema for creating a new translation.
+    TranslationListResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        limit:
+          type: integer
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/TranslationResponse'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - page
+      - limit
+      - items
+      title: TranslationListResponse
+      description: Schema for paginated translation list.
+    TranslationPublicResponse:
+      properties:
+        ticker:
+          type: string
+          title: Ticker
+        market:
+          type: string
+          title: Market
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+        name_zh_tw:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Zh Tw
+      type: object
+      required:
+      - ticker
+      - market
+      title: TranslationPublicResponse
+      description: Schema for public translation lookup response.
+    TranslationResponse:
+      properties:
+        ticker:
+          type: string
+          maxLength: 20
+          title: Ticker
+          description: Stock ticker symbol
+        market:
+          type: string
+          maxLength: 10
+          title: Market
+          description: Market code (US, TW, JP)
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+          description: English name
+        name_zh_tw:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Zh Tw
+          description: Chinese Traditional name
+        id:
+          type: integer
+          title: Id
+        translation_status:
+          type: string
+          title: Translation Status
+        last_updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Updated By
+        last_updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Updated At
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+      type: object
+      required:
+      - ticker
+      - market
+      - id
+      - translation_status
+      title: TranslationResponse
+      description: Schema for translation response.
+    TranslationUpdate:
+      properties:
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+        name_zh_tw:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name Zh Tw
+        translation_status:
+          anyOf:
+          - type: string
+            enum:
+            - pending
+            - approved
+            - auto
+          - type: 'null'
+          title: Translation Status
+      type: object
+      title: TranslationUpdate
+      description: Schema for updating an existing translation.
+    UserResponse:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        name:
+          type: string
+          title: Name
+        avatar:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatar
+        id:
+          type: string
+          title: Id
+        google_id:
+          type: string
+          title: Google Id
+        email_verified:
+          type: boolean
+          title: Email Verified
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        watchlist:
+          items:
+            type: string
+          type: array
+          title: Watchlist
+          default: []
+        podcast_subscriptions:
+          items:
+            type: string
+          type: array
+          title: Podcast Subscriptions
+          default: []
+        episode_bookmarks:
+          items:
+            type: string
+          type: array
+          title: Episode Bookmarks
+          default: []
+        alerts:
+          items:
+            type: string
+          type: array
+          title: Alerts
+          default: []
+        tag_subscriptions:
+          items:
+            type: string
+          type: array
+          title: Tag Subscriptions
+          default: []
+      type: object
+      required:
+      - email
+      - name
+      - id
+      - google_id
+      - email_verified
+      - created_at
+      - updated_at
+      title: UserResponse
+      description: User response model
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

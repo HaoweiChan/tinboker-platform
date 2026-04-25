@@ -1,0 +1,279 @@
+"""
+Configuration management for Graphfolio Backend.
+
+This module handles:
+- System/application configuration (with defaults)
+- Secret tokens (loaded from .env file)
+- Environment-based settings
+
+Best Practices:
+- Secrets: Stored in .env file (never committed to git)
+- System config: Can be set via environment variables or use defaults
+- All config is type-safe and validated
+"""
+
+from typing import Optional, Union, Tuple, Type
+from dotenv import load_dotenv
+from pydantic import field_validator, model_validator, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict, PydanticBaseSettingsSource
+from src.config_loader import GCPSecretManagerSource
+
+load_dotenv()
+
+
+class Settings(BaseSettings):
+    """
+    Application settings with type safety and validation.
+    
+    Secrets are loaded from .env file.
+    System config can be overridden via environment variables.
+    """
+    
+    # ==================== Secrets (from .env) ====================
+    # These should NEVER have defaults and should be in .env
+    finmind_api_key: Optional[str] = None
+    massive_api_key: Optional[str] = None
+    podcast_api_key: Optional[str] = None  # API key for external podcast API (Netcup server)
+    
+    # Google OAuth Configuration
+    google_client_id: Optional[str] = None
+    google_client_secret: Optional[str] = None
+    
+    
+    # JWT Configuration
+    jwt_secret_key: Optional[str] = None
+    jwt_algorithm: str = "HS256"
+    jwt_expiration_hours: Optional[int] = 24
+
+    # Admin Authentication (from GSM: ADMIN_PASSWORD, ADMIN_JWT_SECRET, ADMIN_EMAILS)
+    admin_password: Optional[str] = None  # Password for admin UI login
+    admin_jwt_secret: Optional[str] = None  # JWT signing key for admin tokens
+    admin_emails: list[str] = []  # Comma-separated list of admin email addresses
+
+    @field_validator("admin_emails", mode="before")
+    @classmethod
+    def parse_admin_emails(cls, v: Union[str, list, None]) -> list[str]:
+        """Parse admin emails from comma-separated string or list"""
+        if v is None or v == "":
+            return []
+        if isinstance(v, str):
+            if v.strip().startswith("["):
+                import json
+                return json.loads(v)
+            return [email.strip().lower() for email in v.split(",") if email.strip()]
+        return [email.lower() for email in v]
+
+    # Cloudflare Analytics (from GSM: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ZONE_TAG)
+    cloudflare_api_token: Optional[str] = None  # Cloudflare API token for analytics
+    cloudflare_zone_tag: Optional[str] = None  # Cloudflare zone ID for tinboker.com
+    
+    @field_validator("jwt_expiration_hours", mode="before")
+    @classmethod
+    def parse_jwt_expiration_hours(cls, v: Union[str, int, None]) -> Optional[int]:
+        """Parse JWT expiration hours, handling empty strings"""
+        if v is None or v == "":
+            return 24  # Default
+        if isinstance(v, str):
+            if v.strip() == "":
+                return 24  # Default
+            return int(v)
+        return int(v) if v else 24
+    
+    @model_validator(mode='after')
+    def enforce_production_postgres(self):
+        """Enforce PostgreSQL usage in production environment"""
+        if self.environment.lower() == "production" and not self.use_postgres:
+            # Force enable Postgres in production to prevent data loss
+            self.use_postgres = True
+        return self
+    
+    # ==================== System Configuration ====================
+    # These have sensible defaults but can be overridden via env vars
+    
+    # Data source configuration
+    use_finmind: bool = True  # Use FinMind API instead of mock data
+    
+    # Server configuration
+    host: str = "0.0.0.0"
+    port: int = 5174  # Default port for local development. Render sets PORT env var which is automatically read (case-insensitive)
+    
+    # CORS configuration
+    # Can be set as comma-separated string in env: "http://localhost:5173,https://graphfolio.com"
+    # Or as JSON array: '["http://localhost:5173","https://graphfolio.com"]'
+    # Note: Vercel preview URLs (https://*.vercel.app) are automatically allowed via regex pattern
+    cors_origins: list[str] = [
+        "http://localhost:5173",  # Development frontend (default port)
+        "http://localhost:5174",  # Development frontend (vite default port)
+        "http://localhost:5175",  # Development frontend (alternative port)
+        "http://127.0.0.1:5173",  # Development frontend (127.0.0.1, default port)
+        "http://127.0.0.1:5174",  # Development frontend (127.0.0.1, vite default)
+        "http://127.0.0.1:5175",  # Development frontend (127.0.0.1, alternative port)
+        "https://trendbrief.xyz",  # Production frontend
+        "https://www.trendbrief.xyz"  # Production frontend (www)
+    ]
+    
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v: Union[str, list]) -> list[str]:
+        """Parse CORS origins from string or list"""
+        if isinstance(v, str):
+            # Try JSON first (pydantic will handle it)
+            # If not JSON, treat as comma-separated
+            if v.strip().startswith("["):
+                # JSON array - let pydantic parse it
+                import json
+                return json.loads(v)
+            else:
+                # Comma-separated string
+                return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
+    
+    # API configuration
+    api_title: str = "Graphfolio Backend API"
+    api_version: str = "1.0.0"
+    
+    # Environment
+    environment: str = "development"  # development, staging, production
+    
+    # Database configuration
+    database_path: str = "data/graphfolio.db"  # SQLite database file path
+    use_postgres: bool = False  # Toggle between SQLite and PostgreSQL
+    postgres_url: Optional[str] = None  # PostgreSQL connection URL
+    postgres_host: str = "localhost"
+    postgres_port: int = 5432
+    postgres_db: str = "graphfolio"
+    postgres_user: str = "graphfolio_user"
+    postgres_password: Optional[str] = None
+    
+    @property
+    def postgres_connection_string(self) -> Optional[str]:
+        """Get PostgreSQL connection string from DATABASE_URL or individual settings."""
+        import os
+        # Render provides DATABASE_URL automatically
+        if "DATABASE_URL" in os.environ:
+            return os.environ["DATABASE_URL"]
+        
+        if self.postgres_url:
+            return self.postgres_url
+        
+        # Build from individual settings
+        if self.postgres_password:
+            return f"postgresql://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        
+        return None
+
+    # Recommendation / podcast_db PostgreSQL (data prepared elsewhere; backend only reads)
+    # Reads from POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD in .env (e.g. lines 48-55)
+    recommendation_postgres_host: str = "localhost"
+    recommendation_postgres_port: int = 5432
+    recommendation_postgres_db: str = "podcast_db"
+    recommendation_postgres_user: str = "podcast_user"
+    recommendation_postgres_password: Optional[str] = None
+
+    @property
+    def recommendation_postgres_connection_string(self) -> Optional[str]:
+        """PostgreSQL URL for recommendation/podcast_db. Uses POSTGRES_* when set; host/port can come from POSTGRES_PUBLIC_URL."""
+        import os
+        from urllib.parse import urlparse
+        host = os.environ.get("POSTGRES_HOST") or self.recommendation_postgres_host
+        port = os.environ.get("POSTGRES_PORT", str(self.recommendation_postgres_port))
+        public_url = os.environ.get("POSTGRES_PUBLIC_URL")
+        if public_url:
+            try:
+                u = urlparse(public_url)
+                if u.hostname:
+                    host = u.hostname
+                if u.port is not None:
+                    port = str(u.port)
+            except Exception:
+                pass
+        db = os.environ.get("POSTGRES_DB") or self.recommendation_postgres_db
+        user = os.environ.get("POSTGRES_USER") or self.recommendation_postgres_user
+        password = os.environ.get("POSTGRES_PASSWORD") or self.recommendation_postgres_password
+        if password:
+            return f"postgresql://{user}:{password}@{host}:{port}/{db}"
+        return None
+
+    # Redis configuration
+    redis_url: Optional[str] = None  # Redis connection URL (Render provides REDIS_URL)
+    redis_host: str = "localhost"
+    redis_port: int = 6379
+    redis_db: int = 0
+    redis_password: Optional[str] = None
+    
+    @property
+    def redis_connection_string(self) -> Optional[str]:
+        """Get Redis connection string from REDIS_URL or individual settings."""
+        import os
+        # Render provides REDIS_URL automatically
+        if "REDIS_URL" in os.environ:
+            return os.environ["REDIS_URL"]
+        
+        if self.redis_url:
+            return self.redis_url
+        
+        # Build from individual settings
+        if self.redis_password:
+            return f"redis://:{self.redis_password}@{self.redis_host}:{self.redis_port}/{self.redis_db}"
+        else:
+            return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
+    
+    # WebSocket configuration
+    websocket_update_interval: int = 5  # seconds
+    intraday_snapshot_retention_days: int = 30
+    
+    # External Podcast API (Netcup server) configuration
+    netcup_api_url: str = Field(
+        default="http://159.195.45.195:8000",
+        validation_alias="NETCUP_IP"
+    )
+    
+    model_config = SettingsConfigDict(
+        # Load from .env file
+        env_file=".env",
+        env_file_encoding="utf-8",
+        # Allow case-insensitive env var names
+        case_sensitive=False,
+        # Allow extra fields (for flexibility)
+        extra="ignore"
+    )
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: Type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+        """
+        Define priority of settings sources.
+        Priority (Highest to Lowest):
+        1. Constructor arguments (init_settings)
+        2. Environment variables (env_settings)
+        3. .env file (dotenv_settings)
+        4. GCP Secret Manager (GCPSecretManagerSource)
+        """
+        return (
+            init_settings,
+            env_settings,
+            dotenv_settings,
+            GCPSecretManagerSource(settings_cls),
+        )
+    
+    @property
+    def is_production(self) -> bool:
+        """Check if running in production environment"""
+        return self.environment.lower() == "production"
+    
+    @property
+    def is_development(self) -> bool:
+        """Check if running in development environment"""
+        return self.environment.lower() == "development"
+
+
+# Global settings instance
+# This will be initialized when the module is imported
+settings = Settings()
+

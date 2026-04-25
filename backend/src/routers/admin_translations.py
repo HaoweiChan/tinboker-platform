@@ -1,0 +1,264 @@
+"""
+Admin API endpoints for managing stock translations.
+Requires JWT authentication.
+"""
+
+import csv
+import io
+from typing import Optional, List
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
+from sqlalchemy.orm import Session
+from src.database.postgres import get_session
+from src.services.translation_service import TranslationService
+from src.schemas.translation import (
+    TranslationCreate,
+    TranslationUpdate,
+    TranslationResponse,
+    TranslationListResponse,
+    BulkImportItem,
+    BulkImportResponse,
+    MissingTranslation,
+    MissingTranslationsResponse,
+)
+from src.auth.admin_auth import (
+    get_admin_access,
+    verify_admin_password,
+    create_admin_token,
+    LoginRequest,
+    LoginResponse,
+    AdminAccess,
+)
+
+router = APIRouter(
+    prefix="/api/admin",
+    tags=["admin"]
+)
+
+
+# ==================== Authentication ====================
+
+@router.post("/auth/login", response_model=LoginResponse)
+async def admin_login(request: LoginRequest):
+    """
+    Authenticate admin user with password.
+    Returns JWT token on success.
+    """
+    if not verify_admin_password(request.password):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid password"
+        )
+    return create_admin_token()
+
+
+@router.get("/auth/check")
+async def check_admin_access(admin: AdminAccess = Depends(get_admin_access)):
+    """
+    Check if the current user has admin access.
+    Returns access method (admin token or whitelisted user).
+
+    This endpoint accepts:
+    1. Admin JWT token (from password login)
+    2. Regular user JWT token if user's email is whitelisted in ADMIN_EMAILS
+
+    Whitelisted users can access admin features without needing the admin password.
+    """
+    return {
+        "has_access": True,
+        "access_method": "admin_token" if admin.is_admin_token else "whitelisted_user",
+        "email": admin.email
+    }
+
+
+# ==================== Reports & Stats (must be before parameterized routes) ====================
+
+@router.get("/translations/stats")
+async def get_translation_stats(
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Get translation statistics."""
+    service = TranslationService(db)
+    return service.get_stats()
+
+
+@router.get("/translations/missing", response_model=MissingTranslationsResponse)
+async def get_missing_translations(
+    market: Optional[str] = Query(None, description="Filter by market"),
+    limit: int = Query(100, ge=1, le=500, description="Max items to return"),
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Get translations without ZH-TW name."""
+    service = TranslationService(db)
+    items = service.get_missing_translations(market=market, limit=limit)
+    return MissingTranslationsResponse(
+        total=len(items),
+        items=[
+            MissingTranslation(
+                ticker=item.ticker,
+                market=item.market,
+                name_en=item.name_en
+            )
+            for item in items
+        ]
+    )
+
+
+# ==================== Translations CRUD ====================
+
+@router.get("/translations", response_model=TranslationListResponse)
+async def list_translations(
+    market: Optional[str] = Query(None, description="Filter by market"),
+    status: Optional[str] = Query(None, description="Filter by translation status"),
+    search: Optional[str] = Query(None, description="Search in ticker/name"),
+    page: int = Query(1, ge=1, description="Page number"),
+    limit: int = Query(50, ge=1, le=100, description="Items per page"),
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """
+    List translations with optional filters and pagination.
+    """
+    service = TranslationService(db)
+    items, total = service.list_translations(
+        market=market,
+        status=status,
+        search=search,
+        page=page,
+        limit=limit
+    )
+    return TranslationListResponse(
+        total=total,
+        page=page,
+        limit=limit,
+        items=[TranslationResponse.model_validate(item) for item in items]
+    )
+
+
+@router.get("/translations/{translation_id}", response_model=TranslationResponse)
+async def get_translation(
+    translation_id: int,
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Get a single translation by ID."""
+    service = TranslationService(db)
+    translation = service.get_by_id(translation_id)
+    if not translation:
+        raise HTTPException(status_code=404, detail="Translation not found")
+    return TranslationResponse.model_validate(translation)
+
+
+@router.post("/translations", response_model=TranslationResponse, status_code=201)
+async def create_translation(
+    data: TranslationCreate,
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Create a new translation."""
+    service = TranslationService(db)
+    # Check if already exists
+    existing = service.get_by_ticker_market(data.ticker, data.market)
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Translation for {data.ticker}/{data.market} already exists"
+        )
+    translation = service.create(data, updated_by="admin")
+    return TranslationResponse.model_validate(translation)
+
+
+@router.put("/translations/{translation_id}", response_model=TranslationResponse)
+async def update_translation(
+    translation_id: int,
+    data: TranslationUpdate,
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Update an existing translation."""
+    service = TranslationService(db)
+    translation = service.update(translation_id, data, updated_by="admin")
+    if not translation:
+        raise HTTPException(status_code=404, detail="Translation not found")
+    return TranslationResponse.model_validate(translation)
+
+
+@router.delete("/translations/{translation_id}")
+async def delete_translation(
+    translation_id: int,
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Delete a translation."""
+    service = TranslationService(db)
+    if not service.delete(translation_id):
+        raise HTTPException(status_code=404, detail="Translation not found")
+    return {"success": True}
+
+
+# ==================== Bulk Operations ====================
+
+@router.post("/translations/bulk-import", response_model=BulkImportResponse)
+async def bulk_import_translations(
+    file: UploadFile = File(..., description="CSV file with translations"),
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """
+    Bulk import translations from CSV file.
+    Expected columns: ticker, market, name_en, name_zh_tw
+    Optional column: translation_status (defaults to 'auto')
+    """
+    if not file.filename.endswith(".csv"):
+        raise HTTPException(status_code=400, detail="Only CSV files are supported")
+    content = await file.read()
+    try:
+        decoded = content.decode("utf-8")
+    except UnicodeDecodeError:
+        try:
+            decoded = content.decode("utf-8-sig")  # Handle BOM
+        except UnicodeDecodeError:
+            raise HTTPException(status_code=400, detail="Invalid CSV encoding")
+    reader = csv.DictReader(io.StringIO(decoded))
+    # Validate headers
+    required_headers = {"ticker", "market"}
+    if not required_headers.issubset(set(reader.fieldnames or [])):
+        raise HTTPException(
+            status_code=400,
+            detail=f"CSV must have columns: {required_headers}"
+        )
+    items: List[BulkImportItem] = []
+    for row in reader:
+        try:
+            item = BulkImportItem(
+                ticker=row["ticker"].strip(),
+                market=row["market"].strip(),
+                name_en=row.get("name_en", "").strip() or None,
+                name_zh_tw=row.get("name_zh_tw", "").strip() or None,
+                translation_status=row.get("translation_status", "auto").strip() or "auto"
+            )
+            items.append(item)
+        except Exception:
+            pass  # Skip invalid rows
+    if not items:
+        raise HTTPException(status_code=400, detail="No valid items in CSV")
+    service = TranslationService(db)
+    imported, updated, errors = service.bulk_import(items, updated_by="admin")
+    return BulkImportResponse(imported=imported, updated=updated, errors=errors)
+
+
+@router.post("/translations/bulk-json", response_model=BulkImportResponse)
+async def bulk_import_json(
+    items: List[BulkImportItem],
+    db: Session = Depends(get_session),
+    admin: AdminAccess = Depends(get_admin_access)
+):
+    """Bulk import translations from JSON array."""
+    if not items:
+        raise HTTPException(status_code=400, detail="No items provided")
+    service = TranslationService(db)
+    imported, updated, errors = service.bulk_import(items, updated_by="admin")
+    return BulkImportResponse(imported=imported, updated=updated, errors=errors)
+
+

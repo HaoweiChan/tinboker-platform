@@ -1,0 +1,141 @@
+/**
+ * Netdata embed component for admin dashboard.
+ * Embeds Netdata dashboard via iframe when available.
+ */
+
+import React, { useState, useMemo } from 'react';
+import { ExternalLink, AlertCircle } from 'lucide-react';
+
+interface NetdataEmbedProps {
+    /** Height of the iframe */
+    height?: string;
+}
+
+// Get the Netdata URL based on environment
+const getNetdataUrl = (): string => {
+    // In development, use local netdata
+    if (!import.meta.env.PROD) {
+        return 'http://localhost:19999/';
+    }
+
+    // In production, Netdata is proxied through staging API
+    // Check hostname to determine which API to use
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+
+        // Staging or preview deployments -> use staging API
+        if (hostname.includes('pages.dev') || hostname.includes('vercel.app') || hostname.includes('staging')) {
+            return 'https://staging-api.tinboker.com/netdata/';
+        }
+
+        // Production
+        if (hostname === 'tinboker.com' || hostname === 'www.tinboker.com') {
+            return 'https://api.tinboker.com/netdata/';
+        }
+    }
+
+    // Default to staging
+    return 'https://staging-api.tinboker.com/netdata/';
+};
+
+export const NetdataEmbed: React.FC<NetdataEmbedProps> = ({
+    height = '600px',
+}) => {
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    // Memoize the netdata URL
+    const baseUrl = useMemo(() => getNetdataUrl(), []);
+
+    // Netdata URL for the dashboard with theme
+    const netdataUrl = `${baseUrl}#menu_system;theme=slate`;
+
+    const handleLoad = () => {
+        setLoading(false);
+    };
+
+    const handleError = () => {
+        setLoading(false);
+        setError(true);
+    };
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 dark:border-gray-600 dark:bg-gray-800/50">
+                <AlertCircle className="mb-3 h-8 w-8 text-gray-400" />
+                <p className="mb-2 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Netdata Not Configured
+                </p>
+                <p className="mb-4 text-center text-xs text-gray-500 dark:text-gray-500">
+                    Please ensure Netdata container is running and Caddy reverse proxy is configured
+                </p>
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => {
+                            setError(false);
+                            setLoading(true);
+                        }}
+                        className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                    >
+                        Retry
+                    </button>
+                    <a
+                        href="https://netdata.cloud/docs/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-700 dark:text-gray-400"
+                    >
+                        Docs <ExternalLink className="h-3 w-3" />
+                    </a>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="relative" style={{ minHeight: height }}>
+            {/* Loading overlay */}
+            {loading && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
+                    <div className="flex flex-col items-center gap-2">
+                        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                            Loading Netdata...
+                        </span>
+                    </div>
+                </div>
+            )}
+
+            {/* Netdata iframe */}
+            <iframe
+                src={netdataUrl}
+                title="Netdata Dashboard"
+                className="w-full rounded-lg border-0"
+                style={{ height }}
+                onLoad={handleLoad}
+                onError={handleError}
+                allow="fullscreen"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            />
+
+            {/* Instructions banner */}
+            <div className="mt-2 rounded-md bg-blue-50 p-3 dark:bg-blue-900/20">
+                <p className="text-xs text-blue-700 dark:text-blue-300">
+                    💡 <strong>Tip:</strong> If you see a "Welcome to Netdata" screen, click <strong>"Skip and use the dashboard anonymously"</strong> at the bottom right to view metrics.
+                </p>
+            </div>
+
+            {/* Open in new tab */}
+            <div className="mt-2 flex justify-end">
+                <a
+                    href={baseUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                    Open in new tab <ExternalLink className="h-3 w-3" />
+                </a>
+            </div>
+        </div>
+    );
+};

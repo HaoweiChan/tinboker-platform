@@ -157,8 +157,7 @@ export const PopularTickersWidget: React.FC<PopularTickersWidgetProps> = ({ isMo
     const fetchBuzzStocks = async () => {
       setLoading(true);
       try {
-        // Progressive fallback: 7d -> 14d -> 30d
-        const fallbackWindows = [7, 14, 30];
+        const fallbackWindows = [7, 14, 30, 90, 365];
         let buzzData: Awaited<ReturnType<typeof recommendationService.getMostDiscussedTickers>> = [];
         let usedDays = 7;
         for (const days of fallbackWindows) {

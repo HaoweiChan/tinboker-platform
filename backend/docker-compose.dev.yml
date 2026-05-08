@@ -4,8 +4,8 @@
 
 services:
   backend:
-    image: ghcr.io/graphfolio/graphfolio-backend:${IMAGE_TAG:-develop}
-    container_name: graphfolio-backend-dev
+    image: ghcr.io/haoweichan/tinboker-backend:${IMAGE_TAG:-develop}
+    container_name: tinboker-backend-dev
     ports:
       - "8001:8000"
     environment:
@@ -40,7 +40,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: graphfolio-redis
+    container_name: tinboker-redis
     ports:
       - "127.0.0.1:6379:6379"
     command: redis-server --appendonly no --maxmemory 2gb --maxmemory-policy allkeys-lru

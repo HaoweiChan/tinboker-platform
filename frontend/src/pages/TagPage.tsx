@@ -47,7 +47,7 @@ export const TagPage: React.FC = () => {
         // Transform API episodes to mock format, filtering out those without summary
         const transformedEpisodes = response.episodes
           .map(transformApiEpisodeToMock)
-          .filter((ep): ep is MockEpisode => ep !== null);
+          .filter((ep: MockEpisode | null): ep is MockEpisode => ep !== null);
 
         // Sort by spotify_release_date (descending - newest first)
         // Since API might not sort correctly, we sort client-side as well

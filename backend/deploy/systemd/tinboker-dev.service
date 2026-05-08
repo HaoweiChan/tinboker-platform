@@ -1,5 +1,5 @@
 [Unit]
-Description=Graphfolio Development Backend
+Description=TinBoker Development Backend
 Requires=docker.service
 After=docker.service
 

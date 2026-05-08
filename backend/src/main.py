@@ -31,7 +31,7 @@ from src.middleware.cloudflare import CloudflareMiddleware
 
 app = FastAPI(
     title=settings.api_title,
-    description="Backend API for Graphfolio - Company network visualization",
+    description="Backend API for TinBoker - Financial podcast insights platform",
     version=settings.api_version,
     servers=[
         {
@@ -39,7 +39,7 @@ app = FastAPI(
             "description": "Development server"
         },
         {
-            "url": "https://graphfolio-backend.onrender.com",
+            "url": "https://api.tinboker.com",
             "description": "Production server"
         }
     ]

@@ -1,5 +1,5 @@
 [Unit]
-Description=Graphfolio Staging Backend
+Description=TinBoker Staging Backend
 Requires=docker.service
 After=docker.service
 

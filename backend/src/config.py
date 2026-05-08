@@ -1,5 +1,5 @@
 """
-Configuration management for Graphfolio Backend.
+Configuration management for TinBoker Backend.
 
 This module handles:
 - System/application configuration (with defaults)
@@ -98,8 +98,8 @@ class Settings(BaseSettings):
     port: int = 5174  # Default port for local development. Render sets PORT env var which is automatically read (case-insensitive)
     
     # CORS configuration
-    # Can be set as comma-separated string in env: "http://localhost:5173,https://graphfolio.com"
-    # Or as JSON array: '["http://localhost:5173","https://graphfolio.com"]'
+    # Can be set as comma-separated string in env: "http://localhost:5173,https://tinboker.com"
+    # Or as JSON array: '["http://localhost:5173","https://tinboker.com"]'
     # Note: Vercel preview URLs (https://*.vercel.app) are automatically allowed via regex pattern
     cors_origins: list[str] = [
         "http://localhost:5173",  # Development frontend (default port)
@@ -129,20 +129,20 @@ class Settings(BaseSettings):
         return v
     
     # API configuration
-    api_title: str = "Graphfolio Backend API"
+    api_title: str = "TinBoker Backend API"
     api_version: str = "1.0.0"
     
     # Environment
     environment: str = "development"  # development, staging, production
     
     # Database configuration
-    database_path: str = "data/graphfolio.db"  # SQLite database file path
+    database_path: str = "data/tinboker.db"  # SQLite database file path
     use_postgres: bool = False  # Toggle between SQLite and PostgreSQL
     postgres_url: Optional[str] = None  # PostgreSQL connection URL
     postgres_host: str = "localhost"
     postgres_port: int = 5432
-    postgres_db: str = "graphfolio"
-    postgres_user: str = "graphfolio_user"
+    postgres_db: str = "podcast_db"
+    postgres_user: str = "podcast_user"
     postgres_password: Optional[str] = None
     
     @property

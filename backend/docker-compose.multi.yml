@@ -10,7 +10,7 @@ services:
   # Production Backend - Port 8000
   backend-prod:
     image: ghcr.io/haoweichan/tinboker-backend:${PROD_IMAGE_TAG:-main}
-    container_name: graphfolio-backend-prod
+    container_name: tinboker-backend-prod
     ports:
       - "8000:8000"
     environment:
@@ -45,7 +45,7 @@ services:
   # Development Backend - Port 8001
   backend-dev:
     image: ghcr.io/haoweichan/tinboker-backend:${DEV_IMAGE_TAG:-develop}
-    container_name: graphfolio-backend-dev
+    container_name: tinboker-backend-dev
     ports:
       - "8001:8000"
     environment:
@@ -80,7 +80,7 @@ services:
   # Staging Backend - Port 8002
   backend-staging:
     image: ghcr.io/haoweichan/tinboker-backend:${STAGING_IMAGE_TAG:-develop}
-    container_name: graphfolio-backend-staging
+    container_name: tinboker-backend-staging
     ports:
       - "8002:8000"
     environment:
@@ -98,7 +98,7 @@ services:
       POSTGRES_USER: podcast_user
       POSTGRES_PASSWORD: buxwLXrmK4a20fKCSvPTdpySs
       FIRESTORE_DATABASE_ID: graphfolio-db
-      CORS_ORIGINS: '["https://tinboker.com","https://dev.tinboker.com","https://staging.tinboker.com","https://graphfolio-webui.pages.dev","http://localhost:5173","http://localhost:3000"]'
+      CORS_ORIGINS: '["https://tinboker.com","https://dev.tinboker.com","https://staging.tinboker.com","http://localhost:5173","http://localhost:3000"]'
     volumes:
       - ./gcp-service-account.json:/app/gcp-service-account.json:ro
     depends_on:
@@ -115,7 +115,7 @@ services:
   # Shared Redis
   redis:
     image: redis:7-alpine
-    container_name: graphfolio-redis
+    container_name: tinboker-redis
     ports:
       - "127.0.0.1:6379:6379"
     command: redis-server --appendonly no --maxmemory 2gb --maxmemory-policy allkeys-lru
@@ -131,7 +131,7 @@ services:
   # Shared Netdata Monitoring
   netdata:
     image: netdata/netdata:stable
-    container_name: graphfolio-netdata
+    container_name: tinboker-netdata
     hostname: tinboker-vps
     ports:
       - "127.0.0.1:19999:19999"

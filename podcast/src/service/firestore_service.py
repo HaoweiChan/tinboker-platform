@@ -5,10 +5,10 @@ import os
 import json
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from dotenv import load_dotenv
+from src.secrets_bootstrap import bootstrap
 
-# Load environment variables
-load_dotenv()
+# Load secrets from GSM (idempotent — safe if already bootstrapped at entry point).
+bootstrap()
 
 try:
     import firebase_admin

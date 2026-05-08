@@ -11,10 +11,10 @@ import re
 import hashlib
 from pathlib import Path
 from typing import Optional, List, Dict
-from dotenv import load_dotenv
+from src.secrets_bootstrap import bootstrap
 
-# Load environment variables from .env file
-load_dotenv()
+# Load secrets from GSM (idempotent — safe if already bootstrapped at entry point).
+bootstrap()
 
 try:
     import firebase_admin

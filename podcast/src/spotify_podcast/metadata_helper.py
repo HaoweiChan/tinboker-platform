@@ -5,35 +5,11 @@ Helper functions for fetching Spotify podcast metadata.
 import os
 from typing import Optional, Dict
 from datetime import datetime
-from pathlib import Path
 
-# Try to load .env file if available
-def _load_env_file(env_path: Path):
-    """Manually load .env file as fallback."""
-    if not env_path.exists():
-        return
-    
-    with open(env_path, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#') and '=' in line:
-                key, value = line.split('=', 1)
-                key = key.strip()
-                value = value.split('#')[0].strip()  # Remove comments
-                # Remove quotes if present
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                elif value.startswith("'") and value.endswith("'"):
-                    value = value[1:-1]
-                os.environ[key] = value
+from src.secrets_bootstrap import bootstrap
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    # Fallback to manual loading
-    project_root = Path(__file__).parent.parent.parent.parent
-    _load_env_file(project_root / '.env')
+# Load secrets from GSM (idempotent — safe if already bootstrapped at entry point).
+bootstrap()
 
 from .parser import SpotifyPodcastParser
 from .auth import get_access_token

@@ -8,11 +8,10 @@ import os
 import sys
 from typing import Optional
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+from src.secrets_bootstrap import bootstrap
+
+# Load secrets from GSM (idempotent — safe if already bootstrapped at entry point).
+bootstrap()
 
 from .parser import SpotifyPodcastParser
 from .auth import get_access_token

@@ -62,19 +62,11 @@ writer:
 
 # LLM settings
 llm:
-<<<<<<< HEAD
   default_provider: gemini # gemini | openai | anthropic | google
   extractor_model: gemini-2.0-flash # gpt-5-mini | gemini-2.0-flash | gpt-4o | claude-3.7-sonnet | gemini-2.5-flash | gemini-2.5-pro
   researcher_model: gemini-2.0-flash
   writer_model: gemini-3-pro-preview # gemini-2.0-flash
   segmentation_model: gemini-2.5-pro  # Model for event block segmentation
-=======
-  default_provider: gemini
-  extractor_model: gemini-2.0-flash
-  researcher_model: gemini-2.0-flash
-  writer_model: gemini-2.0-flash
-  segmentation_model: gemini-2.0-flash    # Model for event block segmentation
->>>>>>> render
   temperatures:
     extractor: 0.1              # Deterministic extraction
     researcher: 0.0             # Factual retrieval
@@ -108,4 +100,11 @@ pipeline:
       - 5
       - 15
       - 30
+
+# GCP / GCS — non-secret deployment constants.
+# Secrets (credentials, API keys) come from Google Secret Manager via
+# src/secrets_bootstrap.py — never committed to disk.
+gcp:
+  project_id: gen-lang-client-0901363254
+  gcs_bucket_name: graphfolio-articles
 

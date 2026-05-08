@@ -1,13 +1,14 @@
 """FastAPI application for Podcast Downloader API."""
 
-import os
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.routers import episode, podcast
 
-# Load environment variables from .env file
-load_dotenv()
+# Pull secrets from Google Secret Manager into os.environ before any
+# router/service module that calls os.getenv() at import time.
+from src.secrets_bootstrap import bootstrap
+bootstrap()
+
+from src.routers import episode, podcast  # noqa: E402  — must follow bootstrap()
 
 app = FastAPI(
     title="Podcast Downloader API",

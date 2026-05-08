@@ -16,10 +16,13 @@ import tempfile
 from pathlib import Path
 from typing import List, Dict, Optional
 
-# Import modules from src package
-from src.service.download_podcasts import fetch_episodes, extract_podcast_id
-from src.pipeline import PipelineConfig, EpisodeProcessor
-from src.pipeline.steps import initialize_services
+# Pull secrets from GSM before any module that reads os.getenv() at import time.
+from src.secrets_bootstrap import bootstrap
+bootstrap()
+
+from src.service.download_podcasts import fetch_episodes, extract_podcast_id  # noqa: E402
+from src.pipeline import PipelineConfig, EpisodeProcessor  # noqa: E402
+from src.pipeline.steps import initialize_services  # noqa: E402
 
 
 def load_podcasts_config(config_path: Path) -> List[Dict]:

@@ -32,20 +32,20 @@ from typing import Any
 
 from langgraph.graph import END, StateGraph
 
-from content_builder.nodes.clusterer import cluster_sentences
-from content_builder.nodes.events_markdown import build_events_markdown
-from content_builder.nodes.extractor import extract_events
-from content_builder.nodes.marp_converter import convert_marp, convert_marp_ticker
-from content_builder.nodes.marp_writer import write_marp_slides
-from content_builder.nodes.markdown_transform import transform_to_markdown
-from content_builder.nodes.ticker_extractor import extract_tickers
-from content_builder.nodes.writer import write_article
-from content_builder.state import PipelineState
+from .nodes.clusterer import cluster_sentences
+from .nodes.events_markdown import build_events_markdown
+from .nodes.extractor import extract_events
+from .nodes.marp_converter import convert_marp, convert_marp_ticker
+from .nodes.marp_writer import write_marp_slides
+from .nodes.markdown_transform import transform_to_markdown
+from .nodes.ticker_extractor import extract_tickers
+from .nodes.writer import write_article
+from .state import PipelineState
 
 
 def _write_ticker_marp(state: PipelineState) -> dict[str, Any]:
     """Generate Marp slides specifically for ticker recommendations."""
-    from content_builder.llm import invoke_json, load_prompt
+    from .llm import invoke_json, load_prompt
 
     prompts = load_prompt("marp_writer")
     ticker_data = state.get("ticker_recommendations", {})

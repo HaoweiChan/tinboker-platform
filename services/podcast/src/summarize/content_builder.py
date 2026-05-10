@@ -54,7 +54,7 @@ def analyze_transcript_with_workflow_api(
             "Set it via Google Secret Manager or environment variable."
         )
 
-    from content_builder import run_pipeline
+    from src.podcast.content_builder import run_pipeline
 
     sentences_input = sentences or []
     if not sentences_input and words:

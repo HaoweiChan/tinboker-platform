@@ -3,7 +3,7 @@
 import json
 from typing import Any
 
-from content_builder.state import PipelineState
+from ..state import PipelineState
 
 
 _FINANCIAL_KEYWORDS = [

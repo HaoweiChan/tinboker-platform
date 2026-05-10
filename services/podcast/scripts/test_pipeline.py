@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.secrets_bootstrap import bootstrap
 bootstrap()
 
-from content_builder import run_pipeline
+from src.podcast.content_builder import run_pipeline
 
 test_sentences = [
     {"text": "大家好，歡迎收聽今天的財經節目", "start": 0, "end": 3000},

@@ -3,8 +3,8 @@
 import json
 from typing import Any
 
-from content_builder.llm import invoke_json, load_prompt
-from content_builder.state import PipelineState
+from ..llm import invoke_json, load_prompt
+from ..state import PipelineState
 
 
 def write_marp_slides(state: PipelineState) -> dict[str, Any]:

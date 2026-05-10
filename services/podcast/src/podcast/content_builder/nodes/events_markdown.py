@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from content_builder.state import PipelineState
+from ..state import PipelineState
 
 
 def build_events_markdown(state: PipelineState) -> dict[str, Any]:

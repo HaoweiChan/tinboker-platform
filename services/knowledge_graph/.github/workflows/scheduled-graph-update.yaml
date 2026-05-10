@@ -48,10 +48,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
+        working-directory: services/knowledge_graph
         run: pip install -e .
 
       - name: Run pipeline by tier
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'tier'
+        working-directory: services/knowledge_graph
         run: |
           TIER="${{ github.event.inputs.tier }}"
           LIMIT="${{ github.event.inputs.limit }}"
@@ -62,31 +64,24 @@ jobs:
             python -m apps.cli.main ingest-batch --tier "$TIER"
           fi
         env:
-          NEO4J_URI: ${{ secrets.NEO4J_URI }}
-          NEO4J_USER: ${{ secrets.NEO4J_USER }}
-          NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
 
       - name: Run pipeline by tickers
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'tickers'
+        working-directory: services/knowledge_graph
         run: |
           TICKERS="${{ github.event.inputs.tickers }}"
           python -m apps.cli.main ingest-batch --tickers "$TICKERS"
         env:
-          NEO4J_URI: ${{ secrets.NEO4J_URI }}
-          NEO4J_USER: ${{ secrets.NEO4J_USER }}
-          NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
 
       - name: Run Tier 1 (scheduled)
         if: github.event_name == 'schedule'
+        working-directory: services/knowledge_graph
         run: python -m apps.cli.main ingest-batch --tier 1
         env:
-          NEO4J_URI: ${{ secrets.NEO4J_URI }}
-          NEO4J_USER: ${{ secrets.NEO4J_USER }}
-          NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
 

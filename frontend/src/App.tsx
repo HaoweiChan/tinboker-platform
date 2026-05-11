@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { Landing } from '@/pages/Landing';
+import { HomeFeed } from '@/pages/HomeFeed';
 import { About } from '@/pages/About';
 import { ContactPage } from '@/pages/ContactPage';
 import { GraphGallery } from '@/pages/GraphGallery';
@@ -48,7 +48,7 @@ function App() {
 
         {/* Consumer app — wrapped in the sidebar + header shell */}
         <Route element={<AppLayout />}>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<HomeFeed />} />
 
           {/* New redesign nav targets (Phase 4 fills these in) */}
           <Route path="/podcaster" element={<ComingSoon title="節目" note="所有節目的列表頁正在重新設計。" />} />

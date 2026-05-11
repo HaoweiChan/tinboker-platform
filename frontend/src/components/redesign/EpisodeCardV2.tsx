@@ -102,16 +102,18 @@ export const EpisodeCardV2: React.FC<EpisodeCardV2Props> = ({
       </div>
     )}
 
-    {/* Footer */}
-    <div className="flex items-center gap-2.5 pt-2.5 border-t border-border text-[12px] text-muted-foreground">
-      {durationMinutes != null && <span>{durationMinutes} 分鐘</span>}
-      {durationMinutes != null && commentCount != null && <span aria-hidden>·</span>}
-      {commentCount != null && <span>{commentCount} 則討論</span>}
-      {isNew && (
-        <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.06em] bg-accent-info-soft text-accent-info">
-          NEW
-        </span>
-      )}
-    </div>
+    {/* Footer — only when there's something to show */}
+    {(durationMinutes != null || commentCount != null || isNew) && (
+      <div className="flex items-center gap-2.5 pt-2.5 border-t border-border text-[12px] text-muted-foreground">
+        {durationMinutes != null && <span>{durationMinutes} 分鐘</span>}
+        {durationMinutes != null && commentCount != null && <span aria-hidden>·</span>}
+        {commentCount != null && <span>{commentCount} 則討論</span>}
+        {isNew && (
+          <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.06em] bg-accent-info-soft text-accent-info">
+            NEW
+          </span>
+        )}
+      </div>
+    )}
   </Link>
 );

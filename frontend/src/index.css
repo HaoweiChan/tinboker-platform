@@ -62,6 +62,20 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
+    /* === Redesign: the ONE chrome accent (info blue) — links, focus, active-filter pill === */
+    --accent-info: 221 83% 53%;            /* #2563eb */
+    --accent-info-foreground: 0 0% 100%;
+    --accent-info-soft: 219 100% 93%;      /* ~#dde8ff */
+
+    /* === Redesign: LLM-derived sentiment (SEMANTIC — always green=bull / red=bear) === */
+    /* Independent of the TW/US price-change flip in useStockTrendColor. */
+    --sentiment-bull: 152 86% 29%;         /* ~#0a8a4a */
+    --sentiment-bull-soft: 146 51% 92%;    /* ~#e2f5ea */
+    --sentiment-bear: 0 67% 54%;           /* ~#d83b3b */
+    --sentiment-bear-soft: 0 67% 95%;      /* ~#fbe7e7 */
+    --sentiment-neutral: 215 14% 40%;      /* slate-ish */
+    --sentiment-neutral-soft: 210 40% 96%;
+
     /* Legacy token aliases */
     --bg-base: hsl(var(--background));
     --bg-surface: hsl(var(--card));
@@ -123,6 +137,18 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* === Redesign: accent + sentiment (dark) === */
+    --accent-info: 222 100% 68%;           /* ~#5b8dff */
+    --accent-info-foreground: 222 47% 11%;
+    --accent-info-soft: 222 55% 22%;
+
+    --sentiment-bull: 152 56% 49%;         /* ~#34c476 */
+    --sentiment-bull-soft: 152 50% 14%;
+    --sentiment-bear: 0 80% 65%;           /* ~#ef5a5a */
+    --sentiment-bear-soft: 0 45% 18%;
+    --sentiment-neutral: 215 18% 62%;
+    --sentiment-neutral-soft: 215 28% 18%;
   }
 }
 
@@ -164,6 +190,17 @@
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
+
+  /* Redesign: chrome accent + semantic sentiment */
+  --color-accent-info: hsl(var(--accent-info));
+  --color-accent-info-foreground: hsl(var(--accent-info-foreground));
+  --color-accent-info-soft: hsl(var(--accent-info-soft));
+  --color-sentiment-bull: hsl(var(--sentiment-bull));
+  --color-sentiment-bull-soft: hsl(var(--sentiment-bull-soft));
+  --color-sentiment-bear: hsl(var(--sentiment-bear));
+  --color-sentiment-bear-soft: hsl(var(--sentiment-bear-soft));
+  --color-sentiment-neutral: hsl(var(--sentiment-neutral));
+  --color-sentiment-neutral-soft: hsl(var(--sentiment-neutral-soft));
 
   --color-overlay-bg: hsl(var(--background) / 0.92);
   --color-overlay-border: hsl(var(--border));
@@ -309,6 +346,67 @@
       transform: translateY(0);
     }
   }
+
+  /* ============================================================
+     Redesign component utilities (Polymarket-honest aesthetic)
+     ============================================================ */
+
+  /* Sentiment chip — LLM-derived bullish/bearish/neutral label.
+     SEMANTIC colors: always green=bull / red=bear (NOT the price-change flip). */
+  .sentiment-chip {
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium uppercase tracking-wide;
+  }
+  .sentiment-chip-bull {
+    background-color: hsl(var(--sentiment-bull-soft));
+    color: hsl(var(--sentiment-bull));
+  }
+  .sentiment-chip-bear {
+    background-color: hsl(var(--sentiment-bear-soft));
+    color: hsl(var(--sentiment-bear));
+  }
+  .sentiment-chip-neutral {
+    background-color: hsl(var(--sentiment-neutral-soft));
+    color: hsl(var(--sentiment-neutral));
+  }
+
+  /* Filter pill — the toolbar pills above feeds. */
+  .filter-pill {
+    @apply inline-flex items-center px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer whitespace-nowrap;
+    background-color: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    border: 0.5px solid transparent;
+  }
+  .filter-pill:hover {
+    border-color: hsl(var(--border));
+  }
+  .filter-pill[data-active="true"] {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+    border-color: hsl(var(--foreground));
+  }
+
+  /* Ticker row — inset row inside episode cards / detail pages.
+     Background one notch below the card; mono font for the symbol. */
+  .ticker-row {
+    @apply grid items-center gap-2.5 px-2.5 py-2 rounded-md;
+    grid-template-columns: 78px 1fr auto;
+    background-color: hsl(var(--muted) / 0.6);
+  }
+  .ticker-row-symbol {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  /* Sentiment microbar — bull|neutral|bear proportions. */
+  .sent-bar {
+    @apply inline-flex h-1 rounded-full overflow-hidden;
+    background-color: hsl(var(--muted));
+  }
+  .sent-bar > span { @apply block h-full; }
+  .sent-bar-bull { background-color: hsl(var(--sentiment-bull)); }
+  .sent-bar-neutral { background-color: hsl(var(--sentiment-neutral) / 0.5); }
+  .sent-bar-bear { background-color: hsl(var(--sentiment-bear)); }
 }
 
 @layer utilities {

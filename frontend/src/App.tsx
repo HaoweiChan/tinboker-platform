@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Landing } from '@/pages/Landing';
@@ -20,6 +21,9 @@ import { GlobalPlayer } from '@/components/player/GlobalPlayer';
 import { PlayerConfirmationModal } from '@/components/player/PlayerConfirmationModal';
 import { useAuthInit } from '@/hooks/useAuthInit';
 import { useAppStore } from '@/store/useAppStore';
+
+// Dev-only redesign QA surface; not registered in production builds.
+const DesignPreview = import.meta.env.DEV ? lazy(() => import('@/pages/DesignPreview')) : null;
 
 function App() {
   // Validate stored auth token on app initialization
@@ -61,6 +65,18 @@ function App() {
           <Route path="translations" element={<TranslationsSection />} />
           <Route path="analytics" element={<AdminAnalyticsPage />} />
         </Route>
+
+        {/* Dev-only design preview */}
+        {DesignPreview && (
+          <Route
+            path="/__design"
+            element={
+              <Suspense fallback={null}>
+                <DesignPreview />
+              </Suspense>
+            }
+          />
+        )}
 
         {/* Catch-all Route - Redirect to Home */}
         <Route path="*" element={<Navigate to="/" replace />} />

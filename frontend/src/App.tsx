@@ -13,7 +13,10 @@ import { TagPage } from '@/pages/TagPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { DisclaimerPage } from '@/pages/DisclaimerPage';
-import { ComingSoon } from '@/pages/ComingSoon';
+import { PodcasterIndex } from '@/pages/PodcasterIndex';
+import { StockIndex } from '@/pages/StockIndex';
+import { TopicsCloud } from '@/pages/TopicsCloud';
+import { WatchlistPage } from '@/pages/WatchlistPage';
 import { AdminPage } from '@/pages/AdminPage';
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage';
 import { TranslationsSection } from '@/pages/TranslationsSection';
@@ -50,15 +53,16 @@ function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomeFeed />} />
 
-          {/* New redesign nav targets (Phase 4 fills these in) */}
-          <Route path="/podcaster" element={<ComingSoon title="節目" note="所有節目的列表頁正在重新設計。" />} />
-          <Route path="/stock" element={<ComingSoon title="個股" note="所有個股的列表頁正在重新設計。" />} />
-          <Route path="/topics" element={<ComingSoon title="話題雲" note="話題雲正在重新設計。" />} />
-          <Route path="/watchlist" element={<ComingSoon title="自選" note="自選清單正在重新設計。" />} />
+          {/* Redesigned list / cloud pages */}
+          <Route path="/podcaster" element={<PodcasterIndex />} />
+          <Route path="/stock" element={<StockIndex />} />
+          <Route path="/topics" element={<TopicsCloud />} />
+          <Route path="/watchlist" element={<WatchlistPage />} />
 
           {/* Single-instance / content pages */}
           <Route path="/stock/:ticker" element={<StockDashboard />} />
           <Route path="/podcaster/:id" element={<PodcasterPage />} />
+          <Route path="/topics/:tag" element={<TagPage />} />
           <Route path="/tag/:tag" element={<TagPage />} />
           <Route path="/news/:id" element={<NewsPage />} />
 

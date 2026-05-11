@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Settings, LogOut } from 'lucide-react';
-import { useUser, useLogout } from '@/store/useAppStore';
+import { useAppStore, useUser, useLogout } from '@/store/useAppStore';
 import { LoginButton } from '@/components/auth/LoginButton';
 import { authApi } from '@/services/api/auth';
 
@@ -11,6 +11,7 @@ export const UserMenu: React.FC = () => {
   const navigate = useNavigate();
   const user = useUser();
   const logout = useLogout();
+  const isAuthReady = useAppStore((state) => state.isAuthReady);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -40,6 +41,13 @@ export const UserMenu: React.FC = () => {
       navigate('/');
     }
   };
+
+  // Show a placeholder while auth is being validated to prevent flicker
+  if (!isAuthReady) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+    );
+  }
 
   if (!user) {
     return (

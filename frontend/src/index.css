@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&display=swap');
 @import "tailwindcss";
 
 /* Enable dark mode variant using class strategy */
@@ -128,9 +127,9 @@
 }
 
 @theme {
-  --font-sans: 'Noto Sans TC', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Noto Sans TC', system-ui, sans-serif;
   --font-mono: 'Roboto Mono', monospace;
-  --font-logo: 'Roboto', sans-serif;
+  --font-logo: 'Plus Jakarta Sans', sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -230,29 +229,27 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Noto Sans TC', 'Inter', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Noto Sans TC', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
   }
 
-  h1,
-  h2 {
+  h1, h2, h3 {
     @apply tracking-tight;
+    font-family: 'Plus Jakarta Sans', 'Noto Sans TC', system-ui, sans-serif;
   }
 
   /* Enhanced Dark Mode Background */
   .dark body {
     background-color: hsl(var(--background));
     background-image:
-      /* Subtle Noise Texture */
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
-      /* Top-Left Deep Blue/Indigo Glow */
-      radial-gradient(circle at 0% 0%, rgba(49, 46, 129, 0.15) 0%, transparent 50%),
-      /* Top-Right/Center Amber Glow */
-      radial-gradient(circle at 80% 10%, rgba(180, 83, 9, 0.08) 0%, transparent 50%);
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 0% 0%, rgba(49, 46, 129, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 0%, rgba(180, 83, 9, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(15, 23, 42, 0.4) 0%, transparent 60%);
     background-attachment: fixed;
-    background-repeat: repeat, no-repeat, no-repeat;
-    background-position: 0 0, 0 0, 0 0;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -264,9 +261,13 @@
 
 @layer components {
 
-  /* Modern Glass Card Aesthetic - Pro Max */
+  /* Modern Glass Card Aesthetic */
   .glass-card {
-    @apply bg-white border border-slate-200 shadow-sm transition-all duration-300 dark:bg-slate-900/60 dark:backdrop-blur-md dark:border-white/5;
+    @apply bg-white border border-slate-200/80 shadow-sm transition-all duration-300 dark:bg-slate-900/60 dark:backdrop-blur-md dark:border-white/5;
+  }
+
+  .glass-card:hover {
+    @apply shadow-md border-slate-300/60;
   }
 
   .dark .glass-card {
@@ -274,13 +275,39 @@
     background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.02), transparent);
   }
 
+  .dark .glass-card:hover {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
   /* Variant for panels/sidebars */
   .glass-panel {
-    @apply bg-white border border-slate-200 dark:bg-slate-900/80 dark:backdrop-blur-xl dark:border-white/5;
+    @apply bg-white border border-slate-200/80 dark:bg-slate-900/80 dark:backdrop-blur-xl dark:border-white/5;
   }
 
   .dark .glass-panel {
     box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+  }
+
+  /* Stagger animation for lists */
+  .stagger-in > * {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: stagger-fade-in 0.4s ease-out forwards;
+  }
+  .stagger-in > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-in > *:nth-child(2) { animation-delay: 0.10s; }
+  .stagger-in > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-in > *:nth-child(4) { animation-delay: 0.20s; }
+  .stagger-in > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-in > *:nth-child(6) { animation-delay: 0.30s; }
+  .stagger-in > *:nth-child(n+7) { animation-delay: 0.35s; }
+
+  @keyframes stagger-fade-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 

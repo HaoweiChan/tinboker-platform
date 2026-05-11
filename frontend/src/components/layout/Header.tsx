@@ -12,31 +12,23 @@ export const Header: React.FC = () => {
   const user = useUser();
 
   return (
-    <header className="sticky top-0 z-50 w-full shadow-sm dark:shadow-none backdrop-blur-xl bg-white/80 dark:bg-slate-900/60 border-b border-slate-200 dark:border-white/5 transition-all duration-200 flex flex-col">
-      <div className="w-full py-2 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-2 sm:gap-4">
-          {/* Left: Logo */}
-          <Link to="/" className="flex items-center group flex-shrink-0">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/85 dark:bg-slate-950/70 border-b border-slate-200/60 dark:border-white/[0.06] transition-all duration-300 flex flex-col shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+      <div className="w-full py-2.5 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-3 sm:gap-4">
+          <Link to="/" className="flex items-center group flex-shrink-0 transition-transform duration-200 hover:scale-[1.02] active:scale-95">
             <AppLogo size={28} textClassName="text-slate-900 dark:text-slate-50" mobileCompact={true} />
           </Link>
 
-          {/* Center: Search Bar (Visible on all sizes) */}
-          <div className="flex-1 max-w-2xl lg:mx-auto px-0 md:px-0">
+          <div className="flex-1 max-w-2xl lg:mx-auto">
             <SearchDropdown mode="desktop" />
           </div>
 
-          {/* Right: Actions */}
-          <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0 ml-auto">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 ml-auto">
             <ThemeToggle />
-
             <NotificationDropdown />
-
-            {/* User Menu */}
             <div className="hidden sm:block">
               <UserMenu />
             </div>
-
-            {/* Mobile Auth Button */}
             <div className="sm:hidden flex items-center">
               {user ? (
                 <UserMenu />

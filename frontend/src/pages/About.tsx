@@ -1,13 +1,10 @@
 import React from 'react';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent, CardHeader } from '@/components/ui';
 import { AppLogo } from '@/components/logo/AppLogo';
 
 export const About: React.FC = () => {
   return (
     <div className="page-bg min-h-screen flex flex-col">
-      <Header />
 
       <main className="flex-1 py-20">
         <div className="container mx-auto max-w-4xl space-y-8 px-4">
@@ -101,7 +98,6 @@ export const About: React.FC = () => {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

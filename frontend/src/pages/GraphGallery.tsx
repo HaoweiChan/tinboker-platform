@@ -1,7 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import TopStoryCard from '@/components/home/TopStoryCard';
 import { useAppStore } from '@/store/useAppStore';
 import { INTERACTIVE_MODEL_LIST } from '@/data/interactiveModels';
@@ -10,14 +8,12 @@ import { INTERACTIVE_MODEL_LIST } from '@/data/interactiveModels';
 export const GraphGallery: React.FC = () => {
   return (
     <div className="page-bg min-h-screen flex flex-col">
-      <Header />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <GalleryHero />
         <InteractiveModelGrid />
       </main>
 
-      <Footer />
     </div>
   );
 };

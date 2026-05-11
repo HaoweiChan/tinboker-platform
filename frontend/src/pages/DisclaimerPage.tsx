@@ -1,13 +1,10 @@
 import React from 'react';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui';
 import { ShieldAlert } from 'lucide-react';
 
 export const DisclaimerPage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <Header />
 
       <main className="flex-1 py-12 md:py-20 relative z-0">
         <div className="container mx-auto max-w-3xl px-4">
@@ -69,7 +66,6 @@ export const DisclaimerPage: React.FC = () => {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

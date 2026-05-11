@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
 import { useAppStore } from '@/store/useAppStore';
 import SectorPerformance from '@/components/industry/SectorPerformance';
 import TreeMap from '@/components/industry/TreeMap';
@@ -38,7 +36,6 @@ export const IndustryAnalysis: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}>
-      <Header />
       
       {/* Page Header & Tabs */}
       <div className="border-b" style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-default)' }}>
@@ -113,7 +110,6 @@ export const IndustryAnalysis: React.FC = () => {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

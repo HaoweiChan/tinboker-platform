@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AppLayoutContext } from './LayoutContext';
 import { Sidebar } from './Sidebar';
 import { BottomTabs } from './BottomTabs';
 import { SearchDropdown } from '@/components/ui/SearchDropdown';
@@ -56,36 +55,33 @@ export const AppLayout: React.FC = () => {
   const [title, subtitle] = pageTitle(pathname);
 
   return (
-    <AppLayoutContext.Provider value={true}>
-      <div className="min-h-screen lg:grid lg:grid-cols-[220px_1fr] bg-background">
-        <Sidebar />
-        <div className="flex flex-col min-w-0 min-h-screen">
-          <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-            <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 lg:px-7 py-3 max-w-[1440px] mx-auto w-full">
-              <div className="flex items-baseline gap-2 shrink-0">
-                <span className="text-[16px] sm:text-[18px] font-semibold tracking-[-0.01em] whitespace-nowrap">{title}</span>
-                {subtitle && <span className="hidden md:inline text-[12px] text-muted-foreground font-medium">{subtitle}</span>}
-              </div>
-              <div className="flex-1 min-w-0 max-w-xl lg:mx-auto">
-                <SearchDropdown />
-              </div>
-              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
-                <ThemeToggle />
-                <NotificationDropdown />
-                <UserMenu />
-              </div>
+    <div className="min-h-screen lg:grid lg:grid-cols-[220px_1fr] bg-background">
+      <Sidebar />
+      <div className="flex flex-col min-w-0 min-h-screen">
+        <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+          <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 lg:px-7 py-3 max-w-[1440px] mx-auto w-full">
+            <div className="flex items-baseline gap-2 shrink-0">
+              <span className="text-[16px] sm:text-[18px] font-semibold tracking-[-0.01em] whitespace-nowrap">{title}</span>
+              {subtitle && <span className="hidden md:inline text-[12px] text-muted-foreground font-medium">{subtitle}</span>}
             </div>
-          </header>
+            <div className="flex-1 min-w-0 max-w-xl lg:mx-auto">
+              <SearchDropdown />
+            </div>
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
+              <ThemeToggle />
+              <NotificationDropdown />
+              <UserMenu />
+            </div>
+          </div>
+        </header>
 
-          {/* Each page owns its own content container (PageContent helper for redesigned
-              pages; legacy pages keep their original wrappers during the transition). */}
-          <main className="flex-1 min-w-0">
-            <Outlet />
-          </main>
+        {/* Each page owns its own content container — PageContent for redesigned pages. */}
+        <main className="flex-1 min-w-0">
+          <Outlet />
+        </main>
 
-          <BottomTabs />
-        </div>
+        <BottomTabs />
       </div>
-    </AppLayoutContext.Provider>
+    </div>
   );
 };

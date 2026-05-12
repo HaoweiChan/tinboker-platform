@@ -97,7 +97,7 @@ and E (search) as a second pass since D touches the LLM pipeline.
 | Item | Status |
 |---|---|
 | Wiki → Postgres store + `/api/wiki` routes | Done (see [docs/wiki-schema.md](wiki-schema.md)) |
-| B — ticker registry | Done — `libs/shared/src/shared/data/tickers.json` + `shared.tickers`; `ingest_episode` canonicalizes symbols and stamps entity pages with zh `name` / `market` / `sector` / `entity_type`. Follow-up: route the KG `seed_tickers_to_db` through the same registry; consider a `GET /api/wiki/tickers` registry dump. |
+| B — ticker registry | Done — `libs/shared/src/shared/data/tickers.json` (~60 tickers) + `shared.tickers`; `ingest_episode` canonicalizes symbols and stamps entity pages with zh `name` / `market` / `sector` / `entity_type`; `services/podcast/scripts/reenrich_entities_from_registry.py` backfills those onto existing pages (re-run after extending the registry). The wiki Postgres migration has been executed on the VPS (DB + `WIKI_DATABASE_URL` secret + schema + backfill + re-enrich done — 51/59 entity pages enriched; ~8 long-tail/noise symbols still uncovered). Follow-up: route the KG `seed_tickers_to_db` through the same registry; consider a `GET /api/wiki/tickers` registry dump; redeploy `services/podcast` so `/api/wiki` goes live. |
 | C — stats/aggregation router | Not started |
 | A — `/api/episodes` feed + detail | Not started |
 | D — pipeline emits bullets/chapters/clips | Not started |

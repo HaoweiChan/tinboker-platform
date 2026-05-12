@@ -530,6 +530,16 @@ upserts each into `wiki_pages` (which also populates `wiki_links`). It is idempo
 `GET /api/wiki/index` looks right, `wiki/` and `services/wiki/` can be deleted (they are
 already gitignored, so nothing changes in git).
 
+The backfill imports the markdown verbatim, so pages created before the ticker registry existed
+keep their old (bare-symbol) entity names. Apply the registry's display names / market / sector
+onto them (and re-run any time you extend `libs/shared/src/shared/data/tickers.json`):
+
+```bash
+uv run python services/podcast/scripts/reenrich_entities_from_registry.py \
+  --database-url 'postgresql+psycopg://tinboker:...@127.0.0.1:5432/tinboker_wiki'   # or via WIKI_DATABASE_URL
+# (--dry-run to preview)
+```
+
 ### 7.6 Verify
 
 ```bash

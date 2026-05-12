@@ -24,13 +24,19 @@ htmlcov/
 Thumbs.db
 *.swp
 
-# Local OMC state
-.omc/state/
+# oh-my-claudecode tooling state
+.omc/
 
 # Graphify outputs (top-level)
 graphify-out/
 
-# Wiki graph store (generated at runtime)
+# Wiki content lives in Postgres on the VPS, not in this repo.
+# These dirs may exist locally (e.g. as a one-time migration source) but are
+# never committed — the repo is functional/infra-only and content-agnostic.
+wiki/
+services/wiki/
+
+# Knowledge-graph JSON store (generated at runtime)
 wiki-graph/
 
 # Stray infographic outputs at any depth
@@ -47,7 +53,3 @@ gcp-service-account.json
 
 # uv
 uv.lock
-
-# Content legacy (absorbed into services/podcast)
-content/src/
-content/services/

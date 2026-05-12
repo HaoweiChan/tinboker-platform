@@ -53,7 +53,7 @@ and rewrites the edge rows for that source page.
 
 | kind | typical `frontmatter` keys | `title` |
 |------|---------------------------|---------|
-| `episode` | `podcast`, `episode_number`, `date`, `tickers[]` (canonical symbols), `tags[]`, `source_urls{mp3,transcript,summary}` | episode title |
+| `episode` | `podcast`, `episode_number`, `date`, `tickers[]` (canonical symbols), `tags[]`, `source_urls{mp3,transcript,summary}`, `ticker_sentiment{sym: bull\|bear\|neut}` | episode title |
 | `entity` | `id` (= slug), `name`, `entity_type` (`company`/`etf`/`person`/`product`/`country`), `tickers[]`, `market` (`TW`/`US`/…, when known), `sector` (when known) | entity name |
 | `topic` | `id` (= slug), `name` | topic name |
 | `supply_chain` | `entity` (= slug of the source entity) | `"{name} — Supply Chain"` |
@@ -89,6 +89,16 @@ the database is the source of truth. The HTTP API serves them at
 | `PUT /api/wiki/pages/{kind}/{slug}` | X-API-Key | upsert (`{title, frontmatter, body}`) |
 | `DELETE /api/wiki/pages/{kind}/{slug}` | X-API-Key | delete |
 | `POST /api/wiki/ingest/episode` | X-API-Key | high-level `ingest_episode(**body)` |
+| `GET /api/wiki/stats/top-tickers?days=&limit=` | — | tickers by # episodes in window + sentiment split |
+| `GET /api/wiki/stats/top-shows?days=&limit=` | — | podcasts by # episodes in window + delta vs. prev window |
+| `GET /api/wiki/stats/topics?days=&limit=` | — | topics by # episodes + normalized weight + dominant sentiment |
+| `GET /api/wiki/stats/pulse?date=` | — | one day: episode count, distinct tickers, sentiment split |
+| `GET /api/wiki/stats/dashboard?days=` | — | `{pulse, top_tickers, top_shows, topics}` in one call |
+| `GET /api/wiki/stats/entity/{slug}?days=` | — | per-entity rollup: mentions, last-mentioned-at, sentiment split, recent episodes |
+
+The `/stats/*` aggregates are content-derived (`shared.wiki_builder.stats`) — computed on the fly
+from episode dates, `tickers`/`tags` membership, and `ticker_sentiment`. They never include
+prices / `change` % (that's the platform's quote source).
 
 ## Knowledge-graph (follow-up, deferred)
 

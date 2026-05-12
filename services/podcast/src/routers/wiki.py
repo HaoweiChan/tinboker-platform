@@ -8,7 +8,7 @@ UI, and the knowledge-graph service. Write/destructive routes require X-API-Key
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
@@ -19,6 +19,7 @@ from shared.wiki_builder import (
     get_repository,
     ingest_episode,
     page_to_markdown,
+    stats,
 )
 from shared.wiki_builder.repository import WikiRepository
 
@@ -156,6 +157,79 @@ async def ingest_episode_route(
 ) -> dict:
     page = ingest_episode(repository=repo, **payload.model_dump())
     return {"episode_kind": page.kind, "episode_slug": page.slug}
+
+
+# --- stats / aggregates (content-derived; for the platform webui's dashboards) ---
+def _parse_as_of(value: str | None) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=f"invalid date: {value}") from exc
+
+
+@router.get("/stats/top-tickers")
+async def stats_top_tickers(
+    days: int = Query(7, ge=1, le=365),
+    limit: int = Query(10, ge=1, le=100),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    return {"window_days": days, "tickers": stats.top_tickers(repo, days=days, limit=limit)}
+
+
+@router.get("/stats/top-shows")
+async def stats_top_shows(
+    days: int = Query(7, ge=1, le=365),
+    limit: int = Query(10, ge=1, le=100),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    return {"window_days": days, "shows": stats.top_shows(repo, days=days, limit=limit)}
+
+
+@router.get("/stats/topics")
+async def stats_topics(
+    days: int | None = Query(None, ge=1, le=365, description="omit for all-time"),
+    limit: int = Query(20, ge=1, le=200),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    return {"window_days": days, "topics": stats.topics(repo, days=days, limit=limit)}
+
+
+@router.get("/stats/pulse")
+async def stats_pulse(
+    on_date: str | None = Query(
+        None, alias="date", description="YYYY-MM-DD; omit for the latest episode day"
+    ),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    return stats.pulse(repo, on_date=_parse_as_of(on_date))
+
+
+@router.get("/stats/dashboard")
+async def stats_dashboard(
+    days: int = Query(7, ge=1, le=365),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    return {
+        "window_days": days,
+        "pulse": stats.pulse(repo),
+        "top_tickers": stats.top_tickers(repo, days=days, limit=8),
+        "top_shows": stats.top_shows(repo, days=days, limit=6),
+        "topics": stats.topics(repo, days=None, limit=20),
+    }
+
+
+@router.get("/stats/entity/{slug}")
+async def stats_entity(
+    slug: str,
+    days: int | None = Query(None, ge=1, le=3650),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    agg = stats.entity_aggregate(repo, slug, days=days)
+    if agg is None:
+        raise HTTPException(status_code=404, detail=f"entity/{slug} not found")
+    return agg
 
 
 # NOTE: the `.md` route must precede `/pages/{kind}/{slug}` so the suffix matches.

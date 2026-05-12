@@ -10,8 +10,29 @@ from __future__ import annotations
 
 from typing import Any
 
+from ..tickers import canonical_symbol
 from .models import WikiPage
 from .slugify import episode_slug, slugify, ticker_slug
+
+_SENTIMENT_KEYS = ("bull", "bear", "neut")
+
+
+def normalize_sentiment(value: Any) -> str:
+    """Map a free-form sentiment label to ``'bull' | 'bear' | 'neut' | ''`` (unrecognized).
+
+    Handles English ('bullish', 'positive', 'buy', …), Chinese (看多/看空/中性) and the short
+    forms already used elsewhere ('bull'/'bear'/'neut').
+    """
+    s = str(value or "").strip().lower()
+    if not s:
+        return ""
+    if "bull" in s or "多" in s or s in {"positive", "buy", "overweight", "long"}:
+        return "bull"
+    if "bear" in s or "空" in s or s in {"negative", "sell", "underweight", "short"}:
+        return "bear"
+    if "neut" in s or "中" in s or s in {"hold", "mixed", "flat"}:
+        return "neut"
+    return ""
 
 
 def render_episode_page(
@@ -61,6 +82,16 @@ def render_episode_page(
                 f"| {rec.get('sentiment_score', '')} | {rec.get('time_horizon', '')} | {thesis} |"
             )
         lines.append("")
+
+    # Structured per-ticker sentiment (canonical symbol -> bull|bear|neut) for the stats API.
+    sentiment_map: dict[str, str] = {}
+    for rec in recs:
+        sym = rec.get("ticker")
+        sent = normalize_sentiment(rec.get("sentiment", ""))
+        if sym and sent:
+            sentiment_map[canonical_symbol(str(sym))] = sent
+    if sentiment_map:
+        frontmatter["ticker_sentiment"] = sentiment_map
 
     related = [f"- [[entities/{ticker_slug(t)}]]" for t in tickers]
     related += [f"- [[topics/{slugify(tag)}]]" for tag in tags]

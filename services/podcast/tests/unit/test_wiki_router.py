@@ -152,3 +152,54 @@ def test_stats_routes(client):
     assert c.get("/api/wiki/stats/entity/zzzz").status_code == 404
     bad_date = c.get("/api/wiki/stats/pulse", params={"date": "not-a-date"})
     assert bad_date.status_code == 422
+
+
+def test_episode_feed_routes(client):
+    c, repo = client
+    ingest_episode(
+        podcast_name="股癌", episode_number=1, title="E1 半導體大事", date="2026-05-12",
+        tickers=["2330.TW", "NVDA"], tags=["半導體"], summary_text="這集講台積電良率。",
+        events_markdown="- 2026-05-10: 法說會",
+        ticker_recommendations={
+            "ticker_recommendations": [
+                {"ticker": "2330.TW", "sentiment": "bullish",
+                 "sentiment_score": 8, "bluf_thesis": "良率好"},
+            ]
+        },
+        source_urls={"mp3": "gs://b/a.mp3"},
+        repository=repo,
+    )
+    ingest_episode(
+        podcast_name="財報狗", episode_number=2, title="E2 航運", date="2026-05-09",
+        tickers=["2603"], tags=["航運"], summary_text="紅海危機。", repository=repo,
+    )
+
+    feed = c.get("/api/wiki/episodes").json()
+    assert feed["total"] == 2 and len(feed["episodes"]) == 2
+    assert [e["slug"] for e in feed["episodes"]] == ["股癌_ep1", "財報狗_ep2"]  # newest first
+    first = feed["episodes"][0]
+    assert first["podcast"] == "股癌" and first["episode_number"] == 1
+    assert "台積電" in first["summary_excerpt"]
+    syms = {t["sym"]: t for t in first["tickers"]}
+    assert syms["2330"]["name"] == "台積電" and syms["2330"]["sentiment"] == "bull"
+
+    # filters
+    assert c.get("/api/wiki/episodes", params={"podcast": "財報狗"}).json()["total"] == 1
+    assert c.get("/api/wiki/episodes", params={"tag": "半導體"}).json()["total"] == 1
+    by_ticker = c.get("/api/wiki/episodes", params={"ticker": "2330.TW"}).json()
+    assert by_ticker["episodes"][0]["slug"] == "股癌_ep1"
+    # pagination
+    paged = c.get("/api/wiki/episodes", params={"limit": 1, "offset": 1}).json()
+    assert paged["total"] == 2 and len(paged["episodes"]) == 1
+    assert paged["episodes"][0]["slug"] == "財報狗_ep2"
+
+    # detail
+    detail = c.get("/api/wiki/episodes/股癌_ep1").json()
+    assert detail["title"] == "E1 半導體大事"
+    assert detail["events_markdown"] == "- 2026-05-10: 法說會"
+    assert detail["summary"].startswith("這集講台積電")
+    rec = next(r for r in detail["ticker_recommendations"] if r["sym"] == "2330")
+    assert rec["sentiment"] == "bull" and rec["thesis"] == "良率好"
+    assert {"slug": "2330", "name": "台積電"} in detail["related"]["entities"]
+    assert detail["bullets"] == [] and detail["chapters"] == [] and detail["clips"] == []
+    assert c.get("/api/wiki/episodes/nope").status_code == 404

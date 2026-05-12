@@ -13,15 +13,18 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, Field
+from shared.tickers import canonical_symbol
 from shared.wiki_builder import (
     WikiPage,
     build_index_markdown,
+    episode_view,
     get_repository,
     ingest_episode,
     page_to_markdown,
     stats,
 )
 from shared.wiki_builder.repository import WikiRepository
+from shared.wiki_builder.slugify import ticker_slug
 
 from ..auth import verify_api_key
 
@@ -157,6 +160,58 @@ async def ingest_episode_route(
 ) -> dict:
     page = ingest_episode(repository=repo, **payload.model_dump())
     return {"episode_kind": page.kind, "episode_slug": page.slug}
+
+
+# --- episode feed / detail (a richer, structured view over kind='episode' pages) ---
+def _entity_name_map(repo: WikiRepository) -> dict[str, dict[str, Any]]:
+    return {p.slug: dict(p.frontmatter) for p in repo.list_pages(kind="entity", limit=1_000_000)}
+
+
+def _topic_name_map(repo: WikiRepository) -> dict[str, dict[str, Any]]:
+    return {p.slug: dict(p.frontmatter) for p in repo.list_pages(kind="topic", limit=1_000_000)}
+
+
+def _episode_sort_key(item: dict[str, Any]) -> tuple:
+    # newest first; undated last; stable tiebreak on slug
+    return (item.get("date") or "", item.get("slug") or "")
+
+
+@router.get("/episodes")
+async def list_episodes(
+    podcast: list[str] | None = Query(None, description="filter to one or more show names"),
+    ticker: str | None = Query(None, description="filter to episodes mentioning this ticker"),
+    tag: str | None = Query(None, description="filter to episodes with this tag"),
+    limit: int = Query(30, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    repo: WikiRepository = Depends(get_repo),
+) -> dict:
+    names = _entity_name_map(repo)
+    want_ticker = ticker_slug(canonical_symbol(ticker)) if ticker else None
+    items: list[dict[str, Any]] = []
+    for page in repo.list_pages(kind="episode", limit=1_000_000):
+        item = episode_view.feed_item(page, names)
+        if podcast and item["podcast"] not in podcast:
+            continue
+        if tag and tag not in item["tags"]:
+            continue
+        if want_ticker and want_ticker not in {t["slug"] for t in item["tickers"]}:
+            continue
+        items.append(item)
+    items.sort(key=_episode_sort_key, reverse=True)
+    return {
+        "total": len(items),
+        "limit": limit,
+        "offset": offset,
+        "episodes": items[offset : offset + limit],
+    }
+
+
+@router.get("/episodes/{slug}")
+async def get_episode(slug: str, repo: WikiRepository = Depends(get_repo)) -> dict:
+    page = repo.get_page("episode", slug)
+    if page is None:
+        raise HTTPException(status_code=404, detail=f"episode/{slug} not found")
+    return episode_view.episode_detail(page, _entity_name_map(repo), _topic_name_map(repo))
 
 
 # --- stats / aggregates (content-derived; for the platform webui's dashboards) ---

@@ -89,6 +89,8 @@ the database is the source of truth. The HTTP API serves them at
 | `PUT /api/wiki/pages/{kind}/{slug}` | X-API-Key | upsert (`{title, frontmatter, body}`) |
 | `DELETE /api/wiki/pages/{kind}/{slug}` | X-API-Key | delete |
 | `POST /api/wiki/ingest/episode` | X-API-Key | high-level `ingest_episode(**body)` |
+| `GET /api/wiki/episodes?podcast=&ticker=&tag=&limit=&offset=` | — | structured episode feed (date-desc), filterable by show / ticker / tag |
+| `GET /api/wiki/episodes/{slug}` | — | full episode detail (summary, events, ticker recs, related links, source urls; `bullets`/`chapters`/`clips` are slice-D placeholders) |
 | `GET /api/wiki/stats/top-tickers?days=&limit=` | — | tickers by # episodes in window + sentiment split |
 | `GET /api/wiki/stats/top-shows?days=&limit=` | — | podcasts by # episodes in window + delta vs. prev window |
 | `GET /api/wiki/stats/topics?days=&limit=` | — | topics by # episodes + normalized weight + dominant sentiment |

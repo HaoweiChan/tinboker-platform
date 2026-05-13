@@ -44,15 +44,15 @@ export const PositionSchema = z.object({
 
 export const GraphNodeDataSchema = z.object({
   label: z.string(),
-  ticker: z.string(),
-  marketCapTier: z.enum(['large', 'medium', 'small']),
+  ticker: z.string().optional(),
+  marketCapTier: z.enum(['large', 'medium', 'small']).optional(),
 });
 
 export const GraphNodeSchema = z.object({
   id: z.string(),
-  type: z.enum(['company', 'stock', 'cluster']),
+  type: z.string(),
   data: GraphNodeDataSchema,
-  position: PositionSchema,
+  position: PositionSchema.optional(),
 });
 
 export const GraphEdgeDataSchema = z.object({

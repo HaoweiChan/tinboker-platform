@@ -17,17 +17,19 @@ export interface Company {
 export type NodeDisplayMode = 'default' | 'marketCap' | 'revenue';
 
 // React Flow node structure
+// `type` is intentionally a free string: the backend emits node kinds beyond the
+// canonical set (e.g. 'person', 'Investor'), so validation/schemas.ts keeps it loose.
 export interface GraphNode {
   id: string;
-  type: 'company' | 'stock' | 'cluster';
+  type: string;
   data: ({
     label: string;
-    ticker: string;
-    marketCapTier: 'large' | 'medium' | 'small';
+    ticker?: string;
+    marketCapTier?: 'large' | 'medium' | 'small';
     marketCap?: number;
     revenue?: number;
   } & Partial<StockNodeData>);
-  position: { x: number; y: number };
+  position?: { x: number; y: number };
 }
 
 // Stock node data for new circular design with sparklines

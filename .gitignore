@@ -57,5 +57,4 @@ gcp-service-account.json
 # Logs
 *.log
 
-# uv
-uv.lock
+# uv.lock IS committed for reproducibility — do not ignore it

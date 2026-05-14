@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Any
 
 # Recognised page kinds. New kinds are allowed at runtime — this is just a hint.
-KINDS = ("episode", "entity", "topic", "supply_chain")
+KINDS = ("episode", "entity", "topic", "supply_chain", "contract")
 
 # Maps the legacy on-disk directory names (and already-singular forms) to ``kind``.
 DIR_TO_KIND: dict[str, str] = {

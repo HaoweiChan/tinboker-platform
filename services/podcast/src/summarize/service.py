@@ -96,14 +96,13 @@ class SummarizeService:
                     words=words  # Deprecated, kept for backward compatibility
                 )
                 
-                # Extract markdown_report, events_markdown, pptx_base64, marp_markdown, ticker_recommendations, and ticker_marp_markdown from API result
-                # API result is now a dict with markdown_report, events_markdown, pptx_base64, marp_markdown, ticker_recommendations, and ticker_marp_markdown
+                # Extract markdown_report, events_markdown, pptx_base64, marp_markdown, ticker_insights, and ticker_marp_markdown from API result
                 if isinstance(api_result, dict):
                     summary_text = api_result.get("markdown_report", "")
                     events_markdown = api_result.get("events_markdown")
                     pptx_base64 = api_result.get("pptx_base64")
                     marp_markdown = api_result.get("marp_markdown")
-                    ticker_recommendations = api_result.get("ticker_recommendations")
+                    ticker_insights = api_result.get("ticker_insights")
                     ticker_marp_markdown = api_result.get("ticker_marp_markdown")
                 else:
                     # Backward compatibility: if API returns string, use it as markdown_report
@@ -111,7 +110,7 @@ class SummarizeService:
                     events_markdown = None
                     pptx_base64 = None
                     marp_markdown = None
-                    ticker_recommendations = None
+                    ticker_insights = None
                     ticker_marp_markdown = None
                 
                 # SVG and tickers remain as placeholders (Workflow API doesn't provide them)
@@ -141,14 +140,14 @@ class SummarizeService:
                     result['marp_markdown'] = marp_markdown
                     print(f"  ✓ Also received marp_markdown ({len(marp_markdown):,} characters)")
                 
-                # Add ticker_recommendations if available
-                if ticker_recommendations:
-                    result['ticker_recommendations'] = ticker_recommendations
-                    if isinstance(ticker_recommendations, dict):
-                        ticker_count = len(ticker_recommendations.get('ticker_recommendations', []))
-                        print(f"  ✓ Also received ticker_recommendations ({ticker_count} tickers)")
+                # Add ticker_insights if available
+                if ticker_insights:
+                    result['ticker_insights'] = ticker_insights
+                    if isinstance(ticker_insights, dict):
+                        ticker_count = len(ticker_insights.get('ticker_insights', []))
+                        print(f"  ✓ Also received ticker_insights ({ticker_count} tickers)")
                     else:
-                        print("  ✓ Also received ticker_recommendations")
+                        print("  ✓ Also received ticker_insights")
                 
                 # Add ticker_marp_markdown if available
                 if ticker_marp_markdown:

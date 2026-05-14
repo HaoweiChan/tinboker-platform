@@ -63,6 +63,13 @@ one-time migration source; it is gitignored and never committed.
 - See [docs/MIGRATION.md](docs/MIGRATION.md)
 - podcast/ runs on Netcup VPS via systemd (also hosts the wiki Postgres)
 - Plan to consolidate Firestore + GCS onto the VPS: [docs/data-consolidation-plan.md](docs/data-consolidation-plan.md)
+- **VPS access:** `ssh root@152.53.136.182` works from this machine (RSA key
+  already in `~/.ssh`). The Netcup VPS is the only "production" host — agents
+  may SSH there directly for deploys, publishing the wiki contract,
+  inspecting systemd, restarting `podcast-api`, and similar operational
+  tasks. No tunnel or jump host required.
+- The wiki Postgres listens on `127.0.0.1:5432` on the VPS only (not exposed
+  externally), so anything that needs to write to it must run on the VPS.
 
 ## Conventions
 
@@ -111,6 +118,7 @@ Spotify RSS → services/podcast/download → transcribe → summarize
 - **[README.md](README.md)** — repo overview, architecture, quickstart
 - **[AGENTS.md](AGENTS.md)** — short purpose statement (cross-tool agents entry point)
 - **[docs/wiki-schema.md](docs/wiki-schema.md)** — wiki Postgres schema + `/api/wiki` API
+- **[docs/firestore-schema.md](docs/firestore-schema.md)** — Firestore episode/podcast document contract consumed by the TinBoker platform
 - **[docs/content-api-roadmap.md](docs/content-api-roadmap.md)** — what the TinBoker webui needs from this backend, and the plan to deliver it
 - **[docs/MIGRATION.md](docs/MIGRATION.md)** — production deployment runbook
 - **[docs/content/](docs/content/)** — content/feature notes; **[docs/legacy/](docs/legacy/)** — archived Dify configs

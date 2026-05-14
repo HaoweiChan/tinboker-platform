@@ -26,7 +26,7 @@ class PipelineConfig:
     
     # Rerun flags (more intuitive than "skip")
     # If set, the pipeline will rerun from that step (and download required inputs)
-    rerun_from: Optional[str] = None  # "transcribe", "summarize", "upload", "validate", or None (full pipeline)
+    rerun_from: Optional[str] = None  # "download", "transcribe", "summarize", "upload", "validate", "spotify-metadata", or None (full pipeline)
     
     # DEPRECATED: Legacy flag for backward compatibility only
     # Use rerun_from="summarize" instead to download transcript and regenerate summary

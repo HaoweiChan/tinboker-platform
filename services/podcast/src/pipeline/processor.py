@@ -11,6 +11,7 @@ from .episode_data import EpisodeData
 from .service_container import ServiceContainer
 from .steps import (
     download_episode,
+    export_ticker_insights,
     generate_summary,
     ingest_into_wiki,
     initialize_stt_service,
@@ -79,6 +80,7 @@ class EpisodeProcessor:
         Returns:
             True if successful, False otherwise
         """
+        episode_data = None
         try:
             # Create fresh episode data - NO CLEARING NEEDED!
             # Each episode gets its own isolated data instance
@@ -87,55 +89,78 @@ class EpisodeProcessor:
                 podcast_name=self.config.podcast_name,
                 language=determine_language(self.config.podcast_name)
             )
-            
+
             # Load existing data from Firestore/GCS if available
             self._load_existing_data(episode_data)
-            
+
             # Check if we should skip (based on what we have in episode_data)
             if self._should_skip_episode(episode_data):
                 return True  # Skip is successful
-            
+
             episode_title = api_episode_data.get('title', 'Untitled Episode')
             episode_number = api_episode_data.get('episodeNumber')
             print(f"\nProcessing: {episode_title}")
             if episode_number is not None:
                 print(f"  Episode #: {episode_number}")
-            
+
             # Execute steps in order based on rerun_from logic
             # Each step mutates episode_data fields directly
             # Step 1: Download MP3 + Fetch Spotify Metadata
+            if self.config.rerun_from == "spotify-metadata":
+                # Force a fresh Spotify lookup even if the existing doc already
+                # has partial metadata loaded by `_load_existing_data`.
+                episode_data.spotify_metadata = None
             download_episode(self.config, self.services, episode_data)
-            
+
+            # Backfill-only path: write the refreshed Spotify fields and stop.
+            if self.config.rerun_from == "spotify-metadata":
+                self._upsert_spotify_metadata(episode_data)
+                return True
+
             # Step 2: Transcribe
             transcribe_episode(self.config, self.services, episode_data)
-            
+
             # Step 3: Summarize
             generate_summary(self.config, self.services, episode_data)
-            
+
             # Step 4: Upload to GCS
             upload_to_gcs(self.config, self.services, episode_data)
-            
+
             # Step 5: Upload to Firestore
             upload_to_firestore(self.config, self.services, episode_data)
-            
+
             # Step 5b: Ingest into knowledge wiki (best-effort)
             ingest_into_wiki(self.config, self.services, episode_data)
 
             # Step 5c: Mirror episode into Postgres (best-effort; no-op w/o EPISODE_DATABASE_URL)
             mirror_episode_to_postgres(self.config, self.services, episode_data)
 
+            # Step 5d: Export ticker insights to Firestore subcollection per platform contract
+            export_ticker_insights(self.config, self.services, episode_data)
+
             # Step 6: Validate
             validate_episode(self.config, self.services, episode_data)
-            
+
             print(f"  ✓ Successfully processed: {episode_title}\n")
             return True
-            
+
         except Exception as e:
             episode_title = api_episode_data.get('title', 'Unknown Episode')
             print(f"  ✗ Error processing episode {episode_title}: {e}")
             import traceback
             traceback.print_exc()
             return False
+        finally:
+            # Delete temp MP3 from /tmp after each episode to prevent tmpfs exhaustion
+            # across a multi-show nightly run. In file mode the MP3 lives in a persistent
+            # downloads dir and must not be removed here.
+            if (
+                episode_data is not None
+                and not self.config.use_file_mode
+                and episode_data.mp3_path is not None
+                and episode_data.mp3_path.exists()
+            ):
+                episode_data.mp3_path.unlink(missing_ok=True)
     
     def _load_existing_data(self, episode_data: EpisodeData) -> None:
         """
@@ -318,6 +343,16 @@ class EpisodeProcessor:
                 return True
             # Episode exists, proceed to validate
             return False
+
+        if self.config.rerun_from == "spotify-metadata":
+            # Need an existing doc to patch and a show link to query Spotify.
+            if not has_existing_episode:
+                print(f"  ⏭ Skipping episode (not in Firestore, cannot patch): {episode_info}")
+                return True
+            if not self.config.spotify_show_link:
+                print(f"  ⏭ Skipping episode (no spotify_show_link configured): {episode_info}")
+                return True
+            return False
         
         # Normal mode: Skip if episode already exists and we have all required data
         if has_existing_episode:
@@ -333,5 +368,38 @@ class EpisodeProcessor:
             ]):
                 print(f"  ⏭ Skipping existing episode (already fully processed): {episode_info}")
                 return True
-        
+
         return False
+
+    def _upsert_spotify_metadata(self, episode_data: EpisodeData) -> None:
+        """Patch only the Spotify fields on an existing Firestore episode doc.
+
+        Used by ``--rerun-from spotify-metadata``. Maps the metadata-helper key
+        names (``release_date``, ``description``, ``duration_ms``, ``images``)
+        to the Firestore field names (``spotify_release_date``, ...).
+        """
+        if not self.services.firebase_service:
+            print("  ⚠ Firebase service unavailable; cannot persist Spotify metadata")
+            return
+        if not episode_data.episode_id:
+            print("  ⚠ No episode_id on the loaded record; cannot patch")
+            return
+        meta = episode_data.spotify_metadata or {}
+        if not meta:
+            print("  ⚠ No Spotify metadata fetched; nothing to patch")
+            return
+        fields = {
+            "spotify_id": meta.get("spotify_id"),
+            "spotify_url": meta.get("spotify_url"),
+            "spotify_embed_url": meta.get("spotify_embed_url"),
+            "spotify_release_date": meta.get("release_date"),
+            "spotify_description": meta.get("description"),
+            "spotify_duration_ms": meta.get("duration_ms"),
+            "spotify_images": meta.get("images", []),
+        }
+        # Drop None values so we don't overwrite existing fields with nulls.
+        fields = {k: v for k, v in fields.items() if v is not None}
+        self.services.firebase_service.update_episode_fields(
+            episode_data.episode_id, fields
+        )
+        print(f"  ✓ Patched Spotify fields on {episode_data.episode_id}: {sorted(fields.keys())}")

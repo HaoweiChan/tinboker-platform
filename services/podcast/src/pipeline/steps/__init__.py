@@ -10,6 +10,7 @@ from .gcs_upload import upload_to_gcs
 from .initialize import initialize_services, initialize_stt_service
 from .postgres_episode import mirror_episode_to_postgres
 from .summarize import generate_summary
+from .ticker_insights_export import export_ticker_insights
 from .transcribe import transcribe_episode
 from .validate import validate_episode
 from .wiki_ingest import ingest_into_wiki
@@ -25,6 +26,7 @@ __all__ = [
     "validate_episode",
     "ingest_into_wiki",
     "mirror_episode_to_postgres",
+    "export_ticker_insights",
 ]
 
 

@@ -44,11 +44,11 @@ from .state import PipelineState
 
 
 def _write_ticker_marp(state: PipelineState) -> dict[str, Any]:
-    """Generate Marp slides specifically for ticker recommendations."""
+    """Generate Marp slides specifically for ticker insights."""
     from .llm import invoke_json, load_prompt
 
     prompts = load_prompt("marp_writer")
-    ticker_data = state.get("ticker_recommendations", {})
+    ticker_data = state.get("ticker_insights", {})
     events_json = json.dumps(ticker_data, ensure_ascii=False)
 
     user_msg = prompts["user"].format(
@@ -124,7 +124,7 @@ def run_pipeline(
         - markdown_report
         - events_markdown
         - marp_markdown
-        - ticker_recommendations
+        - ticker_insights
         - ticker_marp_markdown
     """
     app = build_graph()
@@ -142,6 +142,6 @@ def run_pipeline(
         "markdown_report": result.get("markdown_report", ""),
         "events_markdown": result.get("events_markdown", ""),
         "marp_markdown": result.get("marp_markdown", ""),
-        "ticker_recommendations": result.get("ticker_recommendations"),
+        "ticker_insights": result.get("ticker_insights"),
         "ticker_marp_markdown": result.get("ticker_marp_markdown", ""),
     }

@@ -3,7 +3,7 @@ Podcast data models for Firestore integration.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 
@@ -61,11 +61,38 @@ class PodcastEpisode:
     spotify_description: Optional[str] = None  # Episode description from Spotify
     spotify_duration_ms: Optional[int] = None  # Episode duration in milliseconds
     spotify_images: List[str] = field(default_factory=list)  # List of image URLs from Spotify
+
+    # Spec § 2.3 #1: Unix ms timestamp derived from spotify_release_date (preferred) or
+    # created_time. Frontends should prefer this over the timezone-fragile string + ms
+    # parsing the spec replaced.
+    released_at_ms: Optional[int] = None
     
+    def _compute_released_at_ms(self) -> Optional[int]:
+        """Resolve the spec § 2.3 #1 ``released_at_ms`` value.
+
+        Preference order: an explicitly-set ``released_at_ms`` wins (lets a
+        caller override); else parse ``spotify_release_date`` (YYYY-MM-DD UTC
+        midnight); else fall to ``created_time`` if it's a datetime.
+        """
+        if self.released_at_ms is not None:
+            return self.released_at_ms
+        if self.spotify_release_date:
+            try:
+                dt = datetime.strptime(str(self.spotify_release_date), "%Y-%m-%d")
+                return int(dt.replace(tzinfo=timezone.utc).timestamp() * 1000)
+            except ValueError:
+                pass
+        if isinstance(self.created_time, datetime):
+            dt = self.created_time
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return int(dt.timestamp() * 1000)
+        return None
+
     def to_firestore_dict(self) -> Dict:
         """
         Convert PodcastEpisode to Firestore document format.
-        
+
         Returns:
             Dictionary ready for Firestore storage
         """
@@ -125,14 +152,20 @@ class PodcastEpisode:
         if self.spotify_url:
             result['spotify_url'] = self.spotify_url
         if self.spotify_release_date:
-            result['spotify_release_date'] = self.spotify_release_date
+            # Spec § 2.3 #5: persist as string YYYY-MM-DD regardless of input shape.
+            result['spotify_release_date'] = str(self.spotify_release_date)
         if self.spotify_description:
             result['spotify_description'] = self.spotify_description
         if self.spotify_duration_ms:
             result['spotify_duration_ms'] = self.spotify_duration_ms
         if self.spotify_images:
             result['spotify_images'] = self.spotify_images
-        
+
+        # Spec § 2.3 #1: release timestamp as Unix ms for sort/display.
+        released_ms = self._compute_released_at_ms()
+        if released_ms is not None:
+            result['released_at_ms'] = released_ms
+
         return result
     
     @classmethod
@@ -188,6 +221,7 @@ class PodcastEpisode:
             spotify_description=data.get('spotify_description'),
             spotify_duration_ms=data.get('spotify_duration_ms'),
             spotify_images=data.get('spotify_images', []),
+            released_at_ms=data.get('released_at_ms'),
         )
 
 

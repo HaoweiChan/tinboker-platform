@@ -1,4 +1,4 @@
-"""Ticker recommendations extractor node."""
+"""Ticker insights extractor node."""
 
 import json
 from typing import Any
@@ -8,7 +8,7 @@ from ..state import PipelineState
 
 
 def extract_tickers(state: PipelineState) -> dict[str, Any]:
-    """Extract ticker recommendations from clustered events."""
+    """Extract ticker insights from clustered events."""
     prompts = load_prompt("ticker_extractor")
     events_json = json.dumps(state.get("clustered_events", []), ensure_ascii=False)
 
@@ -23,4 +23,4 @@ def extract_tickers(state: PipelineState) -> dict[str, Any]:
         {"role": "user", "content": user_msg},
     ])
 
-    return {"ticker_recommendations": result}
+    return {"ticker_insights": result}

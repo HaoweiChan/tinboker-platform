@@ -120,7 +120,7 @@ def upload_to_gcs(
             sentences_markdown_content=episode_data.summary_result.get('sentences_markdown') if episode_data.summary_result else None,
             pptx_base64=episode_data.summary_result.get('pptx_base64') if episode_data.summary_result else None,
             marp_markdown_content=episode_data.summary_result.get('marp_markdown') if episode_data.summary_result else None,
-            ticker_recommendations_data=episode_data.summary_result.get('ticker_recommendations') if episode_data.summary_result else None,
+            ticker_recommendations_data=episode_data.summary_result.get('ticker_insights') if episode_data.summary_result else None,
             ticker_marp_markdown_content=episode_data.summary_result.get('ticker_marp_markdown') if episode_data.summary_result else None,
             skip_existing=False  # Force re-upload of all files including MP3
         )
@@ -205,17 +205,19 @@ def upload_to_gcs(
                 gcs_urls['marp_markdown_public_url'] = services.gcs_service.generate_public_url(blob_path)
                 print(f"  ✓ Re-uploaded marp markdown to GCS ({len(marp_markdown):,} characters)")
         
-        ticker_recommendations = episode_data.summary_result.get('ticker_recommendations') if episode_data.summary_result else None
-        if ticker_recommendations:
-            ticker_recommendations_json = json.dumps(ticker_recommendations, ensure_ascii=False, indent=2)
+        ticker_insights = episode_data.summary_result.get('ticker_insights') if episode_data.summary_result else None
+        if ticker_insights:
+            ticker_insights_json = json.dumps(ticker_insights, ensure_ascii=False, indent=2)
+            # Keep the GCS folder name "ticker_recommendations" for backward compatibility
+            # with historical data; the Firestore field names below are spec-compatible.
             success, ticker_recommendations_url = services.gcs_service.upload_file_from_string(
-                ticker_recommendations_json, 'ticker_recommendations', episode_data.podcast_name, episode_data.episode_id, 'json', skip_existing=False
+                ticker_insights_json, 'ticker_recommendations', episode_data.podcast_name, episode_data.episode_id, 'json', skip_existing=False
             )
             if success and ticker_recommendations_url:
                 gcs_urls['ticker_recommendations_url'] = ticker_recommendations_url
                 blob_path = ticker_recommendations_url.replace(f"gs://{services.gcs_service.bucket_name}/", "")
                 gcs_urls['ticker_recommendations_public_url'] = services.gcs_service.generate_public_url(blob_path)
-                print("  ✓ Re-uploaded ticker recommendations to GCS")
+                print("  ✓ Re-uploaded ticker insights to GCS")
         
         ticker_marp_markdown = episode_data.summary_result.get('ticker_marp_markdown') if episode_data.summary_result else None
         if ticker_marp_markdown:
@@ -289,7 +291,7 @@ def upload_to_gcs(
             sentences_markdown_content=episode_data.summary_result.get('sentences_markdown') if episode_data.summary_result else None,
             pptx_base64=episode_data.summary_result.get('pptx_base64') if episode_data.summary_result else None,
             marp_markdown_content=episode_data.summary_result.get('marp_markdown') if episode_data.summary_result else None,
-            ticker_recommendations_data=episode_data.summary_result.get('ticker_recommendations') if episode_data.summary_result else None,
+            ticker_recommendations_data=episode_data.summary_result.get('ticker_insights') if episode_data.summary_result else None,
             ticker_marp_markdown_content=episode_data.summary_result.get('ticker_marp_markdown') if episode_data.summary_result else None,
             skip_existing=False  # Force re-upload of derived files
         )
@@ -354,7 +356,7 @@ def upload_to_gcs(
             sentences_markdown_content=episode_data.summary_result.get('sentences_markdown') if episode_data.summary_result else None,
             pptx_base64=episode_data.summary_result.get('pptx_base64') if episode_data.summary_result else None,
             marp_markdown_content=episode_data.summary_result.get('marp_markdown') if episode_data.summary_result else None,
-            ticker_recommendations_data=episode_data.summary_result.get('ticker_recommendations') if episode_data.summary_result else None,
+            ticker_recommendations_data=episode_data.summary_result.get('ticker_insights') if episode_data.summary_result else None,
             ticker_marp_markdown_content=episode_data.summary_result.get('ticker_marp_markdown') if episode_data.summary_result else None,
             skip_existing=True
         )

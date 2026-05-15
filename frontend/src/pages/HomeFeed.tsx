@@ -8,10 +8,8 @@ import { getRecentEpisodes, type Episode as ApiEpisode } from '@/services/api/po
 import { fetchWithFallback } from '@/services/api/migration';
 import { useSubscriptions } from '@/store/useAppStore';
 
-const FILTERS = ['最新', '我追的', '熱門', '今日法說'] as const;
+const FILTERS = ['最新', '我追的', '熱門'] as const;
 type Filter = (typeof FILTERS)[number];
-
-const LAW_TAGS = ['法說', '法說會', '財報', '財測'];
 
 function CardSkeleton() {
   return (
@@ -59,8 +57,6 @@ export const HomeFeed: React.FC = () => {
       list = subs.size ? episodes.filter((e) => subs.has(e.podcast_name)) : [];
     } else if (filter === '熱門') {
       list = [...episodes].sort((a, b) => (b.num_likes ?? b.number_click ?? 0) - (a.num_likes ?? a.number_click ?? 0));
-    } else if (filter === '今日法說') {
-      list = episodes.filter((e) => (e.tags ?? []).some((t) => LAW_TAGS.some((k) => t.includes(k))));
     }
     return list.slice(0, 30);
   }, [episodes, filter, subscriptions]);

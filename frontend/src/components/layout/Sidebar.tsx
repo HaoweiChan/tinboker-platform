@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Mic, LineChart, Hash, Star, Network, Building2, Info } from 'lucide-react';
+import { Home, Mic, LineChart, Hash, Star, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AppLogo } from '@/components/logo/AppLogo';
 import { useSubscriptions, useUser } from '@/store/useAppStore';
@@ -22,11 +22,6 @@ const NAV: readonly NavItem[] = [
   { to: '/watchlist', label: '自選', icon: Star },
 ];
 
-const MORE_NAV: readonly NavItem[] = [
-  { to: '/story', label: '探索', icon: Network },
-  { to: '/industry', label: '產業', icon: Building2 },
-  { to: '/about', label: '關於', icon: Info },
-];
 
 function isActive(pathname: string, item: NavItem): boolean {
   if (item.to === '/') return pathname === '/';
@@ -83,29 +78,11 @@ export const Sidebar: React.FC = () => {
         </>
       )}
 
-      <div className="text-[10px] font-semibold tracking-[0.08em] uppercase text-muted-foreground px-2.5 pt-4.5 pb-2">更多</div>
-      <nav className="flex flex-col gap-0.5">
-        {MORE_NAV.map((item) => {
-          const active = pathname === item.to;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              aria-current={active ? 'page' : undefined}
-              className={cn(
-                'flex items-center gap-3 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors',
-                active ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-              )}
-            >
-              <Icon size={16} className="shrink-0 opacity-85" />
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="mt-auto pt-3.5 border-t border-border flex items-center gap-2.5 px-1.5">
+      <Link to="/about" className="flex items-center gap-1.5 px-2 pb-2 text-[11px] text-muted-foreground hover:text-foreground transition-colors mt-auto">
+        <Info size={12} className="opacity-70" />
+        關於
+      </Link>
+      <div className="pt-3.5 border-t border-border flex items-center gap-2.5 px-1.5">
         {user ? (
           <>
             <div className="w-7 h-7 rounded-full grid place-items-center text-[11px] font-semibold text-white shrink-0 bg-accent-info">

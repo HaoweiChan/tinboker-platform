@@ -443,9 +443,13 @@ export interface Reason {
   end_index: number;
 }
 
+// Spec § 4.3 — was a free string under the legacy Postgres path; tightened to
+// the enum the agents pipeline emits.
+export type Severity = 'HIGH' | 'MEDIUM' | 'LOW';
+
 export interface Risk {
   title: string;
-  severity?: string;
+  severity?: Severity;
   description: string;
   start_time: number;
   end_time: number;
@@ -473,4 +477,36 @@ export interface TickerBuzz {
   count: number;
   sentiment_score: number;
   last_mentioned: string;
+}
+
+// New shape, per openspecs/firestore-schema/spec.md § 4.2 / § 5.3.
+// Replaces TickerBuzz on Stock Index once Phase A is flipped in prod.
+export type SentimentLabel =
+  | 'STRONG_BULLISH'
+  | 'BULLISH'
+  | 'NEUTRAL'
+  | 'BEARISH'
+  | 'STRONG_BEARISH';
+
+export interface TickerTrending {
+  ticker: string;
+  count: number;
+  sentiment_label: SentimentLabel;
+  last_mentioned: string;
+}
+
+// Spec § 4.3 — replaces TickerRecommendation. No `id` (composite path
+// {episode_id}/tickers/{ticker} is the identity); no `sentiment_score`
+// (kept internal to Firestore per § 4.2, never returned by the API).
+export interface TickerInsight {
+  episode_id: string;
+  podcaster?: string;
+  podcast_launch_time: string;
+  ticker: string;
+  bluf_thesis: string;
+  time_horizon: string;
+  sentiment_label: SentimentLabel;
+  reasons: Reason[];
+  risks: Risk[];
+  created_at: string;
 }

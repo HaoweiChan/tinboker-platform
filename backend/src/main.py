@@ -22,6 +22,7 @@ from src.routers.user import router as user_router
 from src.routers.search import router as search_router, init_search_index
 from src.routers.analytics import router as analytics_router
 from src.routers.recommendations import router as recommendations_router
+from src.routers.ticker_insights import router as ticker_insights_router
 from src.routers.translations import router as translations_router
 from src.routers.admin_translations import router as admin_translations_router
 from src.routers.admin_system import router as admin_system_router
@@ -127,6 +128,7 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(search_router)
 app.include_router(recommendations_router)
+app.include_router(ticker_insights_router)
 app.include_router(analytics_router, prefix="/api/analytics", tags=["analytics"])
 app.include_router(translations_router)
 app.include_router(admin_translations_router)

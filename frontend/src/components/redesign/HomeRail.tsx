@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getMostDiscussedTickers, getSortedPodcasts, type Podcast } from '@/services/api/podcasts';
-import type { TickerBuzz } from '@/services/types';
+import { getTrendingTickers, getSortedPodcasts, type Podcast } from '@/services/api/podcasts';
+import type { TickerTrending } from '@/services/types';
 import { fetchWithFallback } from '@/services/api/migration';
 import { RailCard } from './RailCard';
 import { SentBar } from './SentBar';
 import { SentimentChip } from './SentimentChip';
 import { PodMark } from './PodMark';
-import type { Sentiment } from '@/lib/sentiment';
+import { normalizeSentiment, type Sentiment } from '@/lib/sentiment';
 
-function scoreToSentiment(score: number | null | undefined): Sentiment {
-  if (score == null || !Number.isFinite(score)) return null;
-  if (score >= 0.6) return 'BULLISH';
-  if (score <= 0.4) return 'BEARISH';
-  return 'NEUTRAL';
-}
-
-function TodayPulse({ episodeCount, buzz }: { episodeCount: number; buzz: TickerBuzz[] }) {
+function TodayPulse({ episodeCount, buzz }: { episodeCount: number; buzz: TickerTrending[] }) {
   let bull = 0;
   let bear = 0;
   let neutral = 0;
   for (const b of buzz) {
-    const s = scoreToSentiment(b.sentiment_score);
+    const s = normalizeSentiment(b.sentiment_label);
     if (s === 'BULLISH') bull++;
     else if (s === 'BEARISH') bear++;
     else neutral++;
@@ -51,7 +44,7 @@ function TodayPulse({ episodeCount, buzz }: { episodeCount: number; buzz: Ticker
   );
 }
 
-function TopTickers({ buzz }: { buzz: TickerBuzz[] }) {
+function TopTickers({ buzz }: { buzz: TickerTrending[] }) {
   if (buzz.length === 0) return null;
   return (
     <RailCard title="這幾天大家在聊" sub="近 7 天提及">
@@ -66,7 +59,7 @@ function TopTickers({ buzz }: { buzz: TickerBuzz[] }) {
             <span className="font-mono text-[12px] font-medium truncate">{b.ticker}</span>
             <span className="flex items-center gap-2">
               <span className="text-[11px] text-muted-foreground font-mono tabular-nums">{b.count} 集</span>
-              <SentimentChip sentiment={scoreToSentiment(b.sentiment_score)} bare />
+              <SentimentChip sentiment={normalizeSentiment(b.sentiment_label)} bare />
             </span>
           </Link>
         ))}
@@ -98,14 +91,16 @@ function TopPodcasters({ podcasts }: { podcasts: Podcast[] }) {
 
 /** Home page right rail: 今天的市場 / 這幾天大家在聊 / 本週更新最勤. Falls back to mock data when the API is unavailable. */
 export const HomeRail: React.FC<{ episodeCount: number }> = ({ episodeCount }) => {
-  const [buzz, setBuzz] = useState<TickerBuzz[]>([]);
+  const [buzz, setBuzz] = useState<TickerTrending[]>([]);
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
 
   useEffect(() => {
     let alive = true;
     (async () => {
+      // 7-day window isn't returned by the trending aggregate (only 30/90/all
+      // per spec § 5.2); use 30d as the closest "lately" proxy.
       const [b, p] = await Promise.all([
-        fetchWithFallback<TickerBuzz[]>(() => getMostDiscussedTickers({ days: 7, limit: 10 }), [], 'getMostDiscussedTickers').catch(() => [] as TickerBuzz[]),
+        fetchWithFallback<TickerTrending[]>(() => getTrendingTickers({ days: 30, limit: 10 }), [], 'getTrendingTickers:rail').catch(() => [] as TickerTrending[]),
         fetchWithFallback<Podcast[]>(() => getSortedPodcasts({ sortBy: 'updated_at', order: 'desc', limit: 8 }), [], 'getSortedPodcasts').catch(() => [] as Podcast[]),
       ]);
       if (!alive) return;

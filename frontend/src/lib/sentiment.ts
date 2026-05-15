@@ -8,8 +8,8 @@ export type Sentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL' | null | undefined;
 export function normalizeSentiment(raw: unknown): Exclude<Sentiment, null | undefined> | null {
   if (typeof raw !== 'string') return null;
   const s = raw.trim().toUpperCase();
-  if (s === 'BULLISH' || s === 'BULL' || s === 'POSITIVE') return 'BULLISH';
-  if (s === 'BEARISH' || s === 'BEAR' || s === 'NEGATIVE') return 'BEARISH';
+  if (s === 'BULLISH' || s === 'BULL' || s === 'POSITIVE' || s === 'STRONG_BULLISH') return 'BULLISH';
+  if (s === 'BEARISH' || s === 'BEAR' || s === 'NEGATIVE' || s === 'STRONG_BEARISH') return 'BEARISH';
   if (s === 'NEUTRAL' || s === 'NEUT' || s === 'MIXED') return 'NEUTRAL';
   return null;
 }
@@ -47,13 +47,13 @@ export interface SentimentBreakdown {
  * Returns RAW COUNTS — never collapse this into a fake percentage; show "4 多 / 1 空" not "80% bullish".
  */
 export function aggregateSentiment(
-  recs: ReadonlyArray<{ sentiment?: Sentiment; sentiment_score?: string | number | null }>,
+  recs: ReadonlyArray<{ sentiment?: Sentiment | string; sentiment_label?: string; sentiment_score?: string | number | null }>,
 ): SentimentBreakdown {
   const breakdown: SentimentBreakdown = { total: recs.length, bull: 0, bear: 0, neutral: 0, avgScore: null };
   let scoreSum = 0;
   let scoreCount = 0;
   for (const r of recs) {
-    const s = normalizeSentiment(r.sentiment);
+    const s = normalizeSentiment(r.sentiment_label ?? r.sentiment);
     if (s === 'BULLISH') breakdown.bull++;
     else if (s === 'BEARISH') breakdown.bear++;
     else if (s === 'NEUTRAL') breakdown.neutral++;

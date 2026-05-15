@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Clock, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, Button } from '@/components/ui';
-import { recommendationService } from '@/services/recommendationService';
-import type { TickerBuzz } from '@/services/types';
+import { getTrendingTickers } from '@/services/api/podcasts';
+import type { SentimentLabel, TickerTrending } from '@/services/types';
 import { cn } from '@/lib/utils';
 
 interface WeeklyBuzzWidgetProps {
@@ -12,15 +12,26 @@ interface WeeklyBuzzWidgetProps {
     isMobile?: boolean; // Mobile layout prop
 }
 
+// Chinese display + tone class for the 5-tier label. Inline because no other
+// surface needs this exact mapping today — promote to lib/sentiment.ts if it
+// gets a second caller.
+const LABEL_DISPLAY: Record<SentimentLabel, { text: string; tone: string }> = {
+    STRONG_BULLISH: { text: '強看多', tone: 'text-emerald-500' },
+    BULLISH: { text: '看多', tone: 'text-emerald-500' },
+    NEUTRAL: { text: '中性', tone: 'text-slate-400' },
+    BEARISH: { text: '看空', tone: 'text-red-500' },
+    STRONG_BEARISH: { text: '強看空', tone: 'text-red-500' },
+};
+
 export const WeeklyBuzzWidget: React.FC<WeeklyBuzzWidgetProps> = ({ className, isMobile }) => {
-    const [buzz, setBuzz] = useState<TickerBuzz[]>([]);
+    const [buzz, setBuzz] = useState<TickerTrending[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         let cancelled = false;
         (async () => {
             try {
-                const data = await recommendationService.getMostDiscussedTickers(30);
+                const data = await getTrendingTickers({ days: 30, limit: 10 });
                 if (!cancelled) setBuzz(data);
             } catch {
                 if (!cancelled) setBuzz([]);
@@ -29,11 +40,8 @@ export const WeeklyBuzzWidget: React.FC<WeeklyBuzzWidgetProps> = ({ className, i
         return () => { cancelled = true; };
     }, []);
 
-    const getSentimentColor = (score: number) => {
-        if (score > 0.6) return 'text-emerald-500';
-        if (score < 0.4) return 'text-red-500';
-        return 'text-slate-400';
-    };
+    const getLabelDisplay = (label: SentimentLabel) =>
+        LABEL_DISPLAY[label] ?? LABEL_DISPLAY.NEUTRAL;
 
     const handleTickerClick = (ticker: string) => {
         navigate(`/stock/${ticker}`);
@@ -67,8 +75,8 @@ export const WeeklyBuzzWidget: React.FC<WeeklyBuzzWidgetProps> = ({ className, i
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
                                         <span className="font-bold text-slate-900 dark:text-slate-100">{item.ticker}</span>
-                                        <span className={cn("text-xs font-semibold", getSentimentColor(item.sentiment_score))}>
-                                            {(item.sentiment_score * 100).toFixed(0)}% Bullish
+                                        <span className={cn("text-xs font-semibold", getLabelDisplay(item.sentiment_label).tone)}>
+                                            {getLabelDisplay(item.sentiment_label).text}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2 mt-1">

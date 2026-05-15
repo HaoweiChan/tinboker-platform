@@ -4,22 +4,31 @@ import { Search, ChevronRight } from 'lucide-react';
 import { SEO } from '@/components/common/SEO';
 import { PageContent } from '@/components/layout/PageContent';
 import { Segmented, SentimentChip } from '@/components/redesign';
-import { getMostDiscussedTickers } from '@/services/api/podcasts';
+import { getTrendingTickers } from '@/services/api/podcasts';
 import { getSortedStocks } from '@/services/api/stocks';
-import type { TickerBuzz } from '@/services/types';
+import type { SentimentLabel, TickerTrending } from '@/services/types';
 import { fetchWithFallback } from '@/services/api/migration';
 import type { Sentiment } from '@/lib/sentiment';
 
 type Market = 'all' | 'TW' | 'US';
 type Sort = 'mentions' | 'sentiment';
 
+// Stable rank for the "sort by sentiment" segmented control. Spec § 5.3 forbids
+// exposing sentiment_score on the wire, so we sort on the label tier locally.
+const LABEL_RANK: Record<SentimentLabel, number> = {
+  STRONG_BULLISH: 5,
+  BULLISH: 4,
+  NEUTRAL: 3,
+  BEARISH: 2,
+  STRONG_BEARISH: 1,
+};
+
 function isTW(ticker: string): boolean {
   return /\.TW[OW]?$/i.test(ticker);
 }
-function scoreToSentiment(score: number | null | undefined): Sentiment {
-  if (score == null || !Number.isFinite(score)) return null;
-  if (score >= 0.6) return 'BULLISH';
-  if (score <= 0.4) return 'BEARISH';
+function labelToSentiment(label: SentimentLabel): Sentiment {
+  if (label === 'STRONG_BULLISH' || label === 'BULLISH') return 'BULLISH';
+  if (label === 'STRONG_BEARISH' || label === 'BEARISH') return 'BEARISH';
   return 'NEUTRAL';
 }
 
@@ -27,7 +36,7 @@ interface Row {
   ticker: string;
   name: string;
   count: number;
-  sentiment_score: number;
+  sentimentLabel: SentimentLabel;
   lastMentioned: string;
 }
 
@@ -42,8 +51,9 @@ export const StockIndex: React.FC = () => {
     let alive = true;
     (async () => {
       setLoading(true);
-      const [buzz, stocks] = await Promise.all([
-        fetchWithFallback<TickerBuzz[]>(() => getMostDiscussedTickers({ days: 30, limit: 80 }), [], 'getMostDiscussedTickers:index').catch(() => [] as TickerBuzz[]),
+      // Spec § 5.4: default to days=90, limit=200 on StockIndex.
+      const [trending, stocks] = await Promise.all([
+        fetchWithFallback<TickerTrending[]>(() => getTrendingTickers({ days: 90, limit: 200 }), [], 'getTrendingTickers:index').catch(() => [] as TickerTrending[]),
         fetchWithFallback<unknown[]>(() => getSortedStocks({ sortBy: 'ticker', limit: 500 }), [], 'getSortedStocks:index').catch(() => [] as unknown[]),
       ]);
       if (!alive) return;
@@ -54,12 +64,12 @@ export const StockIndex: React.FC = () => {
         if (t) nameOf.set(t, o.name || o.company_name || t);
       }
       setRows(
-        (Array.isArray(buzz) ? buzz : []).map((b) => ({
-          ticker: b.ticker,
-          name: nameOf.get(b.ticker) || b.ticker,
-          count: b.count,
-          sentiment_score: b.sentiment_score,
-          lastMentioned: b.last_mentioned,
+        (Array.isArray(trending) ? trending : []).map((t) => ({
+          ticker: t.ticker,
+          name: nameOf.get(t.ticker) || t.ticker,
+          count: t.count,
+          sentimentLabel: t.sentiment_label,
+          lastMentioned: t.last_mentioned,
         })),
       );
       setLoading(false);
@@ -79,7 +89,11 @@ export const StockIndex: React.FC = () => {
       }
       return true;
     });
-    arr = [...arr].sort((a, b) => (sort === 'mentions' ? b.count - a.count : (b.sentiment_score ?? 0) - (a.sentiment_score ?? 0)));
+    arr = [...arr].sort((a, b) =>
+      sort === 'mentions'
+        ? b.count - a.count
+        : LABEL_RANK[b.sentimentLabel] - LABEL_RANK[a.sentimentLabel],
+    );
     return arr;
   }, [rows, q, market, sort]);
 
@@ -89,9 +103,9 @@ export const StockIndex: React.FC = () => {
       <PageContent>
         <div className="flex items-baseline justify-between mb-1">
           <h1 className="text-[22px] font-semibold tracking-[-0.02em]">所有個股</h1>
-          {!loading && <div className="text-[12px] text-muted-foreground font-mono tabular-nums">{rows.length} 檔（近 30 天提及）</div>}
+          {!loading && <div className="text-[12px] text-muted-foreground font-mono tabular-nums">{rows.length} 檔（近 90 天提及）</div>}
         </div>
-        <p className="text-[13px] text-muted-foreground max-w-[60ch] mb-4">最近 30 天被 TinBoker 追蹤的 Podcast 提及的所有個股，依提及次數排序。點任一檔進入情緒時間軸與相關集數。</p>
+        <p className="text-[13px] text-muted-foreground max-w-[60ch] mb-4">最近 90 天被 TinBoker 追蹤的 Podcast 提及的所有個股，依提及次數排序。點任一檔進入情緒時間軸與相關集數。</p>
 
         <div className="flex gap-2.5 items-center mb-4 flex-wrap">
           <label className="flex items-center gap-2 flex-1 min-w-[180px] bg-card border border-border rounded-md px-3 py-2">
@@ -128,7 +142,7 @@ export const StockIndex: React.FC = () => {
                 <span className="text-[13.5px] font-medium truncate">{r.name}</span>
                 <span className="font-mono text-[13px] tabular-nums text-right">{r.count}</span>
                 <span className="text-right">
-                  <SentimentChip sentiment={scoreToSentiment(r.sentiment_score)} bare />
+                  <SentimentChip sentiment={labelToSentiment(r.sentimentLabel)} bare />
                 </span>
                 <ChevronRight size={14} className="text-muted-foreground" />
               </Link>

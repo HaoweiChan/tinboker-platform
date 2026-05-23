@@ -8,12 +8,14 @@ import { apiEpisodeToCardV2 } from '@/components/redesign/episodeAdapter';
 import { cn } from '@/lib/utils';
 import { getPodcastByName, getPodcastEpisodes, type Podcast, type Episode as ApiEpisode } from '@/services/api';
 import { fetchWithFallback } from '@/services/api/migration';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import { useAppStore, useSubscriptions } from '@/store/useAppStore';
 
 export const PodcasterPage: React.FC = () => {
   const { id } = useParams();
   const { toggleSubscription } = useAppStore();
   const subscriptions = useSubscriptions();
+  const priceMap = useStockPriceMap();
   const [podcast, setPodcast] = useState<Podcast | null>(null);
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ export const PodcasterPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {episodes.map((ep) => (
-              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
             ))}
           </div>
         )}

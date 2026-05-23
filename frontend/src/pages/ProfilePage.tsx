@@ -8,6 +8,7 @@ import { EpisodeCardV2, ListRow, PodMark } from '@/components/redesign';
 import { apiEpisodeToCardV2 } from '@/components/redesign/episodeAdapter';
 import { cn } from '@/lib/utils';
 import { useAppStore } from '@/store/useAppStore';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import {
   getSortedStocks,
   getPodcastByName,
@@ -43,6 +44,7 @@ function initials(name?: string): string {
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { watchlist, toggleWatchlist, token } = useAppStore();
+  const priceMap = useStockPriceMap();
 
   const [userInfo, setUserInfo] = useState<AuthResponse['user'] | null>(null);
   const [userLoading, setUserLoading] = useState(true);
@@ -317,7 +319,7 @@ export const ProfilePage: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {bookmarked.map((ep) => (
-                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
               ))}
             </div>
           )

@@ -7,6 +7,7 @@ import { HomeRail } from '@/components/redesign/HomeRail';
 import { getRecentEpisodes, type Episode as ApiEpisode } from '@/services/api/podcasts';
 import { fetchWithFallback } from '@/services/api/migration';
 import { useSubscriptions } from '@/store/useAppStore';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 
 const FILTERS = ['最新', '我追的', '熱門'] as const;
 type Filter = (typeof FILTERS)[number];
@@ -31,6 +32,7 @@ export const HomeFeed: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>('最新');
   const subscriptions = useSubscriptions();
+  const priceMap = useStockPriceMap();
 
   useEffect(() => {
     let alive = true;
@@ -82,7 +84,7 @@ export const HomeFeed: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {filtered.map((ep) => (
-                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
               ))}
             </div>
             <div className="mt-6 py-3 text-center text-[12px] text-muted-foreground">— 到這邊 —</div>

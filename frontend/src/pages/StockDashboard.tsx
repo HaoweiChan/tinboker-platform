@@ -20,6 +20,7 @@ import { ChartControls } from '@/components/charts/ChartControls';
 import { getInsightsByTicker } from '@/services/api/podcasts';
 import { transformApiEpisodeToMock } from '@/services/api/transformers';
 import type { TickerInsight } from '@/services/types';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 
 function isTW(t: string): boolean {
   return /\.TW[OW]?$/i.test(t);
@@ -223,6 +224,7 @@ const StockHeaderCard: React.FC<{ symbol: string; episodeCount: number }> = ({ s
 export const StockDashboard: React.FC = () => {
   const { ticker } = useParams();
   const symbol = (ticker ?? '2330.TW').toUpperCase();
+  const priceMap = useStockPriceMap();
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
   const [insights, setInsights] = useState<TickerInsight[]>([]);
   const [episodesLoading, setEpisodesLoading] = useState(true);
@@ -349,7 +351,7 @@ export const StockDashboard: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {episodes.map((ep) => (
-              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
             ))}
           </div>
         )}

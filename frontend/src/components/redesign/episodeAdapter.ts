@@ -28,8 +28,9 @@ function timeAgo(release: string | number | null | undefined, created: number): 
   return months < 12 ? `${months} 個月前` : `${Math.floor(months / 12)} 年前`;
 }
 
-/** Map a backend Episode to props for the redesigned EpisodeCardV2. */
-export function apiEpisodeToCardV2(ep: ApiEpisode): EpisodeCardV2Props {
+/** Map a backend Episode to props for the redesigned EpisodeCardV2.
+ *  Pass `priceMap` (ticker → changePercent) to hydrate live price cells. */
+export function apiEpisodeToCardV2(ep: ApiEpisode, priceMap?: Map<string, number>): EpisodeCardV2Props {
   const released = ep.spotify_release_date ?? ep.created_time;
   const releaseTime = typeof released === 'string' ? Date.parse(released) : (released ?? ep.created_time);
   const isRecent = Number.isFinite(releaseTime) && Date.now() - (releaseTime as number) < 7 * 24 * 3_600_000;
@@ -41,9 +42,12 @@ export function apiEpisodeToCardV2(ep: ApiEpisode): EpisodeCardV2Props {
     timeAgo: timeAgo(ep.spotify_release_date, ep.created_time),
     title: ep.episode_title || (ep.episode_number != null ? `EP ${ep.episode_number}` : '本集摘要'),
     summary: plainTeaser(ep.modified_summary_content || ep.summary_content),
-    // related_tickers gives symbols only — sentiment/price-change need the recommendations join.
-    // TODO(data): hydrate sentiment from getRecommendationsBy* / ticker_recommendations_content; price from getStockByTicker.
-    tickers: Array.isArray(ep.related_tickers) ? ep.related_tickers.slice(0, 4).map((symbol) => ({ symbol })) : undefined,
+    tickers: Array.isArray(ep.related_tickers)
+      ? ep.related_tickers.slice(0, 4).map((symbol) => ({
+          symbol,
+          changePercent: priceMap?.get(symbol) ?? priceMap?.get(symbol.toUpperCase()),
+        }))
+      : undefined,
     tags: ep.tags ?? [],
     isNew: isRecent,
     href: `/episode/${encodeURIComponent(ep.id)}?podcast=${encodeURIComponent(ep.podcast_name)}`,

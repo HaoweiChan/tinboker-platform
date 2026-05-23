@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { getEpisodesByTag, type Episode as ApiEpisode } from '@/services/api';
 import { fetchWithFallback } from '@/services/api/migration';
 import { useAppStore, useTagSubscriptions } from '@/store/useAppStore';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 
 interface EpisodesByTagResponse {
   tag?: string;
@@ -20,6 +21,7 @@ export const TagPage: React.FC = () => {
   const { tag } = useParams();
   const { toggleTagSubscription } = useAppStore();
   const tagSubs = useTagSubscriptions();
+  const priceMap = useStockPriceMap();
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,7 +95,7 @@ export const TagPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {episodes.map((ep) => (
-              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
             ))}
           </div>
         )}

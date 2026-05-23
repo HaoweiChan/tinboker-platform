@@ -6,6 +6,7 @@ import { Segmented, EpisodeCardV2, ListRow } from '@/components/redesign';
 import { apiEpisodeToCardV2 } from '@/components/redesign/episodeAdapter';
 import { getPodcastEpisodes, type Episode as ApiEpisode } from '@/services/api/podcasts';
 import { useSubscriptions, useWatchlist } from '@/store/useAppStore';
+import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import { Link } from 'react-router-dom';
 
 type Tab = 'podcasters' | 'tickers';
@@ -13,6 +14,7 @@ type Tab = 'podcasters' | 'tickers';
 export const WatchlistPage: React.FC = () => {
   const subscriptions = useSubscriptions();
   const watchlist = useWatchlist();
+  const priceMap = useStockPriceMap();
   const [tab, setTab] = useState<Tab>('podcasters');
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
   const [loadingEps, setLoadingEps] = useState(false);
@@ -71,7 +73,7 @@ export const WatchlistPage: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {episodes.map((ep) => (
-                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep)} />
+                <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap)} />
               ))}
             </div>
           )

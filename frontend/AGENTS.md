@@ -1,49 +1,40 @@
-# Agent Instructions for tinboker-platform/frontend
+# AGENTS.md — TinBoker Frontend
 
-These instructions are for AI assistants working on the frontend codebase.
+Domain-specific guidelines for AI agents working in `frontend/`. For project-wide rules
+(git, deployment, environments, known bugs), see the root `CLAUDE.md`.
 
-## PR Merge Rules
+---
 
-**NEVER merge PRs without explicit user permission.**
+## UI Conventions
 
-When working on feature branches:
-1. Make changes and commit to the feature branch
-2. Push to GitHub and create/update PR
-3. **Wait for user approval before merging**
-4. Do NOT directly push to `develop` or `main` branches
+### No Emoji Icons
 
-### Allowed actions without explicit permission:
-- Creating feature branches
-- Pushing commits to feature branches
-- Creating PRs from feature branches
-- Updating existing PRs
+Never use emoji characters (🤖, 📊, 💰, …) as icons in JSX, strings, error messages,
+or empty states. Emoji render inconsistently across platforms and can't be styled.
 
-### Actions requiring explicit user permission:
-- Merging PRs to `develop`
-- Merging PRs to `main`
-- Force pushing to any branch
-- Deleting branches
+- Use SVG icon components from `src/components/ui/Icons.tsx` (e.g. `RoboticsIcon`, `BrainIcon`, `GraphIcon`)
+- Import an SVG as a URL: `import iconUrl from '@/components/icons/icon.svg'`
+- Use `IconRenderer` for dynamic icons: `<IconRenderer icon="robotics" size={48} />`
 
-## Git Workflow
+### Traditional Chinese (zh-TW) Localization
 
-- Feature branches: `feat/<feature-name>` from `develop`
-- Bug fixes: `fix/<bug-name>` from `develop`
-- Hotfixes: `hotfix/<issue>` from `main`
-- No `staging` branch — staging is the HEAD of `main`
-- PRs require Cloudflare build check to pass before merge
+All user-facing text must be in Traditional Chinese (zh-TW). Code, comments, variable
+names, console logs, and API endpoint names stay in English.
 
-## Deployment
+- **Brand name:** TinBoker in English contexts; **聽播客** in Chinese contexts. Wordmark: 聽播客 ｜ TinBoker
+- Translate: UI labels, headings, nav items, placeholders, error messages, tooltips, chart labels, table headers, empty/loading states
+- Keep in English: code identifiers, comments, console logs, debug messages, API endpoint names, file names, CSS class names
 
-Frontend is deployed via Cloudflare Pages (single `tinboker-platform` project):
+Common term reference:
 
-| Trigger | Cloudflare branch label | URL |
-|---|---|---|
-| Merge to `develop` | `develop` | dev.tinboker.com |
-| Merge to `main` | `staging` | staging.tinboker.com |
-| Push tag `v*` on `main` | `main` (production) | tinboker.com |
-
-- PR builds → `{branch}.tinboker-platform.pages.dev` (preview, auto-commented on PR)
-- Each environment uses its corresponding backend API:
-  - `dev.tinboker.com` → `dev-api.tinboker.com`
-  - `staging.tinboker.com` → `staging-api.tinboker.com`
-  - `tinboker.com` → `api.tinboker.com`
+| English | 繁體中文 | English | 繁體中文 |
+|---|---|---|---|
+| Home | 首頁 | Price | 價格 |
+| Dashboard | 儀表板 | Change | 漲跌 |
+| News | 新聞 | Volume | 成交量 |
+| Stocks | 股票 | Market Cap | 市值 |
+| Industry | 產業 | P/E Ratio | 本益比 |
+| Search | 搜尋 | Revenue | 營收 |
+| Filter | 篩選 | Loading | 載入中 |
+| Save / Cancel | 儲存 / 取消 | No Data | 無資料 |
+| Load More | 載入更多 | Coming Soon | 即將推出 |

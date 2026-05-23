@@ -1,38 +1,53 @@
 # TinBoker Platform
 
-Taiwanese stock & podcast intelligence platform. Browse stocks, listen to financial podcasts,
-explore relationship graphs, and track market trends.
+Taiwanese stock and podcast intelligence platform. Browse TW/US stocks, explore relationship graphs, track market trends, and discover financial podcasts.
 
-**Live:** [tinboker.com](https://tinboker.com) · **Dev:** [dev.tinboker.com](https://dev.tinboker.com)
+**Live:** [tinboker.com](https://tinboker.com) · **Dev:** [dev.tinboker.com](https://dev.tinboker.com) · **API Docs:** [api.tinboker.com/docs](https://api.tinboker.com/docs)
+
+---
+
+## Features
+
+- Stock dashboard with price charts (TW + US markets)
+- Relationship graph explorer linking companies, sectors, and events
+- Financial podcast directory with episode playback (GCP Firestore)
+- Full-text search with autocomplete
+- Google OAuth authentication
+- Real-time price feed over WebSocket
+- Sector heatmaps and market trend views
 
 ---
 
 ## Architecture
 
 ```
-Cloudflare Edge (DDoS + cache)
-        │
-        ▼
+Browser
+   │
+   ▼
+Cloudflare Pages (static SPA)          ← React 19 + Vite
+   │
+   ▼
+Cloudflare Proxy (DDoS + cache)
+   │
+   ▼
 Netcup VPS — Caddy (reverse proxy + auto-HTTPS)
-        ├── :8000  api.tinboker.com          ← production
-        ├── :8001  dev-api.tinboker.com      ← dev
-        └── :8002  staging-api.tinboker.com  ← staging
-                │
-                ▼
-         Docker Compose
-         ├── FastAPI (Python 3.12)
-         ├── Redis 7-alpine
-         └── Netdata (monitoring)
-                │
-                ▼
-         GCP Services
-         ├── Cloud SQL (PostgreSQL)   — stock & user data
-         ├── Firestore                — podcast & episodes
-         ├── Cloud Storage            — article content
-         └── Secret Manager           — credentials
+   ├── :8000  api.tinboker.com          ← production
+   ├── :8001  dev-api.tinboker.com      ← dev
+   └── :8002  staging-api.tinboker.com  ← staging
+              │
+              ▼
+       Docker Compose
+       ├── FastAPI (Python 3.12)
+       ├── Redis 7-alpine (cache)
+       └── Netdata (monitoring)
+              │
+              ▼
+       GCP Services
+       ├── Cloud SQL (PostgreSQL)   — stock & user data
+       ├── Firestore                — podcast & episode data
+       ├── Cloud Storage            — article content
+       └── Secret Manager           — credentials
 ```
-
-Frontend is deployed to **Cloudflare Pages** (static SPA, no server).
 
 ---
 
@@ -41,12 +56,13 @@ Frontend is deployed to **Cloudflare Pages** (static SPA, no server).
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, TypeScript 5.9, Vite 7, Tailwind CSS 4, Shadcn UI |
-| Charts | TradingView Lightweight Charts, D3.js |
+| Charts | TradingView Lightweight Charts, D3.js, Nivo |
 | Graph Viz | React Flow 11, Dagre, ELK |
 | State | Zustand 5 |
 | Routing | React Router 7 |
+| Validation | Zod 4 |
 | Backend | FastAPI 0.104, Python 3.12, Pydantic v2 |
-| ORM | SQLAlchemy (SQLite dev / PostgreSQL prod) |
+| ORM | SQLAlchemy 2 (SQLite dev / PostgreSQL prod) |
 | Cache | Redis 7 with hiredis |
 | Auth | Google OAuth → JWT (python-jose) |
 | Data APIs | Massive API (US stocks), FinMind (TW stocks) |
@@ -59,7 +75,7 @@ Frontend is deployed to **Cloudflare Pages** (static SPA, no server).
 
 ### Prerequisites
 
-- Python 3.12+, `uv` (or pip)
+- Python 3.12+, [`uv`](https://docs.astral.sh/uv/)
 - Node 20+, npm
 - Docker (for Redis)
 
@@ -73,7 +89,7 @@ docker compose up -d redis    # start Redis
 python -m src.main            # starts on localhost:5174
 ```
 
-API docs available at `http://localhost:5174/docs`.
+API docs: `http://localhost:5174/docs`
 
 ### Frontend
 
@@ -94,11 +110,12 @@ tinboker-platform/
 │   ├── src/
 │   │   ├── main.py           # FastAPI app & lifespan
 │   │   ├── config.py         # Settings (env + GCP Secret Manager)
-│   │   ├── routers/          # API endpoint handlers
-│   │   ├── services/         # Business logic
-│   │   ├── database/         # ORM models & CRUD
-│   │   ├── models/           # Pydantic schemas
-│   │   └── cache/            # Redis client
+│   │   ├── routers/          # 26 API endpoint handlers
+│   │   ├── services/         # Business logic (26 modules)
+│   │   ├── database/         # ORM models & CRUD (16 modules)
+│   │   ├── models/           # Pydantic request/response schemas
+│   │   ├── cache/            # Redis client
+│   │   └── workers/          # Background tasks & cron jobs
 │   ├── tests/
 │   │   ├── unit/             # pytest unit tests
 │   │   ├── integration/      # API integration tests
@@ -108,9 +125,9 @@ tinboker-platform/
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/            # Route-level React pages (19 pages)
+│   │   ├── pages/            # 31 route-level React pages
 │   │   ├── components/       # Reusable UI components
-│   │   ├── services/api/     # Axios API client functions
+│   │   ├── services/         # API client + business logic
 │   │   ├── store/            # Zustand state stores
 │   │   ├── types/            # TypeScript type definitions
 │   │   └── validation/       # Zod schemas for API responses
@@ -118,6 +135,7 @@ tinboker-platform/
 │
 ├── .github/workflows/        # CI/CD pipelines
 ├── openspecs/                # Feature specifications
+├── docs/                     # Additional documentation
 ├── MIGRATION.md              # Infrastructure runbook
 ├── QA_AGENT.md               # QA testing instructions
 └── CLAUDE.md                 # AI agent instructions
@@ -127,20 +145,31 @@ tinboker-platform/
 
 ## API Overview
 
-| Prefix | Purpose |
-|--------|---------|
-| `GET /api/stocks` | Stock list with sorting |
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /api/stocks` | Stock list with sorting/filtering |
 | `GET /api/stocks/{ticker}` | Stock detail + price history |
 | `GET /api/graphs` | Relationship graph list |
-| `GET /api/news` | News/event articles |
-| `GET /api/podcasts` | Podcast channels (Firestore) |
+| `GET /api/news` | News and event articles |
+| `GET /api/podcasts` | Podcast channels |
 | `GET /api/episodes/{id}` | Episode detail |
 | `GET /api/search` | Full-text search |
 | `GET /api/search/suggest` | Search autocomplete |
 | `POST /auth/login` | Google OAuth → JWT |
-| `WS /ws/prices` | Real-time stock prices |
+| `WS /ws/prices` | Real-time stock price feed |
 
-Full interactive docs: `https://api.tinboker.com/docs`
+Full interactive docs: [api.tinboker.com/docs](https://api.tinboker.com/docs)
+
+---
+
+## Environments
+
+| Environment | Frontend | Backend | Branch / Trigger |
+|-------------|----------|---------|-----------------|
+| Production | [tinboker.com](https://tinboker.com) | [api.tinboker.com](https://api.tinboker.com) | `v*` tag on `main` |
+| Staging | [staging.tinboker.com](https://staging.tinboker.com) | [staging-api.tinboker.com](https://staging-api.tinboker.com) | merge to `main` |
+| Dev | [dev.tinboker.com](https://dev.tinboker.com) | [dev-api.tinboker.com](https://dev-api.tinboker.com) | merge to `develop` |
+| Local | localhost:5173 | localhost:5174 | any |
 
 ---
 
@@ -148,9 +177,9 @@ Full interactive docs: `https://api.tinboker.com/docs`
 
 | Pipeline | Trigger | Effect |
 |----------|---------|--------|
-| `backend-ci.yml` | PR to develop/main | Tests + lint |
+| `backend-ci.yml` | PR to develop/main | Lint (ruff) + pytest |
 | `backend-deploy.yml` | Push to develop/main | Docker build → VPS deploy |
-| `frontend-ci.yml` | PR to develop/main | TypeScript + ESLint |
+| `frontend-ci.yml` | PR to develop/main | TypeScript check + ESLint |
 | `frontend-deploy.yml` | Push to develop/main | Cloudflare Pages deploy |
 | `backend-health-check.yml` | Cron every 10 min | Health check all envs |
 
@@ -158,25 +187,23 @@ Docker images: `ghcr.io/haoweichan/tinboker-backend:{tag}`
 
 ---
 
-## Environments
-
-| Environment | Frontend URL | Backend URL | Branch |
-|-------------|-------------|-------------|--------|
-| Production | tinboker.com | api.tinboker.com | `main` |
-| Dev | dev.tinboker.com | dev-api.tinboker.com | `develop` |
-| Staging | `{branch}.tinboker-platform.pages.dev` | staging-api.tinboker.com | manual |
-| Local | localhost:5173 | localhost:5174 | any |
-
----
-
 ## Testing
 
 ```bash
-# Backend
+# Backend — all tests
 cd backend && pytest tests/ -v
 
-# Frontend type check
+# Backend — unit tests only
+cd backend && pytest tests/unit/ -v
+
+# Backend — with coverage
+cd backend && pytest tests/ -v --cov=src --cov-report=term-missing
+
+# Frontend — type check + build
 cd frontend && npm run build
+
+# Frontend — lint
+cd frontend && npm run lint
 
 # End-to-end QA
 # See QA_AGENT.md for full environment test procedures
@@ -187,9 +214,9 @@ cd frontend && npm run build
 ## Contributing
 
 1. Branch from `develop`: `git checkout -b feat/your-feature develop`
-2. Backend changes first, frontend after
-3. Open PR to `develop` — CI must pass
-4. Request review; merge triggers auto-deploy to dev
-5. Promote to production by merging `develop` → `main`
+2. Make backend changes first, then frontend
+3. Open a PR targeting `develop` — CI must pass
+4. Request review; merge triggers auto-deploy to dev.tinboker.com
+5. Promote to staging/production by merging `develop` → `main`, then tagging
 
-See `CLAUDE.md` for AI agent guidelines and `MIGRATION.md` for infrastructure details.
+See [CLAUDE.md](CLAUDE.md) for AI agent guidelines and [MIGRATION.md](MIGRATION.md) for infrastructure runbook.

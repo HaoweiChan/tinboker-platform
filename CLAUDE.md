@@ -211,6 +211,76 @@ See `QA_AGENT.md` for end-to-end and environment-specific QA procedures.
 
 ---
 
+## Browser MCP — Dev Environment Auth Bypass
+
+The dev/staging environments are gated by Google OAuth + admin email allowlist.
+Automated browsers (Cursor browser MCP, Playwright) cannot complete Google OAuth.
+
+A **dev bypass** flow lets the browser authenticate without Google:
+
+### How it works
+
+1. Backend endpoint `POST /api/auth/dev-token` accepts a secret `token`
+2. Returns a valid JWT + user object (same as Google OAuth login)
+3. Only works when `ENVIRONMENT != production` AND `DEV_BYPASS_TOKEN` is set
+4. Frontend route `/auth/dev-bypass?token=SECRET` calls the backend and stores the JWT
+
+### Usage in Cursor browser MCP
+
+```
+# Step 1: Navigate to the bypass URL
+browser_navigate → https://dev.tinboker.com/auth/dev-bypass?token=CXvkSTaZAghJF0jYidL4ii3DbgOo-Z5NVwgFLoNk05I
+
+# Step 2: Wait for redirect to /
+# Step 3: Now browse freely — session is authenticated
+```
+
+### Token value
+
+| Environment | DEV_BYPASS_TOKEN |
+|---|---|
+| Dev (dev-api.tinboker.com) | `CXvkSTaZAghJF0jYidL4ii3DbgOo-Z5NVwgFLoNk05I` |
+
+The token is set as an env var on the VPS backend container.
+It is NOT stored in the repo — only in this doc and in the server's `.env`.
+
+---
+
+## Browser MCP — Dev Environment Auth Bypass
+
+The dev/staging environments are gated by Google OAuth + admin email allowlist.
+Automated browsers (Cursor browser MCP, Playwright) cannot complete Google OAuth.
+
+A **dev bypass** flow lets the browser authenticate without Google:
+
+### How it works
+
+1. Backend endpoint `POST /api/auth/dev-token` accepts a secret `token`
+2. Returns a valid JWT + user object (same as Google OAuth login)
+3. Only works when `ENVIRONMENT != production` AND `DEV_BYPASS_TOKEN` is set
+4. Frontend route `/auth/dev-bypass?token=SECRET` calls the backend and stores the JWT
+
+### Usage in Cursor browser MCP
+
+```
+# Step 1: Navigate to the bypass URL
+browser_navigate → https://dev.tinboker.com/auth/dev-bypass?token=CXvkSTaZAghJF0jYidL4ii3DbgOo-Z5NVwgFLoNk05I
+
+# Step 2: Wait for redirect to /
+# Step 3: Now browse freely — session is authenticated
+```
+
+### Token value
+
+| Environment | DEV_BYPASS_TOKEN |
+|---|---|
+| Dev (dev-api.tinboker.com) | `CXvkSTaZAghJF0jYidL4ii3DbgOo-Z5NVwgFLoNk05I` |
+
+The token is set as an env var on the VPS backend container.
+It is NOT stored in the repo — only in this doc and in the server's `.env`.
+
+---
+
 ## Do Not
 
 - Commit `.env` files, `gcp-service-account.json`, or any secrets

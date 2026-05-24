@@ -26,6 +26,7 @@ import { DevPortalPage } from '@/pages/DevPortalPage';
 import { DevGrafanaPage } from '@/pages/DevGrafanaPage';
 import { DevPodcasterListPage } from '@/pages/DevPodcasterListPage';
 import { DevTranslationsPage } from '@/pages/DevTranslationsPage';
+import { DevBypass } from '@/pages/DevBypass';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { GlobalPlayer } from '@/components/player/GlobalPlayer';
 import { PlayerConfirmationModal } from '@/components/player/PlayerConfirmationModal';
@@ -54,6 +55,10 @@ function App() {
         closeButton
         duration={4000}
       />
+      <Routes>
+        {/* Dev bypass — outside EnvGate so it works unauthenticated */}
+        <Route path="/auth/dev-bypass" element={<DevBypass />} />
+      </Routes>
       <EnvGate>
       <Routes>
         {/* Redirects (no chrome needed) */}

@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     admin_jwt_secret: Optional[str] = None  # JWT signing key for admin tokens
     admin_emails: list[str] = []  # Comma-separated list of admin email addresses
 
+    # Dev bypass token for automated browser testing (e.g. Cursor browser MCP)
+    dev_bypass_token: Optional[str] = None
+
     @field_validator("admin_emails", mode="before")
     @classmethod
     def parse_admin_emails(cls, v: Union[str, list, None]) -> list[str]:

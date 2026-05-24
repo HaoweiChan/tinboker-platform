@@ -1,5 +1,7 @@
 # backend-data Specification
 
+> **See also:** [firestore-schema](../firestore-schema/spec.md) — the full Firestore data contract between the tinboker-agents pipeline and the platform backend, including the canonical episode shape, the new `ticker_insights` and `trending_tickers` collections, and the ownership matrix. The requirements below are subsumed there; this file remains as the historical record of the original `key_insights` ask.
+
 ## Purpose
 TBD - created by archiving change update-episode-card-visuals. Update Purpose after archive.
 ## Requirements

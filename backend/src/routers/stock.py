@@ -91,6 +91,28 @@ async def get_stock_by_ticker(
     return stock
 
 
+@router.get("/batch-prices")
+async def get_batch_prices(
+    tickers: str = Query(description="Comma-separated ticker symbols (max 100)"),
+):
+    """
+    Get changePercent for multiple tickers in one request.
+    Uses the same per-ticker Redis cache as /{ticker}/basic.
+    Returns {TICKER: changePercent} — null if not found.
+    """
+    ticker_list = [t.strip().upper() for t in tickers.split(',') if t.strip()][:100]
+    if not ticker_list:
+        return {}
+    results = await asyncio.gather(
+        *[stock_service.get_stock_basic_info_async(t) for t in ticker_list],
+        return_exceptions=True,
+    )
+    return {
+        ticker: (info.get('changePercent') if isinstance(info, dict) else None)
+        for ticker, info in zip(ticker_list, results)
+    }
+
+
 @router.get("/{ticker}/basic")
 async def get_stock_basic_info(ticker: str):
     """

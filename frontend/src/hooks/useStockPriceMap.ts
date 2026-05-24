@@ -34,22 +34,19 @@ export function useStockPriceMap(tickers: string[]): Map<string, number> {
     }
 
     let alive = true;
-    Promise.allSettled(
-      stale.map((ticker) =>
-        apiClient
-          .get(`/api/stocks/${ticker}/basic`)
-          .then((res) => ({ ticker, changePercent: res.data?.changePercent as number | undefined })),
-      ),
-    ).then((results) => {
-      if (!alive) return;
-      const ts = Date.now();
-      for (const r of results) {
-        if (r.status === 'fulfilled' && Number.isFinite(r.value.changePercent)) {
-          tickerCache.set(r.value.ticker, { value: r.value.changePercent!, ts });
+    apiClient
+      .get('/api/stocks/batch-prices', { params: { tickers: stale.join(',') } })
+      .then((res) => {
+        if (!alive) return;
+        const ts = Date.now();
+        for (const [ticker, changePercent] of Object.entries(res.data ?? {})) {
+          if (Number.isFinite(changePercent)) {
+            tickerCache.set(ticker, { value: changePercent as number, ts });
+          }
         }
-      }
-      setMap(buildMap());
-    });
+        setMap(buildMap());
+      })
+      .catch(() => {});
 
     return () => {
       alive = false;

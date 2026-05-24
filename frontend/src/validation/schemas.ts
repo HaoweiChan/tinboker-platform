@@ -407,6 +407,28 @@ export function safeParseResponse<T>(
   }
 }
 
+// ── Comments ─────────────────────────────────────────────────────────────────
+
+export const CommentSchema = z.object({
+  id: z.string(),
+  podcast_name: z.string(),
+  episode_id: z.string(),
+  user_id: z.string(),
+  user_name: z.string(),
+  user_avatar: z.string().nullable().optional(),
+  content: z.string(),
+  created_at: z.string(),
+});
+export type Comment = z.infer<typeof CommentSchema>;
+
+export const CommentListSchema = z.object({
+  comments: z.array(CommentSchema),
+  total: z.number(),
+  limit: z.number(),
+  offset: z.number(),
+});
+export type CommentList = z.infer<typeof CommentListSchema>;
+
 /**
  * Parse API response with Zod schema
  * Throws descriptive error on validation failure

@@ -9,6 +9,7 @@ import { getEpisodeById, type Episode as ApiEpisode } from '@/services';
 import { fetchWithFallback } from '@/services/api/migration';
 import { parseTimestampedSections, type TimestampedSection } from '@/utils/parseTimestampedSections';
 import { usePlayerStore } from '@/store/usePlayerStore';
+import { CommentSection } from '@/components/episode/CommentSection';
 
 function timeAgo(release: string | number | null | undefined, created: number): string {
   const ms = typeof release === 'string' ? Date.parse(release) : (release ?? created);
@@ -196,11 +197,9 @@ export const EpisodeDetail: React.FC = () => {
               </section>
             )}
 
-            {/* 留言 — no backend yet */}
-            <section className="bg-card border border-border rounded-md p-5 sm:p-6">
-              <h3 className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-3.5">留言</h3>
-              <div className="text-[13px] text-muted-foreground">留言功能即將推出。</div>
-            </section>
+            {id && podcastName && (
+              <CommentSection podcastName={podcastName} episodeId={id} />
+            )}
           </>
         )}
       </PageContent>

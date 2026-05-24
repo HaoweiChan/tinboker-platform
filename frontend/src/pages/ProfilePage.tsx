@@ -44,8 +44,6 @@ function initials(name?: string): string {
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const { watchlist, toggleWatchlist, token } = useAppStore();
-  const priceMap = useStockPriceMap();
-
   const [userInfo, setUserInfo] = useState<AuthResponse['user'] | null>(null);
   const [userLoading, setUserLoading] = useState(true);
 
@@ -57,6 +55,8 @@ export const ProfilePage: React.FC = () => {
   const [stockRows, setStockRows] = useState<StockRow[]>([]);
   const [podcasters, setPodcasters] = useState<Podcast[]>([]);
   const [bookmarked, setBookmarked] = useState<ApiEpisode[]>([]);
+  const episodeTickers = useMemo(() => bookmarked.flatMap((ep) => ep.related_tickers ?? []), [bookmarked]);
+  const priceMap = useStockPriceMap(episodeTickers);
 
   const [tab, setTab] = useState<Tab>('podcasters');
   const [searchOpen, setSearchOpen] = useState(false);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Plus, Check } from 'lucide-react';
 import { SEO } from '@/components/common/SEO';
@@ -15,9 +15,10 @@ export const PodcasterPage: React.FC = () => {
   const { id } = useParams();
   const { toggleSubscription } = useAppStore();
   const subscriptions = useSubscriptions();
-  const priceMap = useStockPriceMap();
   const [podcast, setPodcast] = useState<Podcast | null>(null);
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
+  const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
+  const priceMap = useStockPriceMap(episodeTickers);
   const [loading, setLoading] = useState(true);
 
   const name = decodeURIComponent(id || '');

@@ -1,43 +1,65 @@
 import { useEffect, useState } from 'react';
-import { getSortedStocks } from '@/services/api/stocks';
+import { apiClient } from '@/services/api/client';
 
-// Module-level cache — shared across all hook instances, avoids re-fetching on navigation.
-let _cached: Map<string, number> | null = null;
-let _cacheTime = 0;
-const TTL = 60_000; // 1 minute
+const tickerCache = new Map<string, { value: number; ts: number }>();
+const TTL = 60_000;
 
 /**
- * Returns a map of ticker → changePercent (e.g. -3.4 for -3.40%) for all
- * stocks in the platform's stock list. Used to hydrate TickerRow price cells
- * in episode cards across every page.
- *
- * The first caller fetches; subsequent mounts within the TTL window get the
- * cached result immediately.
+ * Returns a map of ticker → changePercent for the given tickers.
+ * Fetches prices per-ticker via /api/stocks/{ticker}/basic, using a 1-minute
+ * module-level cache so all page mounts share one fetch per ticker.
  */
-export function useStockPriceMap(): Map<string, number> {
-  const [map, setMap] = useState<Map<string, number>>(() => _cached ?? new Map());
+export function useStockPriceMap(tickers: string[]): Map<string, number> {
+  const tickerKey = [...new Set(tickers.map((t) => t.toUpperCase()))].sort().join(',');
+  const [map, setMap] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
-    if (_cached && Date.now() - _cacheTime < TTL) return;
+    const unique = tickerKey ? tickerKey.split(',') : [];
+    if (!unique.length) return;
 
-    getSortedStocks({ limit: 2000 })
-      .then((stocks) => {
-        const m = new Map<string, number>();
-        for (const s of Array.isArray(stocks) ? stocks : []) {
-          const o = s as Record<string, unknown>;
-          const ticker = (o.ticker ?? o.symbol) as string | undefined;
-          const cp = o.change_percent as number | undefined;
-          if (ticker && cp != null && Number.isFinite(cp)) {
-            m.set(ticker, cp);
-            m.set(ticker.toUpperCase(), cp);
-          }
+    const now = Date.now();
+    const stale = unique.filter((t) => {
+      const entry = tickerCache.get(t);
+      return !entry || now - entry.ts > TTL;
+    });
+
+    const buildMap = (): Map<string, number> => {
+      const m = new Map<string, number>();
+      for (const t of unique) {
+        const entry = tickerCache.get(t);
+        if (entry) m.set(t, entry.value);
+      }
+      return m;
+    };
+
+    if (!stale.length) {
+      setMap(buildMap());
+      return;
+    }
+
+    let alive = true;
+    Promise.allSettled(
+      stale.map((ticker) =>
+        apiClient
+          .get(`/api/stocks/${ticker}/basic`)
+          .then((res) => ({ ticker, changePercent: res.data?.changePercent as number | undefined })),
+      ),
+    ).then((results) => {
+      if (!alive) return;
+      const ts = Date.now();
+      for (const r of results) {
+        if (r.status === 'fulfilled' && Number.isFinite(r.value.changePercent)) {
+          tickerCache.set(r.value.ticker, { value: r.value.changePercent!, ts });
         }
-        _cached = m;
-        _cacheTime = Date.now();
-        setMap(m);
-      })
-      .catch(() => {});
-  }, []);
+      }
+      setMap(buildMap());
+    });
+
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tickerKey]);
 
   return map;
 }

@@ -32,7 +32,8 @@ export const HomeFeed: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>('最新');
   const subscriptions = useSubscriptions();
-  const priceMap = useStockPriceMap();
+  const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
+  const priceMap = useStockPriceMap(episodeTickers);
 
   useEffect(() => {
     let alive = true;

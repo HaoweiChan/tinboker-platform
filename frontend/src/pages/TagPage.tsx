@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Hash, Plus, Check } from 'lucide-react';
 import { SEO } from '@/components/common/SEO';
@@ -21,9 +21,10 @@ export const TagPage: React.FC = () => {
   const { tag } = useParams();
   const { toggleTagSubscription } = useAppStore();
   const tagSubs = useTagSubscriptions();
-  const priceMap = useStockPriceMap();
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
   const [loading, setLoading] = useState(true);
+  const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
+  const priceMap = useStockPriceMap(episodeTickers);
 
   const cleanTag = decodeURIComponent(tag || '').replace(/^#/, '');
   const isSubscribed = tagSubs.includes(cleanTag) || tagSubs.includes(`#${cleanTag}`);

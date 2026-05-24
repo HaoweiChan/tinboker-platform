@@ -224,8 +224,9 @@ const StockHeaderCard: React.FC<{ symbol: string; episodeCount: number }> = ({ s
 export const StockDashboard: React.FC = () => {
   const { ticker } = useParams();
   const symbol = (ticker ?? '2330.TW').toUpperCase();
-  const priceMap = useStockPriceMap();
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
+  const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
+  const priceMap = useStockPriceMap(episodeTickers);
   const [insights, setInsights] = useState<TickerInsight[]>([]);
   const [episodesLoading, setEpisodesLoading] = useState(true);
 

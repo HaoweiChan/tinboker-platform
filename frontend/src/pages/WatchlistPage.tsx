@@ -14,9 +14,10 @@ type Tab = 'podcasters' | 'tickers';
 export const WatchlistPage: React.FC = () => {
   const subscriptions = useSubscriptions();
   const watchlist = useWatchlist();
-  const priceMap = useStockPriceMap();
   const [tab, setTab] = useState<Tab>('podcasters');
   const [episodes, setEpisodes] = useState<ApiEpisode[]>([]);
+  const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
+  const priceMap = useStockPriceMap(episodeTickers);
   const [loadingEps, setLoadingEps] = useState(false);
 
   useEffect(() => {

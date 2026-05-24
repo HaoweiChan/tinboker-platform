@@ -22,6 +22,10 @@ import { AdminPage } from '@/pages/AdminPage';
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage';
 import { TranslationsSection } from '@/pages/TranslationsSection';
 import { AdminAnalyticsPage } from '@/pages/AdminAnalyticsPage';
+import { DevPortalPage } from '@/pages/DevPortalPage';
+import { DevGrafanaPage } from '@/pages/DevGrafanaPage';
+import { DevPodcasterListPage } from '@/pages/DevPodcasterListPage';
+import { DevTranslationsPage } from '@/pages/DevTranslationsPage';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { GlobalPlayer } from '@/components/player/GlobalPlayer';
 import { PlayerConfirmationModal } from '@/components/player/PlayerConfirmationModal';
@@ -31,6 +35,10 @@ import { EnvGate } from '@/components/auth/EnvGate';
 
 // Dev-only redesign QA surface; not registered in production builds.
 const DesignPreview = import.meta.env.DEV ? lazy(() => import('@/pages/DesignPreview')) : null;
+
+// Developer portal — only registered when VITE_STAGE=DEV (dev.tinboker.com).
+// STAGING and PRODUCTION builds never register /dev routes so they fall through to the catch-all.
+const IS_DEV_ENV = (import.meta.env.VITE_STAGE as string) === 'DEV';
 
 function App() {
   // Validate stored auth token on app initialization
@@ -99,6 +107,15 @@ function App() {
               </Suspense>
             }
           />
+        )}
+
+        {/* Developer portal — only on dev.tinboker.com (VITE_STAGE=DEV) */}
+        {IS_DEV_ENV && (
+          <Route path="/dev" element={<DevPortalPage />}>
+            <Route index element={<DevGrafanaPage />} />
+            <Route path="podcasters" element={<DevPodcasterListPage />} />
+            <Route path="translations" element={<DevTranslationsPage />} />
+          </Route>
         )}
 
         {/* Catch-all */}

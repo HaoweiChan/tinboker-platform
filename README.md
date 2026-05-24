@@ -134,8 +134,7 @@ tinboker-platform/
 │   └── public/               # Static assets + PWA manifest
 │
 ├── .github/workflows/        # CI/CD pipelines
-├── openspecs/                # Feature specifications
-├── docs/                     # Additional documentation
+├── docs/                     # Domain references, workflows, firestore-contract
 ├── MIGRATION.md              # Infrastructure runbook
 ├── QA_AGENT.md               # QA testing instructions
 └── CLAUDE.md                 # AI agent instructions

@@ -18,14 +18,46 @@ TinBoker is a Taiwanese stock & podcast intelligence platform.
 
 ---
 
+## Where AI tools should look first
+
+**Domain reference docs (tool-neutral):**
+- `docs/agents/podcast-domain.md` — episodes, podcasts, comments, recommendations, news
+- `docs/agents/stock-data.md` — TW/US market data, charting, WebSocket prices, translations
+- `docs/agents/search-discovery.md` — search, suggestions, trending, tags
+- `docs/agents/graph-visuals.md` — knowledge graph, design system, PWA visuals
+- `docs/agents/auth-admin.md` — auth, user, admin dashboard, dev portal
+- `docs/agents/devops-infra.md` — VPS, Docker, Caddy, CI/CD, Redis, monitoring
+
+**Procedural workflows:**
+- `docs/workflows/deploy-flow.md` — branch → env → tag pipeline
+- `docs/workflows/qa-flow.md` — reproducing known bugs, dev-bypass flow
+- `docs/workflows/firestore-data-change.md` — Firestore schema / data-contract changes
+
+**Canonical data contract (cross-repo with tinboker-agents):**
+- `docs/firestore-contract.md`
+
+**Code style / conventions (unchanged):**
+- `backend/AGENTS.md` — Python style, key file map
+- `frontend/AGENTS.md` — UI conventions, zh-TW localization, icon system
+
+**Tool-specific entry points:**
+- Claude Code subagents: `.claude/agents/<domain>.md` (delegate by domain)
+- Claude Code skills: `.claude/skills/<workflow>/SKILL.md` (invoked by intent)
+- Cursor rules: `.cursor/rules/<domain>.mdc` (auto-attached by file glob)
+- Codex CLI / OpenCode / Aider: read this file (`AGENTS.md` is symlinked here)
+
+---
+
 ## Repository Layout
 
 ```
 tinboker-platform/
 ├── backend/            FastAPI app, Docker, deploy scripts
 ├── frontend/           React + Vite app
+├── docs/               Domain references, workflows, firestore-contract
+├── .claude/            Claude Code subagents + skills (thin wrappers)
+├── .cursor/rules/      Cursor rules (thin wrappers)
 ├── .github/workflows/  CI/CD pipelines (GitHub Actions)
-├── openspecs/          Feature design docs
 ├── MIGRATION.md        VPS/infrastructure runbook
 ├── QA_REPORT.md        Latest QA audit with known bugs
 └── QA_AGENT.md         QA agent instructions for all environments

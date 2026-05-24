@@ -3,7 +3,7 @@ Recommendation API: by-ticker, by-podcaster, and buzz.
 Data comes from podcast_db (prepared elsewhere). Default timeframe: today − 7 days → today.
 
 NOTE: /api/recommendations/buzz is deprecated as of 2026-05-14. Use
-/api/ticker-insights/trending instead. Spec: openspecs/firestore-schema/spec.md § 4.4.
+/api/ticker-insights/trending instead. Spec: docs/firestore-contract.md § 4.4.
 """
 import logging
 from typing import Optional

@@ -246,7 +246,7 @@ export async function getMostDiscussedTickers(
 }
 
 // Phase A replacement for /api/recommendations/buzz, reading Firestore trending_tickers/*.
-// Contract: openspecs/firestore-schema/spec.md § 5.
+// Contract: docs/firestore-contract.md § 5.
 export async function getTrendingTickers(
   params?: { days?: number; limit?: number }
 ): Promise<TickerTrending[]> {

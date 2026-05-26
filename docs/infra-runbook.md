@@ -1,7 +1,8 @@
-# tinboker-platform — Full Migration & Deployment Runbook
+# Infrastructure runbook
 
-This document is self-contained. You should never need to open another file to deploy
-this repo from scratch or migrate from the old separate repos.
+Operational reference for the TinBoker production infrastructure: VPS, Caddy, GCP, Cloudflare, Docker, databases, and env vars. This is the source of truth that [`agents/devops-infra.md`](./agents/devops-infra.md) and [`workflows/deploy-flow.md`](./workflows/deploy-flow.md) defer to.
+
+> **History note:** the one-time monorepo migration parts of the original `MIGRATION.md` (create the repo, edit workflow files for the monorepo layout, re-point `/app` on the VPS to the new repo, post-migration verification checklist) have been removed — they describe work that's already done. If you need that history, see git commit `cc5355d` for the pre-trim version.
 
 ---
 
@@ -194,25 +195,7 @@ These are fetched by the workflow via `gcloud secrets versions access`:
 | `GHCR_TOKEN` | GitHub Container Registry login token |
 | `GOOGLE_CLIENT_ID` | Injected as `VITE_GOOGLE_CLIENT_ID` at frontend build time |
 
-These are all already populated from the previous repo — no changes needed.
-
----
-
-## Part 3 — GitHub repository setup
-
-### 3.1 Create the repo
-
-```bash
-cd ~/Documents/tinboker/tinboker-platform
-git init
-git add .
-git commit -m "chore: initial monorepo — frontend + backend + specs"
-git remote add origin git@github.com:YOUR_USERNAME/tinboker-platform.git
-git push -u origin main
-git checkout -b develop && git push -u origin develop
-```
-
-### 3.2 GitHub Actions secrets (stored directly in repo settings)
+### 2.4 GitHub Actions secrets (stored directly in repo settings)
 
 Settings → Secrets and variables → Actions → New repository secret:
 
@@ -227,142 +210,17 @@ Settings → Secrets and variables → Actions → New repository secret:
 
 ---
 
-## Part 4 — Update workflow files for monorepo layout
+## Part 3 — Cloudflare Pages
 
-The old repos had each workflow run at the repo root. Now `frontend/` and `backend/` are
-subdirectories. Three files need editing.
+### 3.1 Rename project (zero downtime, if migrating from a different project name)
 
-### 4.1 `backend/.github/workflows/deploy.yml`
-
-**Change 1** — image name (line near top of file):
-```yaml
-# Before
-IMAGE_NAME: graphfolio/graphfolio-backend
-
-# After
-IMAGE_NAME: YOUR_USERNAME/tinboker-backend
-```
-
-**Change 2** — the VPS SSH deploy script block. Find the `script:` section inside
-`Deploy to VPS` step. Add `cd backend` after the git reset:
-
-```yaml
-script: |
-  cd /app
-  git fetch origin
-  git reset --hard origin/${{ github.ref_name }}
-  git clean -fd
-
-  cd /app/backend                    # ← ADD THIS LINE
-
-  echo "$GHCR_TOKEN" | docker login ghcr.io -u YOUR_USERNAME --password-stdin
-
-  ${{ steps.env.outputs.image_var }}=${{ steps.env.outputs.image_tag }} \
-    docker compose -f docker-compose.multi.yml pull ${{ steps.env.outputs.service }}
-
-  docker compose -f docker-compose.multi.yml up -d redis netdata
-  sleep 5
-
-  ${{ steps.env.outputs.image_var }}=${{ steps.env.outputs.image_tag }} \
-    docker compose -f docker-compose.multi.yml up -d --no-deps ${{ steps.env.outputs.service }}
-
-  docker image prune -f
-  sleep 15
-  curl -f http://localhost:${{ steps.env.outputs.port }}/health || exit 1
-```
-
-**Change 3** — PR comment body (find `ghcr.io/graphfolio/graphfolio-backend`):
-```yaml
-# Before
-const imageName = 'ghcr.io/graphfolio/graphfolio-backend:' + imageTag;
-
-# After
-const imageName = 'ghcr.io/YOUR_USERNAME/tinboker-backend:' + imageTag;
-```
-
-### 4.2 `backend/.github/workflows/deploy-admin.yml`
-
-Same two changes:
-- `IMAGE_NAME: graphfolio/graphfolio-backend` → `YOUR_USERNAME/tinboker-backend`
-- Every `cd /app` in the SSH script block → `cd /app/backend`
-
-### 4.3 `backend/.github/workflows/health-check.yml`
-
-No path changes needed. The file only does external health checks against public URLs.
-If the auto-restart SSH block references `cd /app`, add `cd /app/backend` before the
-`docker compose` commands there too.
-
-### 4.4 `backend/docker-compose.multi.yml`
-
-Update the three image references (one per environment):
-
-```yaml
-# Before (appears 3 times)
-image: ghcr.io/graphfolio/graphfolio-backend:${PROD_IMAGE_TAG:-main}
-image: ghcr.io/graphfolio/graphfolio-backend:${DEV_IMAGE_TAG:-develop}
-image: ghcr.io/graphfolio/graphfolio-backend:${STAGING_IMAGE_TAG:-develop}
-
-# After
-image: ghcr.io/YOUR_USERNAME/tinboker-backend:${PROD_IMAGE_TAG:-main}
-image: ghcr.io/YOUR_USERNAME/tinboker-backend:${DEV_IMAGE_TAG:-develop}
-image: ghcr.io/YOUR_USERNAME/tinboker-backend:${STAGING_IMAGE_TAG:-develop}
-```
-
-### 4.5 `frontend/.github/workflows/deploy.yml`
-
-**Change 1** — add `working-directory` to npm steps:
-
-```yaml
-- name: Install dependencies
-  working-directory: frontend       # ← ADD
-  run: npm ci
-
-- name: Build
-  working-directory: frontend       # ← ADD
-  run: npm run build
-  env:
-    VITE_GOOGLE_CLIENT_ID: ${{ env.VITE_GOOGLE_CLIENT_ID }}
-```
-
-**Change 2** — Cloudflare Pages project name and output directory:
-
-```yaml
-- name: Deploy to Cloudflare Pages
-  uses: cloudflare/pages-action@v1
-  with:
-    apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-    accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-    projectName: tinboker-platform     # ← was: graphfolio-webui
-    directory: frontend/dist           # ← was: dist
-    gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-    branch: ${{ steps.env.outputs.branch }}
-```
-
-### 4.6 Systemd service files (`backend/deploy/systemd/*.service`)
-
-Update `WorkingDirectory` in all three files:
-
-```ini
-# Before
-WorkingDirectory=/app
-
-# After
-WorkingDirectory=/app/backend
-```
-
----
-
-## Part 5 — Cloudflare Pages
-
-### 5a. Rename the existing project (zero downtime, recommended)
-
-1. Cloudflare → Workers & Pages → `graphfolio-webui`
+1. Cloudflare → Workers & Pages → existing project
 2. Settings → General → Project name → rename to `tinboker-platform`
 3. Your `pages.dev` preview subdomain changes to `tinboker-platform.pages.dev`
 4. Update the CNAME root record in DNS (Part 1.3) to `tinboker-platform.pages.dev`
 5. The custom domain `tinboker.com` stays connected automatically
 
-### 5b. Connect repo to Cloudflare Pages
+### 3.2 Connect a fresh repo to Cloudflare Pages
 
 If creating fresh:
 1. Workers & Pages → Create application → Pages → Connect to Git
@@ -372,54 +230,11 @@ If creating fresh:
    - **Build command:** `npm ci && npm run build`
    - **Build output directory:** `dist`
    - **Root directory:** `frontend`
-4. Environment variables → add: `VITE_GOOGLE_CLIENT_ID` = (get from GCP Secret Manager `GOOGLE_CLIENT_ID`)
+4. Environment variables → add: `VITE_GOOGLE_CLIENT_ID` = (from GCP Secret Manager `GOOGLE_CLIENT_ID`)
 
 ---
 
-## Part 6 — VPS migration (re-point `/app` to new repo)
-
-The VPS currently has `/app` = clone of `Graphfolio-Backend`. The deploy workflow SSHs
-in and does `cd /app && git reset --hard`, so `/app` must become the `tinboker-platform`
-monorepo root. Docker commands then run from `/app/backend/`.
-
-```bash
-ssh root@152.53.136.182
-
-# 1. Save the GCP service account key (not in git)
-cp /app/gcp-service-account.json ~/gcp-sa-backup.json
-
-# 2. Containers keep running — they are not affected by source changes
-#    Verify they are healthy before proceeding
-docker ps
-curl http://localhost:8000/health   # should return 200
-
-# 3. Remove old /app, clone new monorepo
-mv /app /app_old
-git clone git@github.com:YOUR_USERNAME/tinboker-platform.git /app
-
-# 4. Restore the service account key into the new backend directory
-cp ~/gcp-sa-backup.json /app/backend/gcp-service-account.json
-
-# 5. Verify docker-compose still runs (images are already pulled, no rebuild needed)
-cd /app/backend
-docker compose -f docker-compose.multi.yml ps
-
-# 6. Confirm services still healthy
-curl http://localhost:8000/health
-curl http://localhost:8001/health
-curl http://localhost:8002/health
-
-# 7. Re-register systemd services (WorkingDirectory updated to /app/backend)
-cd /app/backend
-bash deploy/setup-systemd.sh
-
-# 8. Clean up old repo
-rm -rf /app_old
-```
-
----
-
-## Part 7 — Cold start (first time ever deploying on a fresh VPS)
+## Part 4 — Cold start (first time ever deploying on a fresh VPS)
 
 If this is a brand new server with no running containers:
 
@@ -457,7 +272,7 @@ bash deploy/setup-systemd.sh
 
 ---
 
-## Part 8 — Database
+## Part 5 — Database
 
 ### SQLite (default for dev/staging)
 
@@ -499,7 +314,7 @@ Database ID: `graphfolio-db` (set as `FIRESTORE_DATABASE_ID` env var in `docker-
 
 ---
 
-## Part 9 — Environment variables reference
+## Part 6 — Environment variables reference
 
 Variables set in `docker-compose.multi.yml` are passed directly to containers. Secrets
 not listed here are loaded from GCP Secret Manager at runtime by `src/config_loader.py`.
@@ -523,24 +338,6 @@ and fill in values. The app loads `.env` before falling back to Secret Manager.
 
 ---
 
-## Part 10 — Verification checklist
-
-Work through this after completing all steps above:
-
-- [ ] Push to `main` → GitHub Actions "Build & Deploy" passes
-- [ ] Docker image appears at `ghcr.io/YOUR_USERNAME/tinboker-backend:main`
-- [ ] VPS deploy SSH step shows `cd /app/backend` in Actions log
-- [ ] `curl https://api.tinboker.com/health` → `{"status":"healthy"}`
-- [ ] `curl https://dev-api.tinboker.com/health` → 200
-- [ ] `curl https://staging-api.tinboker.com/health` → 200
-- [ ] Push to `main` → frontend deploys to Cloudflare Pages project `tinboker-platform`
-- [ ] `https://tinboker.com` loads the frontend
-- [ ] Google Login works (OAuth redirect URI registered for `tinboker.com`)
-- [ ] Scheduled health-check workflow passes at next run
-- [ ] Old repos (`Graphfolio-WebUI`, `Graphfolio-Backend`) archived on GitHub
-
----
-
 ## Useful commands
 
 ```bash
@@ -551,9 +348,9 @@ ssh root@152.53.136.182
 docker ps
 
 # Tail logs for a service
-docker logs -f graphfolio-backend-prod
-docker logs -f graphfolio-backend-dev
-docker logs -f graphfolio-backend-staging
+docker logs -f tinboker-backend-prod
+docker logs -f tinboker-backend-dev
+docker logs -f tinboker-backend-staging
 
 # Restart a single service (no downtime for others)
 cd /app/backend
@@ -566,7 +363,7 @@ PROD_IMAGE_TAG=main docker compose -f docker-compose.multi.yml pull backend-prod
 PROD_IMAGE_TAG=main docker compose -f docker-compose.multi.yml up -d --no-deps backend-prod
 
 # Force-clear Redis cache
-docker exec graphfolio-redis redis-cli FLUSHALL
+docker exec tinboker-redis redis-cli FLUSHALL
 
 # Caddy logs
 journalctl -u caddy -f

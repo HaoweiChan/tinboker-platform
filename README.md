@@ -134,9 +134,7 @@ tinboker-platform/
 │   └── public/               # Static assets + PWA manifest
 │
 ├── .github/workflows/        # CI/CD pipelines
-├── docs/                     # Domain references, workflows, firestore-contract
-├── MIGRATION.md              # Infrastructure runbook
-├── QA_AGENT.md               # QA testing instructions
+├── docs/                     # Domain references, workflows, infra runbook, QA suite, firestore-contract
 └── CLAUDE.md                 # AI agent instructions
 ```
 
@@ -205,7 +203,7 @@ cd frontend && npm run build
 cd frontend && npm run lint
 
 # End-to-end QA
-# See QA_AGENT.md for full environment test procedures
+# See docs/agents/qa-tester.md for full environment test procedures
 ```
 
 ---
@@ -218,4 +216,4 @@ cd frontend && npm run lint
 4. Request review; merge triggers auto-deploy to dev.tinboker.com
 5. Promote to staging/production by merging `develop` → `main`, then tagging
 
-See [CLAUDE.md](CLAUDE.md) for AI agent guidelines and [MIGRATION.md](MIGRATION.md) for infrastructure runbook.
+See [CLAUDE.md](CLAUDE.md) for AI agent guidelines and [docs/infra-runbook.md](docs/infra-runbook.md) for the infrastructure runbook.

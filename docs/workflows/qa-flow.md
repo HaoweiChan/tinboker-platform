@@ -1,6 +1,6 @@
 # QA flow
 
-Procedure for QA-ing an environment, reproducing the known bugs in [`QA_REPORT.md`](../../QA_REPORT.md), and using the dev-bypass token for automated browser testing. The full QA suite (every endpoint, every page, every CI check) lives in [`QA_AGENT.md`](../../QA_AGENT.md) — this doc is the procedural overlay: when and how to use it.
+Procedure for QA-ing an environment, reproducing the known bugs in [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md), and using the dev-bypass token for automated browser testing. The full QA suite (every endpoint, every page, every CI check) lives in [`../agents/qa-tester.md`](../agents/qa-tester.md) — this doc is the procedural overlay: when and how to use it.
 
 ## When to run
 
@@ -11,11 +11,11 @@ Procedure for QA-ing an environment, reproducing the known bugs in [`QA_REPORT.m
 | Pre-merge to `main` | `L → D → S` full §1–§5 |
 | Post-prod deploy | `P` §1 health + §3 critical frontend pages + §6 perf baselines |
 
-The leftmost column letter (`L`/`D`/`S`/`P`) matches the environment IDs at the top of [`QA_AGENT.md`](../../QA_AGENT.md).
+The leftmost column letter (`L`/`D`/`S`/`P`) matches the environment IDs at the top of [`../agents/qa-tester.md`](../agents/qa-tester.md).
 
 ## Quick smoke (recommended starting point)
 
-A copy-paste smoke script is in [`QA_AGENT.md`](../../QA_AGENT.md) §8. Save as `qa_smoke.sh`, then:
+A copy-paste smoke script is in [`../agents/qa-tester.md`](../agents/qa-tester.md) §8. Save as `qa_smoke.sh`, then:
 
 ```bash
 ./qa_smoke.sh https://staging-api.tinboker.com https://staging.tinboker-platform.pages.dev
@@ -26,7 +26,7 @@ Passes iff: `/health` healthy + Redis connected + Redis URL NOT exposed + stocks
 
 ## Reproducing the 8 known bugs
 
-Map of bug → repro test (full repro instructions are in [`QA_AGENT.md`](../../QA_AGENT.md) and [`QA_REPORT.md`](../../QA_REPORT.md)):
+Map of bug → repro test (full repro instructions are in [`../agents/qa-tester.md`](../agents/qa-tester.md) and [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md)):
 
 | Bug | What to run | Owner doc |
 |---|---|---|
@@ -58,7 +58,7 @@ Dev and staging are gated by Google OAuth + admin email allowlist. Automated bro
 
 ## Frontend smoke (most-broken-most-often pages)
 
-Per [`QA_AGENT.md`](../../QA_AGENT.md) §3, prioritize these surfaces when validating a UI change:
+Per [`../agents/qa-tester.md`](../agents/qa-tester.md) §3, prioritize these surfaces when validating a UI change:
 
 1. **Landing (`/`)** — no `[DEBUG]` console logs (BUG-8), search bar focusable, trending widget non-empty.
 2. **Stock dashboard (`/stock/AAPL`, `/stock/2330`)** — chart renders, key stats real (BUG-7), title not doubled (BUG-6), analyst insights load (BUG-10).
@@ -73,12 +73,12 @@ After fixing one of the known bugs:
 
 1. Re-run the exact repro from the bug table above.
 2. Run the smoke script.
-3. Update [`QA_REPORT.md`](../../QA_REPORT.md) to mark the bug fixed (date + commit SHA).
+3. Update [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md) to mark the bug fixed (date + commit SHA).
 4. Add a regression test if one doesn't exist (see [`backend/AGENTS.md`](../../backend/AGENTS.md) testing pattern).
 
 ## Cross-references
 
-- Full QA suite (every endpoint + page): [`QA_AGENT.md`](../../QA_AGENT.md)
-- Bug catalog with file locations and fix notes: [`QA_REPORT.md`](../../QA_REPORT.md)
+- Full QA suite (every endpoint + page): [`../agents/qa-tester.md`](../agents/qa-tester.md)
+- Bug catalog with file locations and fix notes: [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md)
 - Dev bypass details: [`CLAUDE.md`](../../CLAUDE.md) "Browser MCP — Dev Environment Auth Bypass"
 - Deploy verification: [`./deploy-flow.md`](./deploy-flow.md) "Verification"

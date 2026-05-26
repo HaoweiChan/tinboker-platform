@@ -1,7 +1,6 @@
-# QA_AGENT.md — TinBoker Platform
+# QA tester
 
-Instructions for a QA agent (human or AI) to systematically test the TinBoker platform
-across all environments before any release. Run the full suite before merging to `main`.
+Tool-neutral reference for any agent (Claude Code, Codex, Cursor, etc.) tasked with QA-ing the TinBoker platform across environments. Defines the full test suite to run before any release. Pair this with [`../workflows/qa-flow.md`](../workflows/qa-flow.md) for the procedural overlay (when to run which subset, dev-bypass flow) and [`qa-report-2026-05-09.md`](../qa-report-2026-05-09.md) for the catalog of bugs this suite regression-tests against.
 
 ---
 
@@ -83,7 +82,7 @@ ssh root@152.53.136.182 "docker inspect --format '{{.RestartCount}} {{.Name}}' \
 curl -s {API}/health | python3 -c "import sys,json; h=json.load(sys.stdin)['redis']; print('hits:', h.get('hit_count'), 'misses:', h.get('miss_count'))"
 ```
 
-- [ ] Redis hit rate > 50% on dev/prod (baseline from QA_REPORT: 35% — needs improvement)
+- [ ] Redis hit rate > 50% on dev/prod (baseline from qa-report-2026-05-09: 35% — needs improvement)
 - [ ] No `"error"` key in redis section
 
 ### 1.5 Caddy / TLS
@@ -526,3 +525,15 @@ Save as `qa_smoke.sh`, `chmod +x qa_smoke.sh`, run:
 | BUG-9 | §1.6 | CORS rejects `trendbrief.xyz` |
 | BUG-10 | §2.6, §3.2 | Analyst insights load successfully |
 | BUG-11 | §5.1 | Health endpoint hides Redis URL |
+
+Full bug catalog with root-cause analysis and file:line citations: [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md).
+
+---
+
+## Cross-references
+
+- Procedural overlay (when to run which subset, dev-bypass flow): [`../workflows/qa-flow.md`](../workflows/qa-flow.md)
+- Bug catalog with root causes: [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md)
+- Deploy pipeline + post-deploy verification: [`../workflows/deploy-flow.md`](../workflows/deploy-flow.md)
+- Infrastructure runbook (VPS, Caddy, GCP): [`../infra-runbook.md`](../infra-runbook.md)
+- Project-wide rules + dev bypass token: [`../../CLAUDE.md`](../../CLAUDE.md)

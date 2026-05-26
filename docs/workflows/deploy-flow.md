@@ -1,6 +1,6 @@
 # Deploy flow
 
-Step-by-step procedure for shipping changes to dev, staging, and production. For full infrastructure context (architecture, secrets, Caddy config, cold-start), see [`MIGRATION.md`](../../MIGRATION.md).
+Step-by-step procedure for shipping changes to dev, staging, and production. For full infrastructure context (architecture, secrets, Caddy config, cold-start), see [`infra-runbook.md`](../infra-runbook.md).
 
 ## Cardinal rule
 
@@ -81,11 +81,11 @@ ssh root@152.53.136.182 "docker inspect --format='{{.RestartCount}}' tinboker-ba
 ssh root@152.53.136.182 "docker inspect --format='{{.Config.Image}}' tinboker-backend-prod"
 ```
 
-Anything that writes (restart, pull, rebuild, file edit) goes through CI/CD or — in a true incident — through the manual redeploy block in [`MIGRATION.md`](../../MIGRATION.md) "Useful commands" with the user's explicit approval.
+Anything that writes (restart, pull, rebuild, file edit) goes through CI/CD or — in a true incident — through the manual redeploy block in [`infra-runbook.md`](../infra-runbook.md) "Useful commands" with the user's explicit approval.
 
 ## Rollback
 
-There is no automated rollback (INFRA-3 in [`../../QA_REPORT.md`](../../QA_REPORT.md)). Before each prod deploy:
+There is no automated rollback (INFRA-3 in [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md)). Before each prod deploy:
 
 1. Note the previous image tag: `ssh root@152.53.136.182 "docker inspect tinboker-backend-prod --format='{{.Config.Image}}'"`.
 2. If the new deploy is bad, manually roll back on the VPS:
@@ -106,12 +106,12 @@ Before opening or merging a `develop → main` PR:
 - [ ] No new `continue-on-error: true` anywhere in `.github/workflows/`
 - [ ] No new `time.sleep()` in async code (per [`CLAUDE.md`](../../CLAUDE.md) "Do Not")
 - [ ] No new `@app.on_event("startup")` — use the lifespan pattern
-- [ ] Search/heatmap/Zod regressions checked (BUG-1, BUG-2, BUG-5 in [`../../QA_REPORT.md`](../../QA_REPORT.md))
+- [ ] Search/heatmap/Zod regressions checked (BUG-1, BUG-2, BUG-5 in [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md))
 - [ ] CORS still includes `tinboker.com`, `dev.tinboker.com`, `staging.tinboker.com` (BUG-9 history)
 
 ## Cross-references
 
-- Full deploy runbook: [`MIGRATION.md`](../../MIGRATION.md)
+- Full deploy runbook: [`infra-runbook.md`](../infra-runbook.md)
 - DevOps reference: [`../agents/devops-infra.md`](../agents/devops-infra.md)
 - Verification suite: [`./qa-flow.md`](./qa-flow.md)
 - Allowed server commands and "Do Not" list: [`CLAUDE.md`](../../CLAUDE.md)

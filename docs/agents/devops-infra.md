@@ -4,7 +4,7 @@ Tool-neutral reference for any agent working on VPS, Docker, Caddy, Cloudflare, 
 
 ## Scope
 
-Everything outside the application code: hosting, networking, containers, CI/CD pipelines, secrets, monitoring, caching, and deployment automation. Source of truth for the production architecture is [`MIGRATION.md`](../../MIGRATION.md) — this doc surfaces the parts agents most need.
+Everything outside the application code: hosting, networking, containers, CI/CD pipelines, secrets, monitoring, caching, and deployment automation. Source of truth for the production architecture is [`infra-runbook.md`](../infra-runbook.md) — this doc surfaces the parts agents most need.
 
 ## Key files
 
@@ -15,8 +15,8 @@ Everything outside the application code: hosting, networking, containers, CI/CD 
 | Docker compose (single env) | [`backend/docker-compose.yml`](../../backend/docker-compose.yml), [`backend/docker-compose.dev.yml`](../../backend/docker-compose.dev.yml), [`backend/docker-compose.staging.yml`](../../backend/docker-compose.staging.yml), [`backend/docker-compose.prod.yml`](../../backend/docker-compose.prod.yml) |
 | Docker compose (multi-env on VPS) | [`backend/docker-compose.multi.yml`](../../backend/docker-compose.multi.yml) |
 | Backend config + secrets loader | [`backend/src/config.py`](../../backend/src/config.py), [`backend/src/config_loader.py`](../../backend/src/config_loader.py) |
-| Full deploy runbook | [`MIGRATION.md`](../../MIGRATION.md) |
-| Caddy / firewall / DNS | Documented in [`MIGRATION.md`](../../MIGRATION.md) Part 1 |
+| Full deploy runbook | [`infra-runbook.md`](../infra-runbook.md) |
+| Caddy / firewall / DNS | Documented in [`infra-runbook.md`](../infra-runbook.md) Part 1 |
 
 ## Architecture (snapshot)
 
@@ -69,14 +69,14 @@ Users → Cloudflare Edge (cache + DDoS) → Netcup VPS (152.53.136.182)
 ### Secrets
 
 - Loaded at startup by `config_loader.py` from **GCP Secret Manager**, namespace: uppercased Python setting name.
-- See [`MIGRATION.md`](../../MIGRATION.md) Part 2.2 for the full list (`POSTGRES_PASSWORD`, `JWT_SECRET_KEY`, `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`, `ADMIN_EMAILS`, `FINMIND_API_KEY`, `MASSIVE_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_TAG`).
+- See [`infra-runbook.md`](../infra-runbook.md) Part 2.2 for the full list (`POSTGRES_PASSWORD`, `JWT_SECRET_KEY`, `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`, `ADMIN_EMAILS`, `FINMIND_API_KEY`, `MASSIVE_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_TAG`).
 - Local dev falls back to `backend/.env` with a warning log.
 - Never commit `gcp-service-account.json` or `.env*` files.
 
 ### CORS
 
 - Origins set per-environment in `docker-compose.multi.yml`. Must include `tinboker.com`, `dev.tinboker.com`, `staging.tinboker.com`.
-- **BUG-9 (medium, historical):** [`backend/src/config.py`](../../backend/src/config.py) had `trendbrief.xyz` (old domain) but not `tinboker.com`. Spot-check before infra changes. See [`../../QA_REPORT.md`](../../QA_REPORT.md) BUG-9.
+- **BUG-9 (medium, historical):** [`backend/src/config.py`](../../backend/src/config.py) had `trendbrief.xyz` (old domain) but not `tinboker.com`. Spot-check before infra changes. See [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md) BUG-9.
 
 ### Monitoring
 
@@ -114,8 +114,8 @@ Users → Cloudflare Edge (cache + DDoS) → Netcup VPS (152.53.136.182)
 
 ## Cross-references
 
-- Full deploy runbook: [`MIGRATION.md`](../../MIGRATION.md)
+- Full deploy runbook: [`infra-runbook.md`](../infra-runbook.md)
 - Branch → env → tag workflow: [`../workflows/deploy-flow.md`](../workflows/deploy-flow.md)
 - Health check + bug repro flow: [`../workflows/qa-flow.md`](../workflows/qa-flow.md)
 - Project-wide rules (deploy don'ts, allowed read-only server commands): [`CLAUDE.md`](../../CLAUDE.md)
-- Bugs: BUG-4, BUG-9, BUG-11, INFRA-1..4 in [`../../QA_REPORT.md`](../../QA_REPORT.md)
+- Bugs: BUG-4, BUG-9, BUG-11, INFRA-1..4 in [`../qa-report-2026-05-09.md`](../qa-report-2026-05-09.md)

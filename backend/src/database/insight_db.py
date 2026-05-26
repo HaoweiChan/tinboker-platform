@@ -1,7 +1,7 @@
 """
-PostgreSQL connection for ticker insights (podcast_db).
+PostgreSQL connection pool for ticker insights.
 Data is prepared elsewhere; this module only provides read-only access.
-Uses POSTGRES_* env vars (or config recommendation_postgres_*).
+Shares the main backend's Postgres connection (settings.postgres_connection_string).
 """
 import logging
 from contextlib import contextmanager
@@ -17,7 +17,7 @@ _pool: Optional[Any] = None
 def init_pool() -> None:
     """Initialize the insight Postgres connection pool."""
     global _pool
-    conn_str = settings.recommendation_postgres_connection_string
+    conn_str = settings.postgres_connection_string
     if not conn_str:
         logger.warning("Insight Postgres not configured (no POSTGRES_PASSWORD).")
         return

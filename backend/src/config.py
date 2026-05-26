@@ -167,38 +167,6 @@ class Settings(BaseSettings):
         
         return None
 
-    # Recommendation / podcast_db PostgreSQL (data prepared elsewhere; backend only reads)
-    # Reads from POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD in .env (e.g. lines 48-55)
-    recommendation_postgres_host: str = "localhost"
-    recommendation_postgres_port: int = 5432
-    recommendation_postgres_db: str = "podcast_db"
-    recommendation_postgres_user: str = "podcast_user"
-    recommendation_postgres_password: Optional[str] = None
-
-    @property
-    def recommendation_postgres_connection_string(self) -> Optional[str]:
-        """PostgreSQL URL for recommendation/podcast_db. Uses POSTGRES_* when set; host/port can come from POSTGRES_PUBLIC_URL."""
-        import os
-        from urllib.parse import urlparse
-        host = os.environ.get("POSTGRES_HOST") or self.recommendation_postgres_host
-        port = os.environ.get("POSTGRES_PORT", str(self.recommendation_postgres_port))
-        public_url = os.environ.get("POSTGRES_PUBLIC_URL")
-        if public_url:
-            try:
-                u = urlparse(public_url)
-                if u.hostname:
-                    host = u.hostname
-                if u.port is not None:
-                    port = str(u.port)
-            except Exception:
-                pass
-        db = os.environ.get("POSTGRES_DB") or self.recommendation_postgres_db
-        user = os.environ.get("POSTGRES_USER") or self.recommendation_postgres_user
-        password = os.environ.get("POSTGRES_PASSWORD") or self.recommendation_postgres_password
-        if password:
-            return f"postgresql://{user}:{password}@{host}:{port}/{db}"
-        return None
-
     # Redis configuration
     redis_url: Optional[str] = None  # Redis connection URL (Render provides REDIS_URL)
     redis_host: str = "localhost"

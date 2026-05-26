@@ -56,16 +56,16 @@ async def lifespan(app: FastAPI):
             init_orm_engine()
             create_all_tables()
 
-    rec_conn_str = settings.recommendation_postgres_connection_string
+    rec_conn_str = settings.postgres_connection_string
     if rec_conn_str:
         try:
             from src.database import insight_db
             insight_db.init_pool()
-            print("Recommendation Postgres pool initialized.")
+            print("Insight Postgres pool initialized.")
         except Exception as e:
-            print(f"Warning: Could not initialize recommendation Postgres: {e}")
+            print(f"Warning: Could not initialize insight Postgres: {e}")
     else:
-        print("Info: Recommendation Postgres not configured.")
+        print("Info: Insight Postgres not configured.")
 
     await RedisClient.initialize()
     await init_search_index()
@@ -213,7 +213,7 @@ async def health_check():
         if rec_is_available():
             rec_db_status["status"] = "connected"
         else:
-            rec_conn_str = settings.recommendation_postgres_connection_string
+            rec_conn_str = settings.postgres_connection_string
             rec_db_status["status"] = "not_configured" if not rec_conn_str else "pool_not_initialized"
     except Exception as e:
         rec_db_status["status"] = "error"

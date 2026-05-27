@@ -479,7 +479,7 @@ export interface TickerBuzz {
   last_mentioned: string;
 }
 
-// New shape, per openspecs/firestore-schema/spec.md § 4.2 / § 5.3.
+// New shape, per docs/firestore-contract.md § 4.2 / § 5.3.
 // Replaces TickerBuzz on Stock Index once Phase A is flipped in prod.
 export type SentimentLabel =
   | 'STRONG_BULLISH'

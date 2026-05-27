@@ -2,7 +2,7 @@
 Ticker insights router.
 
 Firestore-backed replacement for /api/recommendations/*.
-Contract: openspecs/firestore-schema/spec.md §§ 4–5.
+Contract: docs/firestore-contract.md §§ 4–5.
 """
 from typing import List, Optional
 

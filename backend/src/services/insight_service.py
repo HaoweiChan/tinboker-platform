@@ -4,7 +4,7 @@ Ticker insights service: read-only access to Firestore-backed ticker insight dat
 Phase A scope (this file): trending_tickers/{ticker} → /api/ticker-insights/trending.
 Phase B (TODO): ticker_insights/{episode_id}/tickers/{ticker} → by-ticker / by-podcaster.
 
-Contract: openspecs/firestore-schema/spec.md §§ 4–5.
+Contract: docs/firestore-contract.md §§ 4–5.
 """
 import asyncio
 import json

@@ -8,6 +8,7 @@ requires-python = ">=3.11"
 members = [
     "libs/shared",
     "services/podcast",
+    "services/news",
 ]
 
 [dependency-groups]

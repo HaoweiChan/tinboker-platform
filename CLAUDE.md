@@ -41,14 +41,14 @@ one-time migration source; it is gitignored and never committed.
 
 | Path | Purpose | Entry point | Key files |
 |------|---------|-------------|-----------|
-| [services/podcast/](services/podcast/) | Download → transcribe → summarize → Firestore; serves `/api/wiki` | [main.py](services/podcast/main.py) | [podcasts_to_download.json](services/podcast/podcasts_to_download.json) |
+| [services/podcast/](services/podcast/) | Download → transcribe → summarize → Firestore; serves `/api/wiki` | [main.py](services/podcast/main.py) | [podcasts_tw.json](services/podcast/podcasts_tw.json) |
 | [libs/shared/](libs/shared/) | Secrets, GCS, config, wiki_builder (Postgres-backed) | N/A (library) | [src/shared/](libs/shared/src/shared/) |
 | Wiki content | Postgres DB on the VPS (`WIKI_DATABASE_URL`) | `/api/wiki` (podcast service) | [docs/wiki-schema.md](docs/wiki-schema.md) |
 
 ## Decision tree — which module to touch?
 
 **Adding a new podcast source or tweaking download:**
-- Modify [services/podcast/podcasts_to_download.json](services/podcast/podcasts_to_download.json)
+- Modify [services/podcast/podcasts_tw.json](services/podcast/podcasts_tw.json)
 
 **Tweaking summary/extraction prompts:**
 - Content prompts: [services/podcast/src/podcast/content_builder/prompts/](services/podcast/src/podcast/content_builder/prompts/)

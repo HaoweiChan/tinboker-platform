@@ -174,7 +174,7 @@ def main():
     # Load podcasts config for reference
     try:
         import json
-        config_path = project_root / "podcasts_to_download.json"
+        config_path = project_root / "podcasts_tw.json"
         with open(config_path, 'r', encoding='utf-8') as f:
             podcasts_config = json.load(f)
     except Exception as e:

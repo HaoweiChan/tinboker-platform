@@ -3,7 +3,7 @@
 Populate Firestore `podcasts` collection with show-level metadata.
 
 Strategy:
-  1. Read podcasts_to_download.json for canonical names + spotify links.
+  1. Read podcasts_tw.json for canonical names + spotify links.
   2. For each podcast, find an episode in Firestore that has `spotify_images`
      and use that as the show thumbnail (Spotify episode images typically
      inherit the show artwork).
@@ -39,7 +39,7 @@ BASE_URL = (
 
 
 def load_podcasts() -> list[dict]:
-    path = Path(__file__).parent.parent / "podcasts_to_download.json"
+    path = Path(__file__).parent.parent / "podcasts_tw.json"
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -89,7 +89,7 @@ def main():
     args = ap.parse_args()
 
     podcasts = load_podcasts()
-    print(f"Loaded {len(podcasts)} podcasts from podcasts_to_download.json\n")
+    print(f"Loaded {len(podcasts)} podcasts from podcasts_tw.json\n")
 
     gcp_token = get_access_token()
     fb = FirebaseService() if not args.dry_run else None

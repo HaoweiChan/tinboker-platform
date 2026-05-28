@@ -9,7 +9,7 @@ from src.secrets_bootstrap import bootstrap
 
 bootstrap()
 
-from src.routers import episode, podcast, wiki  # noqa: E402  — must follow bootstrap()
+from src.routers import episode, podcast, shows, wiki  # noqa: E402  — must follow bootstrap()
 from src.routers.content import (  # noqa: E402
     episode_router as content_episode_router,
     insights_router,
@@ -36,6 +36,7 @@ app.add_middleware(
 app.include_router(episode.router)
 app.include_router(podcast.router)
 app.include_router(wiki.router)
+app.include_router(shows.router)
 # Postgres-backed content API (Phase D)
 app.include_router(content_podcast_router)
 app.include_router(content_episode_router)

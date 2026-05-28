@@ -27,8 +27,9 @@ if ! command -v uv >/dev/null 2>&1; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
     export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 fi
-echo "→ Syncing dependencies (uv sync --package tinboker-podcast)..."
+echo "→ Syncing dependencies (uv sync — podcast + news packages)..."
 uv sync --package tinboker-podcast
+uv sync --package tinboker-news
 
 # 3. GCP credentials for ADC (Secret Manager, Firestore, GCS)
 if [ ! -f "$SA_FILE" ]; then
@@ -90,6 +91,14 @@ EOF
 systemctl daemon-reload
 systemctl enable podcast-api
 systemctl restart podcast-api
+
+# 6b. Install / refresh the news-ingest timer (oneshot service + 6h timer)
+echo "→ Installing tinboker-news timer..."
+chmod +x "$REPO_DIR/services/news/scripts/run_news.sh"
+cp "$REPO_DIR/services/news/deploy/tinboker-news.service" /etc/systemd/system/tinboker-news.service
+cp "$REPO_DIR/services/news/deploy/tinboker-news.timer" /etc/systemd/system/tinboker-news.timer
+systemctl daemon-reload
+systemctl enable --now tinboker-news.timer
 
 echo "→ Waiting for service to start..."
 sleep 3

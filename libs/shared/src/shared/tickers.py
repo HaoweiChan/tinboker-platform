@@ -29,6 +29,7 @@ class TickerInfo:
     market: str          # "TW" | "US" | "KR" | "EU" | ...
     sector: str
     type: str            # "company" | "etf" | "index" | ...
+    aliases: tuple[str, ...] = ()  # curated alias seed (zh/en variants, old symbols)
 
 
 def _norm(raw: str) -> str:
@@ -52,6 +53,7 @@ def _index() -> dict[str, TickerInfo]:
     raw = json.loads(_DATA_FILE.read_text(encoding="utf-8"))
     out: dict[str, TickerInfo] = {}
     for symbol, meta in (raw.get("tickers") or {}).items():
+        aliases = meta.get("aliases", []) or []
         info = TickerInfo(
             symbol=symbol,
             name=meta.get("name", symbol),
@@ -59,8 +61,8 @@ def _index() -> dict[str, TickerInfo]:
             market=meta.get("market", ""),
             sector=meta.get("sector", ""),
             type=meta.get("type", "company"),
+            aliases=tuple(aliases),
         )
-        aliases = meta.get("aliases", []) or []
         keys = {symbol, _norm(symbol), *aliases, *(_norm(a) for a in aliases)}
         for k in keys:
             if k:
@@ -80,3 +82,15 @@ def canonical_symbol(raw: str) -> str:
     """Canonical symbol for a seen form; unknowns return the trimmed/upper-cased input."""
     info = lookup_ticker(raw)
     return info.symbol if info else (raw or "").strip().upper()
+
+
+@lru_cache(maxsize=1)
+def all_ticker_infos() -> tuple[TickerInfo, ...]:
+    """Every distinct ticker in the registry — one :class:`TickerInfo` per symbol.
+
+    Used by the news pipeline to seed its deterministic alias dictionary.
+    """
+    seen: dict[str, TickerInfo] = {}
+    for info in _index().values():
+        seen.setdefault(info.symbol, info)
+    return tuple(seen.values())

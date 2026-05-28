@@ -184,7 +184,7 @@ def mock_summarize_service():
 def base_config(tmp_path):
     """Create base PipelineConfig for testing."""
     return PipelineConfig(
-        config_file=Path("podcasts_to_download.json"),
+        config_file=Path("podcasts_tw.json"),
         podcast_name="Test Podcast",
         podcast_link="https://podcasttomp3.com/podcasts/v2/123456",
         spotify_show_link=None,

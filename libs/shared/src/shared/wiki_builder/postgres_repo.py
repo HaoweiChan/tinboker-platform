@@ -71,6 +71,24 @@ wiki_links = sa.Table(
     sa.Index("ix_wiki_links_dst", "dst_kind", "dst_slug"),
 )
 
+podcast_shows = sa.Table(
+    "podcast_shows",
+    metadata,
+    sa.Column("id", sa.BigInteger, primary_key=True, autoincrement=True),
+    sa.Column("slug", sa.Text, nullable=False, unique=True),
+    sa.Column("name", sa.Text, nullable=False),
+    sa.Column("rss_url", sa.Text, nullable=False),
+    sa.Column("spotify_url", sa.Text, nullable=True),
+    sa.Column("episode_limit", sa.Integer, nullable=False, server_default="10"),
+    sa.Column("active", sa.Boolean, nullable=False, server_default=sa.true()),
+    sa.Column(
+        "created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+    ),
+    sa.Column(
+        "updated_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()
+    ),
+)
+
 
 def _row_to_page(row: sa.Row) -> WikiPage:
     return WikiPage(

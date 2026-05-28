@@ -10,8 +10,8 @@ def build_parser() -> argparse.ArgumentParser:
         description="Podcast processing pipeline: download, transcribe, summarize, and upload to Firebase"
     )
     parser.add_argument(
-        "--config", type=str, default="podcasts_to_download.json",
-        help="Path to podcasts configuration JSON file (default: podcasts_to_download.json)",
+        "--config", type=str, default="podcasts_tw.json",
+        help="Path to podcasts configuration JSON file (default: podcasts_tw.json)",
     )
     parser.add_argument(
         "--rerun-from", type=str, default=None,

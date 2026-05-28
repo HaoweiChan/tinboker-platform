@@ -101,7 +101,7 @@ podcast_downloader/
 │   └── images/            # Generated summary images (SVG)
 ├── tests/                  # Test files
 ├── main.py                # Main pipeline coordinator
-├── podcasts_to_download.json  # Podcast configuration
+├── podcasts_tw.json  # Podcast configuration
 └── requirements.txt       # Python dependencies
 ```
 
@@ -202,7 +202,7 @@ The default configuration uses Gemini models. If you want to use a different pro
 
 4. Configure podcasts to download:
 
-Edit `podcasts_to_download.json` with your podcast list:
+Edit `podcasts_tw.json` with your podcast list:
 ```json
 [
   {
@@ -275,7 +275,7 @@ The pipeline uses a **rerun logic** that's more intuitive than skip flags:
 - **`--fill-limit`**: Skips already-processed episodes and processes exactly `limit` number of non-processed episodes
   - Fetches episodes from API and checks each against Firestore
   - Filters out episodes that are already fully processed (have all required GCS URLs: mp3_url, transcript_url, summary_url, summary_image_url)
-  - Processes exactly the number specified in `limit` field in `podcasts_to_download.json`
+  - Processes exactly the number specified in `limit` field in `podcasts_tw.json`
   - Fetches 3x the limit from API to ensure enough candidates are available
   - Useful for cron jobs or automated processing where you want to ensure a certain number of new episodes are processed
 
@@ -577,7 +577,7 @@ The new step-based architecture provides:
 - **Solution**: Check that `GCS_BUCKET_NAME`, `GCS_PROJECT_ID`, and `GCS_CREDENTIALS_PATH` are set correctly in `.env`
 
 **Issue**: "No download URL in episode data"
-- **Solution**: Check that the podcast link in `podcasts_to_download.json` is valid and accessible
+- **Solution**: Check that the podcast link in `podcasts_tw.json` is valid and accessible
 
 **Issue**: "Transcript not available for summarization"
 - **Solution**: Ensure transcription step completed successfully. Check STT service API keys.

@@ -23,7 +23,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv sync
 
 # Run podcast pipeline
-cd services/podcast && python main.py --config podcasts_to_download.json
+cd services/podcast && python main.py --config podcasts_tw.json
 ```
 
 ## Repository Structure
@@ -52,7 +52,7 @@ tinboker-agents/
 │   │   ├── pyproject.toml
 │   │   ├── main.py                   # entry point
 │   │   ├── app.py                    # FastAPI app (episode, podcast, wiki routers)
-│   │   ├── podcasts_to_download.json
+│   │   ├── podcasts_tw.json
 │   │   ├── src/
 │   │   │   ├── podcast/
 │   │   │   │   ├── cli.py            # argparse CLI

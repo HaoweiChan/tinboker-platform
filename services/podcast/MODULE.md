@@ -43,7 +43,7 @@ Netcup VPS `152.53.136.182:8003` under systemd unit `podcast-api.service`. Also 
 - [src/wiki_builder/](src/wiki_builder/) — wiki page ingestion after summarize
 
 **Configuration & data:**
-- [podcasts_to_download.json](podcasts_to_download.json) — list of podcasts with RSS links and limits
+- [podcasts_tw.json](podcasts_tw.json) — list of podcasts with RSS links and limits
 - [configs/default.yaml](configs/default.yaml) — LLM settings, GCP project, GCS bucket
 
 ## Dependencies
@@ -55,7 +55,7 @@ Netcup VPS `152.53.136.182:8003` under systemd unit `podcast-api.service`. Also 
 ## Configuration
 
 - **Secrets (Google Secret Manager):** listed in [src/secrets_bootstrap.py](src/secrets_bootstrap.py) (_GSM_VARS tuple)
-- **Env vars:** GCP project ID, GCS bucket in [configs/default.yaml](configs/default.yaml); episodes list in [podcasts_to_download.json](podcasts_to_download.json)
+- **Env vars:** GCP project ID, GCS bucket in [configs/default.yaml](configs/default.yaml); episodes list in [podcasts_tw.json](podcasts_tw.json)
 - **Service account:** `gcp-service-account.json` (NEVER commit)
 
 ## How to run locally

@@ -10,7 +10,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from src.secrets_bootstrap import bootstrap
 
@@ -511,26 +511,42 @@ class FirebaseService:
     def get_episode_by_id(self, episode_id: str) -> Optional[Dict]:
         """
         Get a single episode by its episode_id.
-        
+
         Args:
             episode_id: The episode ID (document ID in Firestore)
-            
+
         Returns:
             Episode dictionary if found, None otherwise
         """
         try:
             doc_ref = self.db.collection("episodes").document(episode_id)
             doc = doc_ref.get()
-            
+
             if doc.exists:
                 episode_data = doc.to_dict()
                 episode_data['id'] = doc.id  # Include document ID
                 return episode_data
             else:
                 return None
-                
+
         except Exception as e:
             raise Exception(f"Failed to get episode from Firestore: {e}") from e
+
+    def update_episode_fields(self, episode_id: str, fields: Dict[str, Any]) -> None:
+        """Partial update of an existing episode document.
+
+        Used by the ``--rerun-from spotify-metadata`` mode to refresh Spotify
+        fields without rewriting the whole document. The episode must already
+        exist; this method does not create new documents.
+        """
+        if not episode_id:
+            raise ValueError("episode_id is required")
+        if not fields:
+            return
+        try:
+            self.db.collection("episodes").document(episode_id).update(fields)
+        except Exception as e:
+            raise Exception(f"Failed to update episode {episode_id}: {e}") from e
     
     def get_all_episodes(self, order_by: str = "created_time", descending: bool = True) -> List[Dict]:
         """

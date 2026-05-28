@@ -58,3 +58,8 @@ gcp-service-account.json
 *.log
 
 # uv.lock IS committed for reproducibility — do not ignore it
+
+# Agent session artifacts (never committed)
+.agents/
+.codex/
+progress.txt

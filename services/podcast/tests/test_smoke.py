@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 def test_pipeline_config_instantiates():
     from src.pipeline import PipelineConfig
     cfg = PipelineConfig(
-        config_file=Path("podcasts_to_download.json"),
+        config_file=Path("podcasts_tw.json"),
         podcast_name="Test",
         podcast_link="https://example.com",
     )

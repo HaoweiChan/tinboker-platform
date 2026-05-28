@@ -14,6 +14,27 @@ from src.service.download_podcasts import extract_podcast_id, fetch_episodes
 from .firestore_reprocessor import process_firestore_episode
 
 
+def _load_podcasts_from_db() -> List[Dict] | None:
+    """Load active shows from Postgres. Returns None if DB unavailable or empty."""
+    try:
+        import os
+        db_url = os.environ.get("WIKI_DATABASE_URL")
+        if not db_url:
+            return None
+        from shared.wiki_builder import get_show_repository
+        repo = get_show_repository(db_url)
+        if repo is None:
+            return None
+        shows = repo.list_shows(active_only=True)
+        if not shows:
+            return None
+        print(f"Loaded {len(shows)} active show(s) from Postgres show registry")
+        return [s.to_pipeline_config() for s in shows]
+    except Exception as e:
+        print(f"Warning: Could not load shows from DB, falling back to config file: {e}")
+        return None
+
+
 def load_podcasts_config(config_path: Path) -> List[Dict]:
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found: {config_path}")
@@ -40,7 +61,7 @@ def create_podcast_config_mapping(config_path: Path) -> Dict[str, Dict]:
 
 
 def run_pipeline(
-    config_file: Path = Path("podcasts_to_download.json"),
+    config_file: Path = Path("podcasts_tw.json"),
     rerun_from: Optional[str] = None,
     transcript_service: str = "groq",
     use_file_mode: bool = False,
@@ -83,11 +104,13 @@ def run_pipeline(
 
     podcast_config_mapping = create_podcast_config_mapping(config_file)
 
-    try:
-        podcasts = load_podcasts_config(config_file)
-    except Exception as e:
-        print(f"Warning: Could not load podcasts config: {e}")
-        podcasts = []
+    podcasts = _load_podcasts_from_db()
+    if podcasts is None:
+        try:
+            podcasts = load_podcasts_config(config_file)
+        except Exception as e:
+            print(f"Warning: Could not load podcasts config: {e}")
+            podcasts = []
 
     if episode_id:
         _handle_firestore_mode(

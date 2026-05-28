@@ -41,7 +41,7 @@ class TestEpisodeMode:
     def test_episode_mode_applies_transcript_option(
         self, base_config, base_context, sample_firestore_episode, sample_podcasts
     ):
-        """Test that --episode mode applies transcript_option from podcasts_to_download.json."""
+        """Test that --episode mode applies transcript_option from podcasts_tw.json."""
         # Mock the podcast config mapping
         podcast_name = sample_firestore_episode['podcast_name']
         podcast_config = next(p for p in sample_podcasts if p['name'] == podcast_name)

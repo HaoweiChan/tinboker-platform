@@ -56,7 +56,7 @@ class TickerRisk(TypedDict, total=False):
     end_time: int
 
 
-class TickerRecommendation(TypedDict, total=False):
+class TickerInsight(TypedDict, total=False):
     ticker: str
     sentiment: str
     sentiment_score: float
@@ -93,8 +93,8 @@ class PipelineState(TypedDict, total=False):
     marp_slides: dict[str, Any]
     marp_markdown: str
 
-    # Ticker recommendations (parallel branch)
-    ticker_recommendations: dict[str, Any]
+    # Ticker insights (parallel branch)
+    ticker_insights: dict[str, Any]
     ticker_marp_slides: dict[str, Any]
     ticker_marp_markdown: str
 

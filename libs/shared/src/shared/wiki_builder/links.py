@@ -45,8 +45,8 @@ def extract_links(
             if key not in found:
                 found[key] = WikiLink(src_kind, src_slug, dst_kind, dst_slug, context)
 
-    # Episode frontmatter carries the canonical ticker / tag membership.
-    if src_kind == "episode":
+    # Episode + news_article frontmatter carries the canonical ticker / tag membership.
+    if src_kind in ("episode", "news_article"):
         for ticker in frontmatter.get("tickers", []) or []:
             key = ("entity", ticker_slug(str(ticker)))
             found.setdefault(key, WikiLink(src_kind, src_slug, *key, ""))

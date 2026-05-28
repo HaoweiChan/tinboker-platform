@@ -10,13 +10,17 @@ def build_parser() -> argparse.ArgumentParser:
         description="Podcast processing pipeline: download, transcribe, summarize, and upload to Firebase"
     )
     parser.add_argument(
-        "--config", type=str, default="podcasts_to_download.json",
-        help="Path to podcasts configuration JSON file (default: podcasts_to_download.json)",
+        "--config", type=str, default="podcasts_tw.json",
+        help="Path to podcasts configuration JSON file (default: podcasts_tw.json)",
     )
     parser.add_argument(
         "--rerun-from", type=str, default=None,
-        choices=["download", "transcribe", "summarize", "upload", "validate"],
-        help="Rerun pipeline from specific step. Default: None (full pipeline)",
+        choices=["download", "transcribe", "summarize", "upload", "validate", "spotify-metadata"],
+        help=(
+            "Rerun pipeline from a specific step. Default: None (full pipeline). "
+            "Use 'spotify-metadata' to refresh only the Spotify fields on an existing "
+            "Firestore episode (no MP3 / transcript / summary work)."
+        ),
     )
     parser.add_argument(
         "--transcript-service", type=str, default="groq", dest="transcript_service",

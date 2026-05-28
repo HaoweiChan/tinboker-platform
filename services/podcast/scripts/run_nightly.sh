@@ -35,4 +35,4 @@ export EXTRACTOR_MODEL TICKER_EXTRACTOR_MODEL
 PY="$REPO_ROOT/.venv/bin/python"
 [ -x "$PY" ] || PY="$(command -v python3)"
 
-exec "$PY" main.py --config podcasts_to_download.json --fill-limit "$@"
+exec "$PY" main.py --config podcasts_tw.json --fill-limit "$@"

@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Any
 
 # Recognised page kinds. New kinds are allowed at runtime — this is just a hint.
-KINDS = ("episode", "entity", "topic", "supply_chain")
+KINDS = ("episode", "entity", "topic", "supply_chain", "contract", "news_article")
 
 # Maps the legacy on-disk directory names (and already-singular forms) to ``kind``.
 DIR_TO_KIND: dict[str, str] = {
@@ -21,10 +21,12 @@ DIR_TO_KIND: dict[str, str] = {
     "entities": "entity",
     "topics": "topic",
     "supply-chain": "supply_chain",
+    "news": "news_article",
     "episode": "episode",
     "entity": "entity",
     "topic": "topic",
     "supply_chain": "supply_chain",
+    "news_article": "news_article",
 }
 
 # Reverse: ``kind`` -> the link prefix used inside ``[[...]]`` wikilinks.
@@ -33,6 +35,7 @@ KIND_TO_LINK_PREFIX: dict[str, str] = {
     "entity": "entities",
     "topic": "topics",
     "supply_chain": "supply-chain",
+    "news_article": "news",
 }
 
 

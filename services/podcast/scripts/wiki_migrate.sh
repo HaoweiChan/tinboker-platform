@@ -22,9 +22,24 @@ url = os.environ.get("WIKI_DATABASE_URL")
 if not url:
     raise SystemExit("WIKI_DATABASE_URL is not set — cannot migrate the wiki schema")
 
+import sqlalchemy as sa
+
 from shared.wiki_builder.postgres_repo import PostgresWikiRepository
 
 repo = PostgresWikiRepository(url)
 repo.init_schema()
+
+# Expression index on the JSONB 'date' field — makes date-range/ordering cheap for
+# both news_article and episode pages. metadata.create_all does not add indexes to
+# existing tables, so this ships as an idempotent CREATE INDEX IF NOT EXISTS.
+with repo.engine.begin() as conn:
+    conn.execute(
+        sa.text(
+            "CREATE INDEX IF NOT EXISTS ix_wiki_pages_date "
+            "ON wiki_pages ((frontmatter->>'date'))"
+        )
+    )
+
 print(f"wiki schema ready: {repo.health()}")
+print("date expression index ready: ix_wiki_pages_date")
 PY

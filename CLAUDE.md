@@ -41,14 +41,14 @@ one-time migration source; it is gitignored and never committed.
 
 | Path | Purpose | Entry point | Key files |
 |------|---------|-------------|-----------|
-| [services/podcast/](services/podcast/) | Download → transcribe → summarize → Firestore; serves `/api/wiki` | [main.py](services/podcast/main.py) | [podcasts_to_download.json](services/podcast/podcasts_to_download.json) |
+| [services/podcast/](services/podcast/) | Download → transcribe → summarize → Firestore; serves `/api/wiki` | [main.py](services/podcast/main.py) | [podcasts_tw.json](services/podcast/podcasts_tw.json) |
 | [libs/shared/](libs/shared/) | Secrets, GCS, config, wiki_builder (Postgres-backed) | N/A (library) | [src/shared/](libs/shared/src/shared/) |
 | Wiki content | Postgres DB on the VPS (`WIKI_DATABASE_URL`) | `/api/wiki` (podcast service) | [docs/wiki-schema.md](docs/wiki-schema.md) |
 
 ## Decision tree — which module to touch?
 
 **Adding a new podcast source or tweaking download:**
-- Modify [services/podcast/podcasts_to_download.json](services/podcast/podcasts_to_download.json)
+- Modify [services/podcast/podcasts_tw.json](services/podcast/podcasts_tw.json)
 
 **Tweaking summary/extraction prompts:**
 - Content prompts: [services/podcast/src/podcast/content_builder/prompts/](services/podcast/src/podcast/content_builder/prompts/)
@@ -63,6 +63,13 @@ one-time migration source; it is gitignored and never committed.
 - See [docs/MIGRATION.md](docs/MIGRATION.md)
 - podcast/ runs on Netcup VPS via systemd (also hosts the wiki Postgres)
 - Plan to consolidate Firestore + GCS onto the VPS: [docs/data-consolidation-plan.md](docs/data-consolidation-plan.md)
+- **VPS access:** `ssh root@152.53.136.182` works from this machine (RSA key
+  already in `~/.ssh`). The Netcup VPS is the only "production" host — agents
+  may SSH there directly for deploys, publishing the wiki contract,
+  inspecting systemd, restarting `podcast-api`, and similar operational
+  tasks. No tunnel or jump host required.
+- The wiki Postgres listens on `127.0.0.1:5432` on the VPS only (not exposed
+  externally), so anything that needs to write to it must run on the VPS.
 
 ## Conventions
 
@@ -111,6 +118,7 @@ Spotify RSS → services/podcast/download → transcribe → summarize
 - **[README.md](README.md)** — repo overview, architecture, quickstart
 - **[AGENTS.md](AGENTS.md)** — short purpose statement (cross-tool agents entry point)
 - **[docs/wiki-schema.md](docs/wiki-schema.md)** — wiki Postgres schema + `/api/wiki` API
+- **[docs/firestore-schema.md](docs/firestore-schema.md)** — Firestore episode/podcast document contract consumed by the TinBoker platform
 - **[docs/content-api-roadmap.md](docs/content-api-roadmap.md)** — what the TinBoker webui needs from this backend, and the plan to deliver it
 - **[docs/MIGRATION.md](docs/MIGRATION.md)** — production deployment runbook
 - **[docs/content/](docs/content/)** — content/feature notes; **[docs/legacy/](docs/legacy/)** — archived Dify configs

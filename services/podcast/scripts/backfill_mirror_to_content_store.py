@@ -35,6 +35,8 @@ _SERVICE_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_REPO_ROOT / "libs" / "shared" / "src"))
 sys.path.insert(0, str(_SERVICE_ROOT / "src"))
 
+from podcast.exporters.ticker_insights import build_episode_insight_docs  # noqa: E402
+from podcast.exporters.trending_tickers import aggregate_trending  # noqa: E402
 from shared.db import (  # noqa: E402
     Episode,
     Podcast,
@@ -44,9 +46,6 @@ from shared.db import (  # noqa: E402
     get_repositories,
 )
 from shared.tickers import _index as ticker_index  # noqa: E402
-from podcast.exporters.ticker_insights import build_episode_insight_docs  # noqa: E402
-from podcast.exporters.trending_tickers import aggregate_trending  # noqa: E402
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -96,7 +95,7 @@ def _read_gcs_json(gs_url: str) -> object | None:
     try:
         blob = storage.Client().bucket(bucket).blob(path)
         return json.loads(blob.download_as_text(encoding="utf-8"))
-    except Exception as e:
+    except Exception:
         return None  # caller handles
 
 

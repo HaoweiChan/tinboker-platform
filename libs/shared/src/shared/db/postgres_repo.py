@@ -69,8 +69,14 @@ from .repository import (
 metadata = sa.MetaData()
 
 _Text = sa.Text
-_ts = lambda: sa.DateTime(timezone=True)
-_now = lambda: sa.func.now()
+
+
+def _ts():
+    return sa.DateTime(timezone=True)
+
+
+def _now():
+    return sa.func.now()
 
 podcasts_table = sa.Table(
     "podcasts",

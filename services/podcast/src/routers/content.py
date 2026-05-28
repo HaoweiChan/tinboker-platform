@@ -28,7 +28,6 @@ from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException, Query, Response
 from pydantic import BaseModel
-
 from shared.db import (
     ContentRepositories,
     Episode,
@@ -230,9 +229,7 @@ async def list_podcasts(response: Response):
     out = []
     for p in pods:
         # list_by_podcast is cheap (index scan); count via limit trick
-        eps = repos.episodes.list_by_podcast(p.name, limit=1, offset=0)
-        # Use count() would require per-podcast query; approximate with 0 and let the
-        # caller use the /episodes endpoint for the real list
+        # episode_count not fetched here — caller uses /episodes endpoint for the real list
         out.append(PodcastOut(
             name=p.name,
             language=p.language,

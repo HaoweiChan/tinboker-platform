@@ -43,6 +43,7 @@ engine = sa.create_engine(db_url, pool_pre_ping=True, future=True)
 
 # Ensure the table exists (idempotent)
 from shared.wiki_builder.postgres_repo import metadata  # noqa: E402
+
 metadata.create_all(engine)
 
 repo = PostgresShowRepository(engine)

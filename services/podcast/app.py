@@ -9,8 +9,8 @@ from src.secrets_bootstrap import bootstrap
 
 bootstrap()
 
-from src.routers import episode, podcast, shows, wiki  # noqa: E402  — must follow bootstrap()
-from src.routers.content import (  # noqa: E402
+from src.routers import episode, podcast, shows, wiki  # noqa: E402, I001
+from src.routers.content import (  # noqa: E402, I001
     episode_router as content_episode_router,
     insights_router,
     podcast_router as content_podcast_router,

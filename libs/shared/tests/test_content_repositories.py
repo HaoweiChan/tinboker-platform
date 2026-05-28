@@ -3,9 +3,7 @@
 Mirrors the style of test_wiki_repository.py — no I/O, no network.
 """
 
-from datetime import datetime, timezone
 
-import pytest
 
 from shared.db import (
     Episode,
@@ -21,7 +19,6 @@ from shared.db import (
     TrendingTicker,
     get_repositories,
 )
-
 
 # ---------------------------------------------------------------------------
 # EpisodeRepository

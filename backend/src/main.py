@@ -70,6 +70,19 @@ async def lifespan(app: FastAPI):
     await RedisClient.initialize()
     await init_search_index()
 
+    # Backfill brand colors for any stock_translations rows where brand_color is NULL
+    try:
+        from src.data.brand_colors import BRAND_COLORS
+        from src.database.postgres import get_session
+        from src.services.translation_service import TranslationService
+        for session in get_session():
+            updated = TranslationService(session).backfill_brand_colors(BRAND_COLORS)
+            if updated:
+                print(f"Backfilled brand_color for {updated} stock translation(s).")
+            break
+    except Exception as e:
+        print(f"Warning: brand color backfill skipped: {e}")
+
     yield
 
     # --- Shutdown ---

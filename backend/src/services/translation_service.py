@@ -202,6 +202,23 @@ class TranslationService:
             query = query.filter(StockTranslation.market == market.upper())
         return query.order_by(StockTranslation.ticker).limit(limit).all()
 
+    def backfill_brand_colors(self, colors: dict[str, str]) -> int:
+        """Set brand_color for rows where it is currently NULL. Returns count updated."""
+        rows = (
+            self.db.query(StockTranslation)
+            .filter(StockTranslation.brand_color.is_(None))
+            .all()
+        )
+        updated = 0
+        for row in rows:
+            color = colors.get(row.ticker)
+            if color:
+                row.brand_color = color
+                updated += 1
+        if updated:
+            self.db.commit()
+        return updated
+
     def get_stats(self) -> dict:
         """Get translation statistics."""
         total = self.db.query(func.count(StockTranslation.id)).scalar()

@@ -12,15 +12,15 @@ import {
   listTranslations,
   updateTranslation,
   deleteTranslation,
-  adminLogout,
-  isAdminAuthenticated,
 } from '@/services/api/translations';
+import { useAppStore } from '@/store/useAppStore';
 import type { Translation, TranslationStatus, TranslationListParams } from '@/types/translation';
 
 const ITEMS_PER_PAGE = 50;
 
 export const AdminTranslationsPage: React.FC = () => {
-  const [authenticated, setAuthenticated] = useState(isAdminAuthenticated());
+  const logout = useAppStore((state) => state.logout);
+  const [authenticated, setAuthenticated] = useState(false);
   const [translations, setTranslations] = useState<Translation[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -59,9 +59,8 @@ export const AdminTranslationsPage: React.FC = () => {
       setTranslations(response.items);
       setTotal(response.total);
     } catch (error: any) {
-      if (error.response?.status === 401) {
-        // Token expired, logout
-        adminLogout();
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        logout();
         setAuthenticated(false);
       }
     } finally {
@@ -116,9 +115,8 @@ export const AdminTranslationsPage: React.FC = () => {
     setTotal((prev) => prev - 1);
   };
 
-  // Handle logout
   const handleLogout = () => {
-    adminLogout();
+    logout();
     setAuthenticated(false);
   };
 

@@ -114,13 +114,14 @@ def create_all_tables():
     
     logger.info("Creating all database tables...")
     Base.metadata.create_all(bind=engine)
-    # Add columns that may not exist on pre-existing tables (idempotent)
-    with engine.connect() as conn:
-        conn.execute(text(
-            "ALTER TABLE IF EXISTS stock_translations "
-            "ADD COLUMN IF NOT EXISTS brand_color VARCHAR(7)"
-        ))
-        conn.commit()
+    # Add columns that may not exist on pre-existing tables (idempotent, Postgres only)
+    if engine.dialect.name == "postgresql":
+        with engine.connect() as conn:
+            conn.execute(text(
+                "ALTER TABLE IF EXISTS stock_translations "
+                "ADD COLUMN IF NOT EXISTS brand_color VARCHAR(7)"
+            ))
+            conn.commit()
     logger.info("Database tables created successfully")
 
 

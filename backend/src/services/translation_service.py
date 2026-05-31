@@ -202,6 +202,27 @@ class TranslationService:
             query = query.filter(StockTranslation.market == market.upper())
         return query.order_by(StockTranslation.ticker).limit(limit).all()
 
+    def backfill_translations(
+        self,
+        entries: list[tuple],
+        colors: dict[str, str],
+    ) -> int:
+        """Insert stock translations that don't already exist. Never touches existing rows."""
+        inserted = 0
+        for ticker, market, name_en, name_zh_tw, status in entries:
+            if self.get_by_ticker_market(ticker, market) is None:
+                data = TranslationCreate(
+                    ticker=ticker,
+                    market=market,
+                    name_en=name_en,
+                    name_zh_tw=name_zh_tw,
+                    translation_status=status,
+                    brand_color=colors.get(ticker),
+                )
+                self.create(data, "startup_backfill")
+                inserted += 1
+        return inserted
+
     def backfill_brand_colors(self, colors: dict[str, str]) -> int:
         """Set brand_color for rows where it is currently NULL. Returns count updated."""
         rows = (

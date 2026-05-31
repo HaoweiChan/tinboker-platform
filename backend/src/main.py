@@ -70,18 +70,27 @@ async def lifespan(app: FastAPI):
     await RedisClient.initialize()
     await init_search_index()
 
-    # Backfill brand colors for any stock_translations rows where brand_color is NULL
+    # Seed missing translations and backfill brand colors (insert-only, never overwrites)
     try:
         from src.data.brand_colors import BRAND_COLORS
+        from src.data.seed_data import TRANSLATIONS
+        from src.data.us_stocks import US_STOCK_TRANSLATIONS
         from src.database.postgres import get_session
         from src.services.translation_service import TranslationService
         for session in get_session():
-            updated = TranslationService(session).backfill_brand_colors(BRAND_COLORS)
+            svc = TranslationService(session)
+            tw_inserted = svc.backfill_translations(TRANSLATIONS, BRAND_COLORS)
+            if tw_inserted:
+                print(f"Backfilled {tw_inserted} new TW/core stock translation(s).")
+            us_inserted = svc.backfill_translations(US_STOCK_TRANSLATIONS, BRAND_COLORS)
+            if us_inserted:
+                print(f"Backfilled {us_inserted} new US stock translation(s).")
+            updated = svc.backfill_brand_colors(BRAND_COLORS)
             if updated:
                 print(f"Backfilled brand_color for {updated} stock translation(s).")
             break
     except Exception as e:
-        print(f"Warning: brand color backfill skipped: {e}")
+        print(f"Warning: translation seed/backfill skipped: {e}")
 
     yield
 

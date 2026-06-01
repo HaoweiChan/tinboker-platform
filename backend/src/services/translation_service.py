@@ -207,10 +207,17 @@ class TranslationService:
         entries: list[tuple],
         colors: dict[str, str],
     ) -> int:
-        """Insert stock translations that don't already exist. Never touches existing rows."""
-        inserted = 0
+        """
+        Seed stock translations from a list of (ticker, market, name_en, name_zh_tw, status).
+        - Inserts rows that don't exist yet.
+        - Fills in name_en/name_zh_tw/brand_color for existing stub rows (name_en is NULL
+          and status is not "approved"), without downgrading approved rows.
+        Returns count of rows inserted or updated.
+        """
+        affected = 0
         for ticker, market, name_en, name_zh_tw, status in entries:
-            if self.get_by_ticker_market(ticker, market) is None:
+            existing = self.get_by_ticker_market(ticker, market)
+            if existing is None:
                 data = TranslationCreate(
                     ticker=ticker,
                     market=market,
@@ -220,8 +227,18 @@ class TranslationService:
                     brand_color=colors.get(ticker),
                 )
                 self.create(data, "startup_backfill")
-                inserted += 1
-        return inserted
+                affected += 1
+            elif existing.name_en is None and existing.translation_status != "approved":
+                # Populate empty auto-created stubs without touching approved rows
+                existing.name_en = name_en
+                existing.name_zh_tw = name_zh_tw
+                existing.translation_status = status
+                if existing.brand_color is None:
+                    existing.brand_color = colors.get(ticker)
+                existing.last_updated_by = "startup_backfill"
+                self.db.commit()
+                affected += 1
+        return affected
 
     def backfill_brand_colors(self, colors: dict[str, str]) -> int:
         """Set brand_color for rows where it is currently NULL. Returns count updated."""

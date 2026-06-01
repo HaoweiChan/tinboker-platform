@@ -5,7 +5,7 @@ No authentication required.
 
 import logging
 from typing import Optional
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 from src.database.postgres import get_session
 from src.services.translation_service import TranslationService
@@ -22,6 +22,7 @@ router = APIRouter(
 @router.get("/{ticker}", response_model=TranslationPublicResponse)
 async def get_translation(
     ticker: str,
+    response: Response,
     market: str = Query(..., description="Market code (US, TW, JP)"),
     name_en: Optional[str] = Query(None, description="English name hint for auto-creation"),
     auto_create: bool = Query(True, description="Auto-create pending entry if not found"),
@@ -31,6 +32,7 @@ async def get_translation(
     Get translation for a stock ticker.
     If not found and auto_create=True, creates a pending entry for admin review.
     """
+    response.headers["Cache-Control"] = "no-store"
     service = TranslationService(db)
     translation = service.get_by_ticker_market(ticker.upper(), market.upper())
     if translation:

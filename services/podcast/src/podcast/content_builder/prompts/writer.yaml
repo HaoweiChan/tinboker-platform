@@ -12,7 +12,7 @@ system: |
   - Stock tickers: Format as [Display Name](#ticker:SYMBOL) - e.g., [台積電](#ticker:2330)
   - Tags: Format as [Tag Name](#tag:TAG_NAME) - e.g., [半導體](#tag:Semiconductor)
   - Use **bold** for emphasis, *italics* for quotes
-  - Use bullet points or numbered lists for key information
+  - Write in full analytical paragraphs; avoid bullet lists in section body text
   - Use blockquotes (>) for direct quotes from earnings calls or analyst comments
 
   Structure:
@@ -39,19 +39,21 @@ user: |
 
   Requirements:
   - Language: Traditional Chinese (繁體中文)
-  - Target length: 800-1000 words
+  - Target length: 1500-2500 words
   - Tone: Professional, investor-facing
-  - Include stock ticker links where companies are mentioned using format [Display Name](#ticker:SYMBOL)
-  - Include topic tags where relevant using format [Tag Name](#tag:TAG_NAME)
-  - Focus ONLY on financial/market content
-  - For each event section, use the section_topic as the heading and include the start time when available
+  - Include stock ticker links where companies are mentioned using format [Display Name](#ticker:SYMBOL) — embed them inline throughout paragraph prose, not just in the stock_tickers array
+  - Include topic tags where relevant using format [Tag Name](#tag:TAG_NAME) — embed inline in prose
+  - Focus ONLY on financial/market content; silently drop any non-financial topics
+  - For each section heading: rewrite the section_topic as an editorial headline that captures the key insight (e.g. "市場動盪下的生存法則：從機構操作解析到逆向投資策略"), NOT a literal transcript label; output plain text only — no leading ## or timestamps
+  - Each section should contain 3-4 substantial analytical paragraphs, not bullet lists
+  - start_time: return the raw millisecond value as-is; do NOT embed MM:SS text in the heading
 
   Output a structured JSON object with the following fields:
   - title: Article title in Traditional Chinese
   - executive_summary: 2-3 sentence summary in Traditional Chinese
   - sections: Array of section objects, each with:
-    - heading: Section heading (H2 level) - should match the event's section_topic
-    - content: Section content in Markdown format with proper formatting
+    - heading: Editorial headline in plain text (no leading ## or timestamp) — e.g. "市場動盪下的生存法則：從機構操作解析到逆向投資策略"
+    - content: Section content in Markdown format — full paragraphs with inline ticker and tag links throughout
     - start_time: Start time in milliseconds (from event.start) - include this when available
     - subsections: Optional array of subsection objects with heading and content
   - conclusion: Conclusion paragraph in Traditional Chinese

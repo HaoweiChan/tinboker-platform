@@ -20,7 +20,7 @@ def transform_to_markdown(state: PipelineState) -> dict[str, Any]:
         parts.append(f"{writer_output['executive_summary']}\n")
 
     for section in writer_output.get("sections", []):
-        heading = section.get("heading", "")
+        heading = section.get("heading", "").lstrip("# ").strip()
         start_time = section.get("start_time")
 
         if heading:

@@ -51,6 +51,12 @@ class Settings(BaseSettings):
     # Dev bypass token for automated browser testing (e.g. Cursor browser MCP)
     dev_bypass_token: Optional[str] = None
 
+    # Non-expiring service token for the headless translation backfill agent
+    # (env var: TINBOKER_WRITE_TOKEN — same name the agent's MCP uses). Grants access
+    # to the translation list + bulk-write endpoints ONLY (not full admin). Generate
+    # with `openssl rand -hex 32`; store in GSM. Unset = disabled.
+    tinboker_write_token: Optional[str] = None
+
     @field_validator("admin_emails", mode="before")
     @classmethod
     def parse_admin_emails(cls, v: Union[str, list, None]) -> list[str]:

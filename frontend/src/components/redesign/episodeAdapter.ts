@@ -1,5 +1,6 @@
 import type { Episode as ApiEpisode } from '@/services/api/podcasts';
 import type { EpisodeCardV2Props } from './EpisodeCardV2';
+import type { Sentiment } from '@/lib/sentiment';
 
 /** Strip light markdown so a long `summary_content` reads as a plain teaser. */
 function plainTeaser(md: string | null | undefined, max = 200): string | undefined {
@@ -31,12 +32,14 @@ function timeAgo(release: string | number | null | undefined, created: number): 
 /** Map a backend Episode to props for the redesigned EpisodeCardV2.
  *  Pass `priceMap` (ticker → changePercent) to hydrate live price cells.
  *  Pass `podcastImageMap` (podcast_name → image_url) to show cover art.
- *  Pass `translationMap` (TICKER_UPPER → displayName) to show localized names. */
+ *  Pass `translationMap` (TICKER_UPPER → displayName) to show localized names.
+ *  Pass `sentimentMap` (TICKER_UPPER → Sentiment) for this episode to show sentiment chips. */
 export function apiEpisodeToCardV2(
   ep: ApiEpisode,
   priceMap?: Map<string, number>,
   podcastImageMap?: Map<string, string>,
   translationMap?: Map<string, string>,
+  sentimentMap?: Map<string, Sentiment>,
 ): EpisodeCardV2Props {
   const released = ep.spotify_release_date ?? ep.created_time;
   const releaseTime = typeof released === 'string' ? Date.parse(released) : (released ?? ep.created_time);
@@ -54,6 +57,7 @@ export function apiEpisodeToCardV2(
       ? ep.related_tickers.slice(0, 4).map((symbol) => ({
           symbol,
           name: translationMap?.get(symbol.toUpperCase()),
+          sentiment: sentimentMap?.get(symbol.toUpperCase()),
           changePercent: priceMap?.get(symbol) ?? priceMap?.get(symbol.toUpperCase()),
         }))
       : undefined,

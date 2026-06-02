@@ -39,10 +39,10 @@ scoped to the translation list + bulk-write endpoints only — it does **not** u
 admin routes.
 
 1. **Generate** the token: `openssl rand -hex 32`.
-2. **Backend:** set it as `TRANSLATION_WRITE_TOKEN` (env / GSM secret) on the API. Unset =
+2. **Backend:** set it as `TINBOKER_WRITE_TOKEN` (env / GSM secret) on the API. Unset =
    the token path is disabled (admin-JWT-only).
-3. **Agent:** set the same value as `TINBOKER_WRITE_TOKEN` in the MCP env. When present,
-   the privileged tools are registered and sent as `Authorization: Bearer <token>`.
+3. **Agent:** set the **same** `TINBOKER_WRITE_TOKEN` in the MCP env. When present, the
+   privileged tools are registered and sent as `Authorization: Bearer <token>`.
 
 The admin UI continues to use Google-OAuth JWTs (the endpoints accept either). Rotate the
 token by regenerating and updating both sides.
@@ -56,7 +56,7 @@ token by regenerating and updating both sides.
       "args": ["--from", "/abs/path/to/mcp-servers/stock-translations", "tinboker-stock-translations-mcp"],
       "env": {
         "TINBOKER_API_BASE_URL": "https://dev-api.tinboker.com",
-        "TINBOKER_WRITE_TOKEN": "<same value as backend TRANSLATION_WRITE_TOKEN>"
+        "TINBOKER_WRITE_TOKEN": "<same value set on the backend API>"
       }
     }
   }

@@ -36,7 +36,8 @@ from mcp.server.fastmcp import FastMCP
 API_BASE_URL = os.environ.get("TINBOKER_API_BASE_URL", "https://api.tinboker.com").rstrip("/")
 API_TIMEOUT = float(os.environ.get("TINBOKER_API_TIMEOUT", "10"))
 
-# Non-expiring TRANSLATION_WRITE_TOKEN service token. When set, the privileged backfill tools
+# Non-expiring TINBOKER_WRITE_TOKEN service token (the backend reads the same var).
+# When set, the privileged backfill tools
 # (list_pending_translations, propose_translations) are registered. Leave unset
 # for the read-only deployment used by the summary-writing agent / frontend.
 WRITE_TOKEN = os.environ.get("TINBOKER_WRITE_TOKEN")
@@ -155,7 +156,7 @@ async def _admin_request(
             resp.raise_for_status()
             return resp.json()
     except httpx.HTTPStatusError as e:
-        hint = " (check TINBOKER_WRITE_TOKEN matches the backend TRANSLATION_WRITE_TOKEN)" if e.response.status_code in (401, 403) else ""
+        hint = " (check TINBOKER_WRITE_TOKEN matches the value set on the backend)" if e.response.status_code in (401, 403) else ""
         return {"error": f"HTTP {e.response.status_code} from {url}{hint}"}
     except httpx.HTTPError as e:
         return {"error": f"request failed: {e}"}

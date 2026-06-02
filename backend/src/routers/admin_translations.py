@@ -87,7 +87,7 @@ async def list_translations(
 ):
     """
     List translations with optional filters and pagination.
-    Accepts an admin JWT or the TRANSLATION_WRITE_TOKEN (backfill agent work queue).
+    Accepts an admin JWT or the TINBOKER_WRITE_TOKEN (backfill agent work queue).
     """
     service = TranslationService(db)
     items, total = service.list_translations(
@@ -224,7 +224,7 @@ async def bulk_import_json(
     admin: AdminAccess = Depends(get_translation_access)
 ):
     """Bulk import translations from JSON array.
-    Accepts an admin JWT or the TRANSLATION_WRITE_TOKEN (backfill agent writes)."""
+    Accepts an admin JWT or the TINBOKER_WRITE_TOKEN (backfill agent writes)."""
     if not items:
         raise HTTPException(status_code=400, detail="No items provided")
     service = TranslationService(db)

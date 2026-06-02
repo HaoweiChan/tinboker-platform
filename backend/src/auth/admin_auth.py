@@ -58,9 +58,9 @@ async def get_translation_access(
     Dependency for the translation list + bulk-write endpoints.
 
     Accepts EITHER a whitelisted admin JWT (the admin UI) OR the non-expiring
-    TRANSLATION_WRITE_TOKEN service token (the headless backfill agent). The
-    service token is scoped to these translation endpoints only — it does not
-    unlock other admin routes.
+    TINBOKER_WRITE_TOKEN service token (the headless backfill agent). The service
+    token is scoped to these translation endpoints only — it does not unlock other
+    admin routes.
     """
     token = credentials.credentials
 
@@ -74,7 +74,7 @@ async def get_translation_access(
         logger.debug(f"Token verification failed: {e}")
 
     # 2. Service-token path (constant-time compare; only if configured).
-    service_token = settings.translation_write_token
+    service_token = settings.tinboker_write_token
     if service_token and secrets.compare_digest(token, service_token):
         return AdminAccess(email="translation-writer@service", user_id="service")
 

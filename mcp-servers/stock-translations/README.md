@@ -44,7 +44,7 @@ Every result row carries:
 |---------|---------|-------|
 | `TINBOKER_API_BASE_URL` | `https://api.tinboker.com` | Use `https://dev-api.tinboker.com` against dev. |
 | `TINBOKER_API_TIMEOUT` | `10` | Per-request timeout (seconds). |
-| `TINBOKER_WRITE_TOKEN` | _(unset)_ | Service token matching the backend's `TRANSLATION_WRITE_TOKEN`. When set, registers the privileged backfill tools. See [BACKFILL_AGENT.md](./BACKFILL_AGENT.md). |
+| `TINBOKER_WRITE_TOKEN` | _(unset)_ | Service token; the backend API reads the same `TINBOKER_WRITE_TOKEN`. When set, registers the privileged backfill tools. See [BACKFILL_AGENT.md](./BACKFILL_AGENT.md). |
 
 ## Running
 

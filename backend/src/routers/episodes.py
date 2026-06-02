@@ -2,15 +2,22 @@
 Episodes API router for cross-podcast episode queries
 """
 from fastapi import APIRouter, HTTPException, Path, Query
+from pydantic import BaseModel, Field
 from typing import Optional
 from src.services.podcast import PodcastService
 from src.services.translation_discovery import schedule_ticker_discovery
+from src.services.episode_sentiments import EpisodeSentimentService
 from src.cache.cdn_cache import cdn_cache_podcast
 
 router = APIRouter(prefix="/api/episodes", tags=["episodes"])
 
-# Initialize service
+# Initialize services
 podcast_service = PodcastService()
+sentiment_service = EpisodeSentimentService()
+
+
+class TickerSentimentsRequest(BaseModel):
+    episode_ids: list[str] = Field(default_factory=list, max_length=80)
 
 
 @router.get("/recent")
@@ -54,6 +61,21 @@ async def get_recent_episodes(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching recent episodes: {str(e)}")
+
+
+@router.post("/ticker-sentiments")
+async def get_ticker_sentiments(body: TickerSentimentsRequest):
+    """Per-(episode, ticker) sentiment for episode-card chips.
+
+    POST (not GET) because episode ids are long unicode title strings. Returns
+    `{ episode_id: { TICKER: "BULLISH"|"BEARISH"|"NEUTRAL" } }`. Maps are extracted
+    from each episode's ticker_recommendations file and cached in Redis, so this is
+    cheap after the first warm.
+    """
+    try:
+        return await sentiment_service.get_sentiments(body.episode_ids)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching ticker sentiments: {str(e)}")
 
 
 @router.get("/by-ticker/{ticker}")

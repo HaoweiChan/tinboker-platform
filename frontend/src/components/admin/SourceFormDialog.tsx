@@ -14,7 +14,8 @@ export interface SourceFormValues {
   region: string;
   language: string;
   spotify_url: string;
-  episode_limit: string; // kept as string for the input; normalized on save
+  lookback_days: string; // kept as string for the input; normalized on save
+  max_episodes: string;
   transcript_service: string;
   transcript_model: string;
   active: boolean;
@@ -40,7 +41,8 @@ function emptyValues(sourceType: SourceType): SourceFormValues {
     region: '',
     language: sourceType === 'podcast' ? 'zh-TW' : '',
     spotify_url: '',
-    episode_limit: sourceType === 'podcast' ? '10' : '',
+    lookback_days: '30',
+    max_episodes: '',
     transcript_service: '',
     transcript_model: '',
     active: true,
@@ -55,7 +57,8 @@ function fromSource(s: ContentSource): SourceFormValues {
     region: s.region ?? '',
     language: s.language ?? '',
     spotify_url: s.spotify_url ?? '',
-    episode_limit: s.episode_limit == null ? '' : String(s.episode_limit),
+    lookback_days: s.lookback_days == null ? '' : String(s.lookback_days),
+    max_episodes: s.max_episodes == null ? '' : String(s.max_episodes),
     transcript_service: s.transcript_service ?? '',
     transcript_model: s.transcript_model ?? '',
     active: s.active,
@@ -151,28 +154,16 @@ export const SourceFormDialog: React.FC<SourceFormDialogProps> = ({
 
           {isPodcast ? (
             <>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className={labelCls}>Language</label>
-                  <select
-                    value={values.language}
-                    onChange={(e) => set('language', e.target.value)}
-                    className={fieldCls}
-                  >
-                    <option value="zh-TW">Chinese (zh-TW)</option>
-                    <option value="en">English</option>
-                  </select>
-                </div>
-                <div>
-                  <label className={labelCls}>Episode Limit</label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={values.episode_limit}
-                    onChange={(e) => set('episode_limit', e.target.value)}
-                    className={fieldCls}
-                  />
-                </div>
+              <div>
+                <label className={labelCls}>Language</label>
+                <select
+                  value={values.language}
+                  onChange={(e) => set('language', e.target.value)}
+                  className={fieldCls}
+                >
+                  <option value="zh-TW">Chinese (zh-TW)</option>
+                  <option value="en">English</option>
+                </select>
               </div>
               <div>
                 <label className={labelCls}>Spotify URL</label>
@@ -225,6 +216,34 @@ export const SourceFormDialog: React.FC<SourceFormDialogProps> = ({
               </select>
             </div>
           )}
+
+          {/* Ingest recency — applies to both podcasts and news */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={labelCls}>Lookback (days)</label>
+              <input
+                type="number"
+                min={1}
+                value={values.lookback_days}
+                onChange={(e) => set('lookback_days', e.target.value)}
+                className={fieldCls}
+                placeholder="30"
+              />
+              <p className="mt-1 text-xs text-gray-400">Only ingest items newer than this</p>
+            </div>
+            <div>
+              <label className={labelCls}>Max episodes</label>
+              <input
+                type="number"
+                min={1}
+                value={values.max_episodes}
+                onChange={(e) => set('max_episodes', e.target.value)}
+                className={fieldCls}
+                placeholder="(no cap)"
+              />
+              <p className="mt-1 text-xs text-gray-400">Optional safety cap per run</p>
+            </div>
+          </div>
 
           <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input

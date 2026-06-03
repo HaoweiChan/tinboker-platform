@@ -50,8 +50,9 @@ class ContentSource(Base):
     pulls the active rows via GET /api/sources (see routers/sources.py).
 
     Unifies two source types in one table:
-      - source_type="podcast": uses language, spotify_url, episode_limit, transcript_*
+      - source_type="podcast": uses language, spotify_url, transcript_*
       - source_type="news":    uses region; podcast-only columns stay NULL
+    Ingest recency (lookback_days + optional max_episodes cap) applies to both types.
     """
     __tablename__ = "content_sources"
 
@@ -63,7 +64,8 @@ class ContentSource(Base):
     region = Column(String(10), nullable=True, index=True)  # news region: "US" | "TW" | ...
     language = Column(String(10), nullable=True)  # podcast content language: "zh-TW" | "en"
     spotify_url = Column(Text, nullable=True)  # podcast only
-    episode_limit = Column(Integer, nullable=True)  # podcast only: episodes per ingest run
+    lookback_days = Column(Integer, nullable=True, default=30)  # ingest window: only items newer than N days
+    max_episodes = Column(Integer, nullable=True)  # optional safety cap: at most N most-recent items per run
     transcript_service = Column(String(20), nullable=True)  # podcast only: groq|whisper|openai
     transcript_model = Column(String(50), nullable=True)  # podcast only: e.g. whisper-large-v3
     active = Column(Boolean, nullable=False, default=True, index=True)

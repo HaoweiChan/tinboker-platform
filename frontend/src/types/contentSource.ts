@@ -13,7 +13,8 @@ export interface ContentSource {
   region: string | null;
   language: string | null;
   spotify_url: string | null;
-  episode_limit: number | null;
+  lookback_days: number | null;
+  max_episodes: number | null;
   transcript_service: string | null;
   transcript_model: string | null;
   active: boolean;
@@ -30,7 +31,8 @@ export interface ContentSourceCreate {
   region?: string | null;
   language?: string | null;
   spotify_url?: string | null;
-  episode_limit?: number | null;
+  lookback_days?: number | null;
+  max_episodes?: number | null;
   transcript_service?: string | null;
   transcript_model?: string | null;
   active?: boolean;
@@ -42,7 +44,8 @@ export interface ContentSourceUpdate {
   region?: string | null;
   language?: string | null;
   spotify_url?: string | null;
-  episode_limit?: number | null;
+  lookback_days?: number | null;
+  max_episodes?: number | null;
   transcript_service?: string | null;
   transcript_model?: string | null;
   active?: boolean;

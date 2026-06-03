@@ -17,7 +17,8 @@ class ContentSourceBase(BaseModel):
     region: Optional[str] = Field(None, max_length=10, description="News region: US, TW, ...")
     language: Optional[str] = Field(None, max_length=10, description="Podcast content language: zh-TW, en")
     spotify_url: Optional[str] = Field(None, description="Podcast Spotify show URL")
-    episode_limit: Optional[int] = Field(None, ge=1, description="Podcast episodes per ingest run")
+    lookback_days: Optional[int] = Field(None, ge=1, description="Ingest window: only items newer than N days")
+    max_episodes: Optional[int] = Field(None, ge=1, description="Optional cap: at most N most-recent items per run")
     transcript_service: Optional[str] = Field(None, max_length=20, description="groq | whisper | openai")
     transcript_model: Optional[str] = Field(None, max_length=50, description="STT model, e.g. whisper-large-v3")
     active: bool = True
@@ -36,7 +37,8 @@ class ContentSourceUpdate(BaseModel):
     region: Optional[str] = Field(None, max_length=10)
     language: Optional[str] = Field(None, max_length=10)
     spotify_url: Optional[str] = None
-    episode_limit: Optional[int] = Field(None, ge=1)
+    lookback_days: Optional[int] = Field(None, ge=1)
+    max_episodes: Optional[int] = Field(None, ge=1)
     transcript_service: Optional[str] = Field(None, max_length=20)
     transcript_model: Optional[str] = Field(None, max_length=50)
     active: Optional[bool] = None
@@ -66,8 +68,8 @@ class ContentSourceListResponse(BaseModel):
 class ContentSourcePublic(BaseModel):
     """Minimal read-only shape the agents pipeline consumes when pulling the follow-list.
 
-    Mirrors the agents repo's per-show config (name, feed link, spotify, episode limit,
-    transcript service/model) so the orchestrator can map it 1:1.
+    The download step should select items published within `lookback_days`, optionally
+    capped at `max_episodes` most-recent. Maps 1:1 to the agents repo's per-show config.
     """
     source_type: SourceType
     name: str
@@ -76,7 +78,8 @@ class ContentSourcePublic(BaseModel):
     region: Optional[str] = None
     language: Optional[str] = None
     spotify_url: Optional[str] = None
-    episode_limit: Optional[int] = None
+    lookback_days: Optional[int] = None
+    max_episodes: Optional[int] = None
     transcript_service: Optional[str] = None
     transcript_model: Optional[str] = None
 

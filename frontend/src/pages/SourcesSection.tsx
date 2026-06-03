@@ -105,14 +105,15 @@ export const SourcesSection: React.FC = () => {
   // Build the right payload for create vs edit, normalizing empty strings to null.
   const handleSave = async (values: SourceFormValues, editingId?: number) => {
     const isPodcast = values.source_type === 'podcast';
-    const limit = values.episode_limit.trim() ? parseInt(values.episode_limit, 10) : null;
+    const toIntOrNull = (v: string) => (v.trim() ? parseInt(v, 10) : null);
     const shared = {
       name: values.name.trim(),
       feed_url: values.feed_url.trim(),
       region: isPodcast ? null : trimOrNull(values.region),
       language: isPodcast ? trimOrNull(values.language) : null,
       spotify_url: isPodcast ? trimOrNull(values.spotify_url) : null,
-      episode_limit: isPodcast ? limit : null,
+      lookback_days: toIntOrNull(values.lookback_days),
+      max_episodes: toIntOrNull(values.max_episodes),
       transcript_service: isPodcast ? trimOrNull(values.transcript_service) : null,
       transcript_model: isPodcast ? trimOrNull(values.transcript_model) : null,
       active: values.active,

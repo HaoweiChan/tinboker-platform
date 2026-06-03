@@ -16,7 +16,7 @@ interface SourceTableProps {
 
 interface EditingCell {
   id: number;
-  field: 'name' | 'episode_limit';
+  field: 'name' | 'lookback_days';
   value: string;
 }
 
@@ -31,7 +31,7 @@ export const SourceTable: React.FC<SourceTableProps> = ({
   const [saving, setSaving] = useState<number | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
 
-  const startEdit = (id: number, field: 'name' | 'episode_limit', current: string | number | null) => {
+  const startEdit = (id: number, field: 'name' | 'lookback_days', current: string | number | null) => {
     setEditingCell({ id, field, value: current == null ? '' : String(current) });
   };
 
@@ -42,7 +42,7 @@ export const SourceTable: React.FC<SourceTableProps> = ({
       setEditingCell(null);
       return;
     }
-    const current = editingCell.field === 'name' ? source.name : source.episode_limit;
+    const current = editingCell.field === 'name' ? source.name : source.lookback_days;
     const currentStr = current == null ? '' : String(current);
     if (editingCell.value !== currentStr) {
       setSaving(editingCell.id);
@@ -53,7 +53,7 @@ export const SourceTable: React.FC<SourceTableProps> = ({
           }
         } else {
           const n = parseInt(editingCell.value, 10);
-          await onUpdate(editingCell.id, { episode_limit: Number.isFinite(n) ? n : null });
+          await onUpdate(editingCell.id, { lookback_days: Number.isFinite(n) ? n : null });
         }
       } finally {
         setSaving(null);
@@ -119,7 +119,9 @@ export const SourceTable: React.FC<SourceTableProps> = ({
             <th className={thCls}>Name</th>
             <th className={thCls}>Locale</th>
             <th className={thCls}>Feed</th>
-            <th className={thCls}>Limit</th>
+            <th className={thCls} title="Only ingest items published within this many days (optional ≤ cap)">
+              Window
+            </th>
             <th className={thCls}>Active</th>
             <th className={thCls}>Actions</th>
           </tr>
@@ -129,7 +131,7 @@ export const SourceTable: React.FC<SourceTableProps> = ({
             const isSaving = saving === source.id;
             const isDeleting = deleting === source.id;
             const editingName = editingCell?.id === source.id && editingCell.field === 'name';
-            const editingLimit = editingCell?.id === source.id && editingCell.field === 'episode_limit';
+            const editingWindow = editingCell?.id === source.id && editingCell.field === 'lookback_days';
             const locale = source.source_type === 'news' ? source.region : source.language;
             return (
               <tr key={source.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -175,11 +177,9 @@ export const SourceTable: React.FC<SourceTableProps> = ({
                     <ExternalLink className="h-3 w-3 shrink-0" />
                   </a>
                 </td>
-                {/* Episode limit (podcast only) */}
+                {/* Ingest window (days) — applies to both podcasts and news */}
                 <td className="px-4 py-3">
-                  {source.source_type !== 'podcast' ? (
-                    <span className="italic text-gray-400">—</span>
-                  ) : editingLimit ? (
+                  {editingWindow ? (
                     <input
                       type="number"
                       min={1}
@@ -192,10 +192,22 @@ export const SourceTable: React.FC<SourceTableProps> = ({
                     />
                   ) : (
                     <div
-                      onClick={() => startEdit(source.id, 'episode_limit', source.episode_limit)}
-                      className="cursor-pointer rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                      onClick={() => startEdit(source.id, 'lookback_days', source.lookback_days)}
+                      className="flex cursor-pointer items-baseline gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                      title={
+                        source.max_episodes != null
+                          ? `Last ${source.lookback_days ?? '?'} days, capped at ${source.max_episodes} items/run`
+                          : 'Only ingest items newer than this many days'
+                      }
                     >
-                      {source.episode_limit ?? <span className="italic text-gray-400">Click…</span>}
+                      {source.lookback_days != null ? (
+                        <span>{source.lookback_days}d</span>
+                      ) : (
+                        <span className="italic text-gray-400">Click…</span>
+                      )}
+                      {source.max_episodes != null && (
+                        <span className="text-xs text-gray-400">≤{source.max_episodes}</span>
+                      )}
                     </div>
                   )}
                 </td>

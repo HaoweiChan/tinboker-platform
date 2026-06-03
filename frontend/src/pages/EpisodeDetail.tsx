@@ -110,8 +110,6 @@ function episodeInsightFrom(ep: ApiEpisode | null, fallbackTitle: string): Episo
   };
 }
 
-type RailTab = 'stocks' | 'chapters';
-
 export const EpisodeDetail: React.FC = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -121,7 +119,6 @@ export const EpisodeDetail: React.FC = () => {
 
   const [episode, setEpisode] = useState<ApiEpisode | null>(null);
   const [loading, setLoading] = useState(true);
-  const [railTab, setRailTab] = useState<RailTab>('stocks');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -165,12 +162,6 @@ export const EpisodeDetail: React.FC = () => {
   const name = episode?.podcast_name || podcastName || '節目';
   const episodeInsight = useMemo(() => episodeInsightFrom(episode, title), [episode, title]);
 
-  useEffect(() => {
-    if (railTab === 'stocks' && tickers.length === 0 && chapters.length > 0) {
-      setRailTab('chapters');
-    }
-  }, [chapters.length, railTab, tickers.length]);
-
   const onPlay = () => {
     if (!episode) return;
     playEpisode({
@@ -189,42 +180,29 @@ export const EpisodeDetail: React.FC = () => {
       <PageContent
         rail={
           tickers.length > 0 || chapters.length > 0 ? (
-            <nav className="bg-card border border-border rounded-md p-3" aria-label="集數導覽">
-              <div className="grid grid-cols-2 gap-1 rounded-md bg-muted/60 p-1 mb-3">
-                <button
-                  type="button"
-                  onClick={() => setRailTab('stocks')}
-                  className={cn('h-8 rounded text-[12px] font-medium transition-colors', railTab === 'stocks' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
-                >
-                  股票
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRailTab('chapters')}
-                  className={cn('h-8 rounded text-[12px] font-medium transition-colors', railTab === 'chapters' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
-                >
-                  章節
-                </button>
-              </div>
-              {railTab === 'stocks' ? (
-                tickers.length > 0 ? (
+            <nav className="bg-card border border-border rounded-md p-3 max-h-[calc(100vh-96px)] overflow-hidden" aria-label="集數導覽">
+              {tickers.length > 0 && (
+                <section aria-labelledby="episode-rail-tickers">
+                  <h4 id="episode-rail-tickers" className="text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground px-2 mb-2">提及股票</h4>
                   <div className="flex flex-col gap-1.5">
                     {tickers.map((t) => (
                       <TickerRow key={t.symbol} ticker={t} onClick={() => navigate(`/stock/${encodeURIComponent(t.symbol)}`)} />
                     ))}
                   </div>
-                ) : (
-                  <p className="px-2 py-4 text-[13px] text-muted-foreground">本集沒有提及股票。</p>
-                )
-              ) : (
-                <div className="flex flex-col gap-0.5">
+                </section>
+              )}
+              {chapters.length > 0 && (
+                <section aria-labelledby="episode-rail-chapters" className={cn(tickers.length > 0 && 'mt-4 pt-4 border-t border-border')}>
+                  <h4 id="episode-rail-chapters" className="text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground px-2 mb-2">章節</h4>
+                  <div className="flex flex-col gap-0.5 max-h-[44vh] overflow-y-auto pr-1">
                   {chapters.map((c, i) => (
                     <button key={i} type="button" onClick={() => requestSeek(c.timestampSeconds)} className="flex items-center gap-2.5 px-2 py-1.5 rounded text-left text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
                       <span className="font-mono text-[11px] text-muted-foreground shrink-0">{c.formattedTime}</span>
                       <span className="truncate">{c.title}</span>
                     </button>
                   ))}
-                </div>
+                  </div>
+                </section>
               )}
             </nav>
           ) : undefined

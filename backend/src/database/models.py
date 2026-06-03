@@ -3,7 +3,7 @@ SQLAlchemy ORM models for the TinBoker database.
 """
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, Index, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, JSON, Index, UniqueConstraint
 from src.database.postgres import Base
 
 
@@ -41,3 +41,41 @@ class StockTranslation(Base):
 
     def __repr__(self) -> str:
         return f"<StockTranslation(ticker='{self.ticker}', market='{self.market}', name_zh_tw='{self.name_zh_tw}')>"
+
+
+class ContentSource(Base):
+    """
+    Operator-maintained registry of followed content sources (podcast shows and
+    news RSS feeds). The platform owns this config; the tinboker-agents pipeline
+    pulls the active rows via GET /api/sources (see routers/sources.py).
+
+    Unifies two source types in one table:
+      - source_type="podcast": uses language, spotify_url, episode_limit, transcript_*
+      - source_type="news":    uses region; podcast-only columns stay NULL
+    """
+    __tablename__ = "content_sources"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    source_type = Column(String(20), nullable=False, index=True)  # "podcast" | "news"
+    name = Column(Text, nullable=False)
+    slug = Column(String(100), nullable=False)
+    feed_url = Column(Text, nullable=False)  # RSS/feed URL (podcast "link" / news "url")
+    region = Column(String(10), nullable=True, index=True)  # news region: "US" | "TW" | ...
+    language = Column(String(10), nullable=True)  # podcast content language: "zh-TW" | "en"
+    spotify_url = Column(Text, nullable=True)  # podcast only
+    episode_limit = Column(Integer, nullable=True)  # podcast only: episodes per ingest run
+    transcript_service = Column(String(20), nullable=True)  # podcast only: groq|whisper|openai
+    transcript_model = Column(String(50), nullable=True)  # podcast only: e.g. whisper-large-v3
+    active = Column(Boolean, nullable=False, default=True, index=True)
+    extra = Column(JSON, nullable=True)  # type-specific overflow / future-proofing
+    last_updated_by = Column(String(100), nullable=True)
+    last_updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("source_type", "slug", name="uq_source_type_slug"),
+        Index("idx_content_sources_type_active", "source_type", "active"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<ContentSource(type='{self.source_type}', slug='{self.slug}', active={self.active})>"

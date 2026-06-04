@@ -8,6 +8,7 @@ import {
     LayoutDashboard,
     Languages,
     Rss,
+    SlidersHorizontal,
     BarChart3,
     ChevronLeft,
     ChevronRight,
@@ -99,6 +100,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     to="/admin/sources"
                     icon={<Rss className="h-5 w-5" />}
                     label="Sources"
+                    collapsed={collapsed}
+                />
+                <NavItem
+                    to="/admin/pipeline"
+                    icon={<SlidersHorizontal className="h-5 w-5" />}
+                    label="Pipeline"
                     collapsed={collapsed}
                 />
                 <NavItem

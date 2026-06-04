@@ -22,6 +22,7 @@ import { AdminPage } from '@/pages/AdminPage';
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage';
 import { TranslationsSection } from '@/pages/TranslationsSection';
 import { SourcesSection } from '@/pages/SourcesSection';
+import { PipelineSettingsPage } from '@/pages/PipelineSettingsPage';
 import { AdminAnalyticsPage } from '@/pages/AdminAnalyticsPage';
 import { DevPortalPage } from '@/pages/DevPortalPage';
 import { DevGrafanaPage } from '@/pages/DevGrafanaPage';
@@ -101,6 +102,7 @@ function App() {
           <Route index element={<AdminDashboardPage />} />
           <Route path="translations" element={<TranslationsSection />} />
           <Route path="sources" element={<SourcesSection />} />
+          <Route path="pipeline" element={<PipelineSettingsPage />} />
           <Route path="analytics" element={<AdminAnalyticsPage />} />
         </Route>
 

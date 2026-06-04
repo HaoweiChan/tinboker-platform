@@ -27,6 +27,7 @@ from src.routers.translations import router as translations_router
 from src.routers.admin_translations import router as admin_translations_router
 from src.routers.sources import router as sources_router
 from src.routers.admin_sources import router as admin_sources_router
+from src.routers.admin_pipeline import router as admin_pipeline_router
 from src.routers.admin_system import router as admin_system_router
 from src.routers.admin_analytics import router as admin_analytics_router
 from src.routers.notifications import router as notifications_router
@@ -174,6 +175,7 @@ app.include_router(translations_router)
 app.include_router(admin_translations_router)
 app.include_router(sources_router)
 app.include_router(admin_sources_router)
+app.include_router(admin_pipeline_router)
 app.include_router(admin_system_router)
 app.include_router(admin_analytics_router)
 app.include_router(notifications_router)

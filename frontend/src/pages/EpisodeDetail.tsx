@@ -15,7 +15,7 @@ import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import { useTranslationMap } from '@/hooks/useTranslationMap';
 import { useEpisodeSentimentMap } from '@/hooks/useEpisodeSentimentMap';
 import { EpisodeInsightCard, type EpisodeInsight } from '@/components/episode/EpisodeInsightCard';
-import { MentionText } from '@/components/episode/InlineMarkers';
+import { SummaryMarkdown } from '@/components/episode/SummaryMarkdown';
 import type { Sentiment } from '@/lib/sentiment';
 
 function timeAgo(release: string | number | null | undefined, created: number): string {
@@ -40,17 +40,6 @@ function spotifyUriFrom(ep: ApiEpisode | null): string | undefined {
     if (ep.spotify_url.startsWith('spotify:episode:')) return ep.spotify_url;
   }
   return undefined;
-}
-
-function bulletsFrom(ep: ApiEpisode | null): string[] {
-  if (!ep) return [];
-  if (Array.isArray(ep.key_insights) && ep.key_insights.length > 0) return ep.key_insights.filter((s) => s && s.trim()).slice(0, 8);
-  const src = ep.modified_summary_content || ep.summary_content || '';
-  return src
-    .split('\n')
-    .map((l) => l.replace(/^[#>\-*\s]+/, '').replace(/\(#time:\s*\d+\)/g, '').replace(/[*_`]/g, '').trim())
-    .filter((l) => l.length > 4)
-    .slice(0, 8);
 }
 
 function cleanSummaryLine(line: string): string {
@@ -148,7 +137,6 @@ export const EpisodeDetail: React.FC = () => {
     };
   }, [id, podcastName]);
 
-  const bullets = useMemo(() => bulletsFrom(episode), [episode]);
   const chapters = useMemo<TimestampedSection[]>(() => (episode?.events_markdown_content ? parseTimestampedSections(episode.events_markdown_content) : []), [episode]);
   const clips = useMemo<TimestampedSection[]>(() => (episode?.sentences_markdown_content ? parseTimestampedSections(episode.sentences_markdown_content).slice(0, 8) : []), [episode]);
   const tickerSymbols = useMemo(() => (Array.isArray(episode?.related_tickers) ? episode!.related_tickers.slice(0, 8) : []), [episode]);
@@ -266,18 +254,11 @@ export const EpisodeDetail: React.FC = () => {
 
             {episodeInsight && <EpisodeInsightCard insight={episodeInsight} />}
 
-            {/* 本集重點 */}
-            {bullets.length > 0 && (
+            {/* 摘要 — full structured summary (headings, paragraphs, ticker/tag/time markers) */}
+            {(episode.modified_summary_content || episode.summary_content) && (
               <section className="bg-card border border-border rounded-md p-5 sm:p-6 mb-3.5">
-                <h3 className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-3.5">本集重點</h3>
-                <ul className="flex flex-col gap-2.5">
-                  {bullets.map((b, i) => (
-                    <li key={i} className="grid grid-cols-[14px_1fr] gap-2 text-[14px] leading-[1.55]">
-                      <span className="mt-[9px] w-1.5 h-1.5 rounded-full bg-foreground" />
-                      <span><MentionText text={b} /></span>
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-3.5">摘要</h3>
+                <SummaryMarkdown content={episode.modified_summary_content || episode.summary_content || ''} onSeek={requestSeek} />
               </section>
             )}
 

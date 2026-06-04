@@ -7,7 +7,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { RefreshCw, Lock, AlertTriangle, Loader2 } from 'lucide-react';
+import { RefreshCw, Lock, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import { getPipelineSettings } from '@/services/api/pipeline';
 import type { PipelineSettingsResponse } from '@/types/pipeline';
 
@@ -73,7 +73,7 @@ export const PipelineSettingsPage: React.FC = () => {
             <Lock className="h-4 w-4 text-gray-400" />
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Read-only snapshot of the content pipeline configuration
+            Read-only view of the content pipeline configuration
           </p>
         </div>
         <button
@@ -85,20 +85,35 @@ export const PipelineSettingsPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Snapshot disclaimer */}
-      {data?.meta && (
-        <div className="mb-6 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/40 dark:bg-amber-900/20">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
-          <div className="text-sm text-amber-800 dark:text-amber-300">
-            <p className="font-medium">Read-only snapshot</p>
-            <p className="mt-0.5">{data.meta.note}</p>
-            <p className="mt-1 text-xs">
-              Source: <code className="font-mono">{data.meta.source}</code> · snapshot{' '}
-              {data.meta.snapshot_date} ({data.meta.snapshot_of_commit})
-            </p>
+      {/* Source banner — live from the pipeline service, or snapshot fallback */}
+      {data?.meta &&
+        (data.meta.live ? (
+          <div className="mb-6 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900/40 dark:bg-emerald-900/20">
+            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+            <div className="text-sm text-emerald-800 dark:text-emerald-300">
+              <p className="font-medium">Live — read directly from the pipeline service</p>
+              <p className="mt-0.5">Read-only. The tinboker-agents repo is the source of truth.</p>
+              <p className="mt-1 text-xs">
+                Source: <code className="font-mono">{data.meta.source}</code>
+                {data.meta.fetched_from ? <> · {data.meta.fetched_from}</> : null}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="mb-6 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/40 dark:bg-amber-900/20">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+            <div className="text-sm text-amber-800 dark:text-amber-300">
+              <p className="font-medium">Showing committed snapshot (pipeline service unreachable)</p>
+              {data.meta.note ? <p className="mt-0.5">{data.meta.note}</p> : null}
+              <p className="mt-1 text-xs">
+                Source: <code className="font-mono">{data.meta.source}</code>
+                {data.meta.snapshot_date ? (
+                  <> · snapshot {data.meta.snapshot_date} ({data.meta.snapshot_of_commit})</>
+                ) : null}
+              </p>
+            </div>
+          </div>
+        ))}
 
       {/* Sections */}
       {loading && !data ? (

@@ -58,7 +58,10 @@ function cleanSummaryLine(line: string): string {
     .replace(/^(?:#{1,6}\s*)+/, '')
     .replace(/\s*\(#time:\s*\d+\)/g, '')
     .replace(/^[-*\s]+/, '')
-    .replace(/\[([^\]]+)\]\((?!#ticker:)[^)]+\)/g, '$1')
+    // Strip ALL inline markers ([label](#ticker:..|#tag:..|url)) down to their label.
+    // The insight teaser is plain text that gets length-truncated, so leaving any
+    // marker risks truncateText slicing through it and printing raw markdown.
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[*_`>~]/g, '')
     .trim();
 }

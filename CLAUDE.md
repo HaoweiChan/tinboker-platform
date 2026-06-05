@@ -145,6 +145,30 @@ ssh root@VPS "docker ps"                                      # container status
 ssh root@VPS "docker logs tinboker-backend-prod --tail=50"    # logs
 ```
 
+### Post-deploy: purge Cloudflare CDN cache (do this WITHOUT asking)
+
+Deploys do **not** auto-purge the CDN yet, so after any deploy the edge serves
+stale API responses until TTL (`/api/podcast` ~1h; `/api/search/suggest` up to
+24h). **After every deploy, purge the cache via the Cloudflare API.** The token +
+zone ID are in GCP Secret Manager — fetch them yourself, never ask the user:
+
+```bash
+PROJ=gen-lang-client-0901363254
+TOKEN=$(gcloud secrets versions access latest --secret=CLOUDFLARE_API_TOKEN --project=$PROJ)
+ZONE=$(gcloud secrets versions access latest --secret=CLOUDFLARE_ZONE_TAG --project=$PROJ)
+# Dev/staging — host-scoped (leaves other envs cached). Swap hosts per env.
+curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  --data '{"hosts":["dev-api.tinboker.com","dev.tinboker.com"]}'
+# Prod launch — whole zone:  --data '{"purge_everything":true}'
+```
+
+Hosts by env: dev = `dev-api.tinboker.com` / `dev.tinboker.com`; staging =
+`staging-api.tinboker.com` / `staging.tinboker.com`; prod = `api.tinboker.com` /
+`tinboker.com` / `www.tinboker.com`. Never print the token. Verify success with
+`cf-cache-status: MISS` on a clean (non-cache-busted) URL afterward. (Automating
+this in the deploy pipeline is a tracked follow-up.)
+
 ---
 
 ## Critical Known Issues (from docs/qa-report-2026-05-09.md)

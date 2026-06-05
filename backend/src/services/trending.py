@@ -12,7 +12,6 @@ from src.services.podcast import PodcastService
 from src.services.stock import StockService
 from src.cache.redis_client import cache_get, cache_set, get_redis
 from src.schemas.search import SearchResultItem
-from src.database.postgres import SessionLocal, init_engine
 from src.database.models import StockTranslation
 
 
@@ -51,8 +50,14 @@ class TrendingService:
         # Fetch from database
         translations = {}
         try:
-            init_engine()
-            db = SessionLocal()
+            # Use the module attribute, not the value imported at module-load time:
+            # init_engine() sets postgres.SessionLocal, but the name imported here
+            # stays None forever → SessionLocal() would call None() ('NoneType' object
+            # is not callable), silently breaking all translations.
+            from src.database import postgres
+            if postgres.SessionLocal is None:
+                postgres.init_engine()
+            db = postgres.SessionLocal()
             try:
                 for ticker in tickers:
                     # Determine market based on ticker format

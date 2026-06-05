@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
+import { cn } from '@/lib/utils';
 import { BottomTabs } from './BottomTabs';
 import { SearchDropdown } from '@/components/ui/SearchDropdown';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -50,13 +51,33 @@ function pageTitle(pathname: string): [string, string] {
  * App shell: left sidebar (desktop) + sticky top header + page content (<Outlet/>) + bottom tabs (mobile).
  * Wraps all consumer routes; /admin keeps its own layout.
  */
+const SIDEBAR_COLLAPSED_KEY = 'sidebar:collapsed';
+
 export const AppLayout: React.FC = () => {
   const { pathname } = useLocation();
   const [title, subtitle] = pageTitle(pathname);
 
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true';
+  });
+
+  React.useEffect(() => {
+    try {
+      window.localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(sidebarCollapsed));
+    } catch {
+      // localStorage may be unavailable (private mode); collapse still works in-session.
+    }
+  }, [sidebarCollapsed]);
+
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[220px_1fr] bg-background">
-      <Sidebar />
+    <div
+      className={cn(
+        'min-h-screen lg:grid bg-background transition-[grid-template-columns] duration-200 ease-in-out',
+        sidebarCollapsed ? 'lg:grid-cols-[64px_1fr]' : 'lg:grid-cols-[220px_1fr]',
+      )}
+    >
+      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed((v) => !v)} />
       <div className="flex flex-col min-w-0 min-h-screen">
         <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
           <div className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 lg:px-7 py-2 sm:py-3 max-w-[1440px] mx-auto w-full">

@@ -246,6 +246,7 @@ def create_episode_object(
         ticker_marp_markdown_public_url=gcs_urls.get('ticker_marp_markdown_public_url'),
         related_tickers=related_tickers,
         key_insights=summary_result.get('key_insights', []) if summary_result else [],
+        social_cards=summary_result.get('social_cards', []) if summary_result else [],
         created_time=created_time,
         feed_date_published_ms=feed_date_published_ms,
         number_click=0,

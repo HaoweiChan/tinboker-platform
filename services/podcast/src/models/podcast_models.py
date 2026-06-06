@@ -47,6 +47,7 @@ class PodcastEpisode:
     # Metadata
     related_tickers: List[str] = field(default_factory=list)  # List of ticker symbols
     key_insights: List[str] = field(default_factory=list)  # 3–8 plain-text zh-TW takeaways
+    social_cards: List[Dict] = field(default_factory=list)  # AlphaMemo-style cards (cover + per theme)
     created_time: datetime = field(default_factory=datetime.now)  # Timestamp
     number_click: int = 0  # Number of clicks
     num_likes: int = 0  # Number of likes
@@ -128,6 +129,10 @@ class PodcastEpisode:
         # previously-populated value).
         if self.key_insights:
             result['key_insights'] = self.key_insights
+
+        # Same merge-safe rule for the social cards (cover + per-theme).
+        if self.social_cards:
+            result['social_cards'] = self.social_cards
 
         # Add public URLs if they exist
         if self.mp3_public_url:
@@ -228,6 +233,7 @@ class PodcastEpisode:
             ticker_marp_markdown_public_url=data.get('ticker_marp_markdown_public_url'),
             related_tickers=data.get('related_tickers', []),
             key_insights=data.get('key_insights', []),
+            social_cards=data.get('social_cards', []),
             created_time=created_time,
             number_click=data.get('number_click', 0),
             num_likes=data.get('num_likes', 0),

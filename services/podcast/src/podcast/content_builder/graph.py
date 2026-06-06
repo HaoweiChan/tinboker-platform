@@ -40,6 +40,7 @@ from .nodes.key_insights_extractor import extract_key_insights
 from .nodes.markdown_transform import transform_to_markdown
 from .nodes.marp_converter import convert_marp, convert_marp_ticker
 from .nodes.marp_writer import write_marp_slides
+from .nodes.social_cards_builder import build_social_cards
 from .nodes.ticker_extractor import extract_tickers
 from .nodes.writer import write_article
 from .state import PipelineState
@@ -80,6 +81,7 @@ def build_graph() -> StateGraph:
     graph.add_node("extract_key_insights", extract_key_insights)
     graph.add_node("write_marp_slides", write_marp_slides)
     graph.add_node("convert_marp", convert_marp)
+    graph.add_node("build_social_cards", build_social_cards)
     graph.add_node("extract_tickers", extract_tickers)
     graph.add_node("write_ticker_marp", _write_ticker_marp)
     graph.add_node("convert_marp_ticker", convert_marp_ticker)
@@ -102,11 +104,15 @@ def build_graph() -> StateGraph:
     # Article branch (markdown → key_insights, derived from the finished summary)
     graph.add_edge("write_article", "transform_to_markdown")
     graph.add_edge("transform_to_markdown", "extract_key_insights")
-    graph.add_edge("extract_key_insights", END)
 
     # Marp branch
     graph.add_edge("write_marp_slides", "convert_marp")
-    graph.add_edge("convert_marp", END)
+
+    # Join: social cards need BOTH the marp slides and the key insights, so
+    # build_social_cards waits on both branches (LangGraph fan-in) before END.
+    graph.add_edge("extract_key_insights", "build_social_cards")
+    graph.add_edge("convert_marp", "build_social_cards")
+    graph.add_edge("build_social_cards", END)
 
     # Ticker branch
     graph.add_edge("extract_tickers", "write_ticker_marp")
@@ -131,6 +137,7 @@ def run_pipeline(
         - ticker_insights
         - ticker_marp_markdown
         - key_insights
+        - social_cards
     """
     app = build_graph()
 
@@ -150,4 +157,5 @@ def run_pipeline(
         "ticker_insights": result.get("ticker_insights"),
         "ticker_marp_markdown": result.get("ticker_marp_markdown", ""),
         "key_insights": result.get("key_insights", []),
+        "social_cards": result.get("social_cards", []),
     }

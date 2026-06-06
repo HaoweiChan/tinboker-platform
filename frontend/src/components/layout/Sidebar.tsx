@@ -66,31 +66,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
         collapsed ? 'w-[64px] px-2' : 'w-[220px] px-3.5',
       )}
     >
-      <Link
-        to="/"
-        title="聽播客 TinBoker"
+      {/* Brand + collapse control — the toggle is a distinct square icon button,
+          divided from the nav so it reads as a control, not a destination tab. */}
+      <div
         className={cn(
-          'flex items-center pt-1.5 pb-4 hover:opacity-80 transition-opacity',
-          collapsed ? 'justify-center px-0' : 'px-1',
+          'flex pt-1 pb-3.5 mb-2 border-b border-border',
+          collapsed ? 'flex-col items-center gap-2.5' : 'items-center justify-between gap-2',
         )}
       >
-        <AppLogo size={26} markOnly={collapsed} />
-      </Link>
+        <Link
+          to="/"
+          title="聽播客 TinBoker"
+          className={cn(
+            'flex items-center hover:opacity-80 transition-opacity',
+            collapsed ? 'justify-center' : 'px-1',
+          )}
+        >
+          <AppLogo size={26} markOnly={collapsed} />
+        </Link>
 
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-label={collapsed ? '展開側邊欄' : '收合側邊欄'}
-        aria-expanded={!collapsed}
-        title={collapsed ? '展開側邊欄' : '收合側邊欄'}
-        className={cn(
-          'flex items-center gap-2 px-2.5 py-2 mb-1 rounded-lg text-[13px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors',
-          collapsed && 'justify-center px-0',
-        )}
-      >
-        {collapsed ? <PanelLeftOpen size={18} className="shrink-0 opacity-85" /> : <PanelLeftClose size={18} className="shrink-0 opacity-85" />}
-        {!collapsed && '收合'}
-      </button>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label={collapsed ? '展開側邊欄' : '收合側邊欄'}
+          aria-expanded={!collapsed}
+          title={collapsed ? '展開側邊欄' : '收合側邊欄'}
+          className="grid place-items-center h-8 w-8 shrink-0 rounded-md border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border transition-colors"
+        >
+          {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+        </button>
+      </div>
 
       <nav className="flex flex-col gap-0.5">
         {NAV.map((item) => {

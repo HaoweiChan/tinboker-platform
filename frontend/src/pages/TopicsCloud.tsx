@@ -8,6 +8,47 @@ import { getTags } from '@/services/api/podcasts';
 import type { Tag } from '@/services/api/podcasts';
 import { fetchWithFallback } from '@/services/api/migration';
 
+// ---------------------------------------------------------------------------
+// Word-cloud animation styles — injected once, tree-shakable in production.
+// Reduced-motion: stagger and scale transitions are both disabled by the media
+// query so the guard is applied at the CSS layer, not just component logic.
+// ---------------------------------------------------------------------------
+const CLOUD_STYLES = `
+@keyframes tb-word-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: var(--tb-word-opacity); transform: translateY(0); }
+}
+.tb-word {
+  animation: tb-word-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--tb-word-delay, 0ms);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.tb-word:hover,
+.tb-word:focus-visible {
+  opacity: 1 !important;
+  transform: scale(1.07);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tb-word {
+    animation: none;
+    opacity: var(--tb-word-opacity);
+  }
+  .tb-word:hover,
+  .tb-word:focus-visible {
+    transform: none;
+  }
+}
+`;
+
+let _stylesInjected = false;
+function injectCloudStyles() {
+  if (_stylesInjected || typeof document === 'undefined') return;
+  const el = document.createElement('style');
+  el.textContent = CLOUD_STYLES;
+  document.head.appendChild(el);
+  _stylesInjected = true;
+}
+
 const TOPIC_LIMIT = 48;
 
 const topicLabels: Record<string, string> = {
@@ -64,6 +105,9 @@ export const TopicsCloud: React.FC = () => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Inject keyframe styles once on mount
+  useEffect(() => { injectCloudStyles(); }, []);
+
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -110,29 +154,67 @@ export const TopicsCloud: React.FC = () => {
         ) : (
           <>
             {/* Word cloud */}
-            <section className="bg-card border border-border rounded-md px-5 py-6 sm:px-7 sm:py-8">
-              <div className="flex flex-wrap content-center items-center justify-center gap-x-4 gap-y-2 min-h-[320px] sm:min-h-[420px]">
+            <section
+              className="bg-card border border-border rounded-md px-5 py-6 sm:px-7 sm:py-8 relative overflow-hidden"
+              style={{
+                // Faint radial vignette: a hint of the accent color pools at the
+                // centre, giving the cloud a spotlight feel without neon.
+                // Using hsl values that match the dark-mode card + accent-info tokens.
+                backgroundImage:
+                  'radial-gradient(ellipse 70% 55% at 50% 48%, hsl(222 55% 22% / 0.35) 0%, transparent 72%), ' +
+                  'radial-gradient(ellipse 100% 80% at 50% 50%, hsl(222 21% 11% / 0) 60%, hsl(222 22% 7% / 0.45) 100%)',
+              }}
+            >
+              <div className="flex flex-wrap content-center items-center justify-center gap-x-4 gap-y-2 min-h-[340px] sm:min-h-[440px]">
                 {posterTags.map((t, index) => {
                   const count = t.episode_count || 1;
-                  // Perceptually gentle power scale: top word ~36px, tail ~13px
+                  // Perceptually-tuned power scale:
+                  //   rank 0 → ~44px (commands the eye)
+                  //   rank ~10 → ~22px (clear secondary tier)
+                  //   tail → ~12px (legible but clearly background)
                   const ratio = count / maxCount;
-                  const fontSize = Math.round(13 + Math.pow(ratio, 0.45) * 23);
+                  const fontSize = Math.round(12 + Math.pow(ratio, 0.38) * 32);
+
+                  // Font weight tracks rank: top words feel heavy, tail stays regular
+                  const fontWeight = ratio > 0.6 ? 700 : ratio > 0.3 ? 600 : 500;
+
+                  // Opacity: hot topics are fully opaque, tail fades to 40%
+                  const opacity = 0.40 + ratio * 0.60;
+
+                  // Color temperature via CSS custom property:
+                  //   top words → accent-info (calm blue #5b8dff in dark)
+                  //   mid → foreground at reduced opacity (handled by opacity above)
+                  //   tail → muted-foreground colour
+                  // We express this as a blend between two token values using
+                  // the `color-mix` approach via inline class selection.
+                  const colorClass =
+                    ratio > 0.55
+                      ? 'text-accent-info'
+                      : ratio > 0.20
+                      ? 'text-foreground'
+                      : 'text-muted-foreground';
+
                   const label = getTopicLabel(t.name);
-                  // Accent the top 3; mute the long tail slightly
-                  const isTop = index < 3;
-                  const opacity = 0.45 + ratio * 0.55;
+
+                  // Stagger: spread first 24 words over 280ms; rest appear instantly
+                  const delayMs = index < 24 ? Math.round(index * 12) : 0;
 
                   return (
                     <Link
                       key={t.id || t.name}
                       to={`/topics/${encodeURIComponent(t.name)}`}
                       aria-label={`${label}，${count} 集提及`}
-                      className={`group relative inline-flex items-baseline gap-1 rounded px-1 py-0.5 font-semibold leading-snug outline-none transition-opacity duration-150 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-accent-info ${isTop ? 'text-accent-info' : 'text-foreground'}`}
-                      style={{ fontSize, opacity }}
+                      className={`tb-word group relative inline-flex items-baseline gap-1 rounded px-1 py-0.5 leading-snug outline-none focus-visible:ring-2 focus-visible:ring-accent-info ${colorClass}`}
+                      style={{
+                        fontSize,
+                        fontWeight,
+                        '--tb-word-opacity': opacity,
+                        '--tb-word-delay': `${delayMs}ms`,
+                      } as React.CSSProperties}
                     >
                       <span>{label}</span>
-                      {/* Count badge — visible on hover */}
-                      <span className="font-mono text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                      {/* Count badge — visible on hover/focus */}
+                      <span className="font-mono text-[10px] text-muted-foreground opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100">
                         {count}
                       </span>
                     </Link>

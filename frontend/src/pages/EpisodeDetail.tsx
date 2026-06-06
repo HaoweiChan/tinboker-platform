@@ -167,6 +167,34 @@ export const EpisodeDetail: React.FC = () => {
   const episodeInsight = useMemo(() => episodeInsightFrom(episode, title), [episode, title]);
   const podcasterImageUrl = podcastImageUrl || episode?.spotify_images?.[0] || null;
 
+  // SEO: a PodcastEpisode JSON-LD with Clip parts (one per timestamped section) so
+  // Google can surface chapters, plus a canonical URL + og:image. Sections come from
+  // the same timestamped parse the page already uses.
+  const canonicalUrl = episode ? `https://tinboker.com/episode/${episode.id}` : undefined;
+  const seoImage = episode?.summary_image_public_url || episode?.spotify_images?.[0] || podcasterImageUrl || undefined;
+  const structuredData = useMemo<Record<string, unknown> | undefined>(() => {
+    if (!episode) return undefined;
+    const sections = chapters.length ? chapters : clips;
+    const data: Record<string, unknown> = {
+      '@context': 'https://schema.org',
+      '@type': 'PodcastEpisode',
+      name: title,
+      partOfSeries: { '@type': 'PodcastSeries', name },
+    };
+    if (canonicalUrl) data.url = canonicalUrl;
+    if (seoImage) data.image = seoImage;
+    if (episode.released_at_ms) data.datePublished = new Date(episode.released_at_ms).toISOString();
+    if (sections.length) {
+      data.hasPart = sections.map((s) => ({
+        '@type': 'Clip',
+        name: s.title,
+        startOffset: s.timestampSeconds,
+        ...(canonicalUrl ? { url: `${canonicalUrl}#t-${s.timestampSeconds}` } : {}),
+      }));
+    }
+    return data;
+  }, [episode, chapters, clips, title, name, canonicalUrl, seoImage]);
+
   const onPlay = () => {
     if (!episode) return;
     playEpisode({
@@ -181,7 +209,13 @@ export const EpisodeDetail: React.FC = () => {
 
   return (
     <>
-      <SEO title={title} description={`${name} · ${title} — 結構化摘要與重點。`} />
+      <SEO
+        title={title}
+        description={`${name} · ${title} — 結構化摘要與重點。`}
+        image={seoImage}
+        url={canonicalUrl}
+        structuredData={structuredData}
+      />
       <PageContent
         rail={
           tickers.length > 0 ? (

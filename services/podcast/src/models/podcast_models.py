@@ -46,6 +46,7 @@ class PodcastEpisode:
     
     # Metadata
     related_tickers: List[str] = field(default_factory=list)  # List of ticker symbols
+    key_insights: List[str] = field(default_factory=list)  # 3–8 plain-text zh-TW takeaways
     created_time: datetime = field(default_factory=datetime.now)  # Timestamp
     number_click: int = 0  # Number of clicks
     num_likes: int = 0  # Number of likes
@@ -122,6 +123,12 @@ class PodcastEpisode:
             'episode_number': self.episode_number,
         }
         
+        # Only write key_insights when we actually have them — on an update()
+        # this keeps the write merge-safe (an empty extraction won't clobber a
+        # previously-populated value).
+        if self.key_insights:
+            result['key_insights'] = self.key_insights
+
         # Add public URLs if they exist
         if self.mp3_public_url:
             result['mp3_public_url'] = self.mp3_public_url
@@ -220,6 +227,7 @@ class PodcastEpisode:
             ticker_marp_markdown_url=data.get('ticker_marp_markdown_url'),
             ticker_marp_markdown_public_url=data.get('ticker_marp_markdown_public_url'),
             related_tickers=data.get('related_tickers', []),
+            key_insights=data.get('key_insights', []),
             created_time=created_time,
             number_click=data.get('number_click', 0),
             num_likes=data.get('num_likes', 0),

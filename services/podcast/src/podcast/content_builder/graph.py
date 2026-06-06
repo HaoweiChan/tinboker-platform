@@ -19,10 +19,11 @@ Graph topology (mirrors the original Dify workflow):
   transform_md    convert_marp        write_ticker_marp
       │                │                     │
       ▼                ▼                     ▼
-     END              END             convert_ticker_marp
-                                             │
-                                             ▼
-                                            END
+ extract_key_     convert_marp        convert_ticker_marp
+   insights           │                     │
+      │               ▼                     ▼
+      ▼              END                    END
+     END
 """
 
 from __future__ import annotations
@@ -35,6 +36,7 @@ from langgraph.graph import END, StateGraph
 from .nodes.clusterer import cluster_sentences
 from .nodes.events_markdown import build_events_markdown
 from .nodes.extractor import extract_events
+from .nodes.key_insights_extractor import extract_key_insights
 from .nodes.markdown_transform import transform_to_markdown
 from .nodes.marp_converter import convert_marp, convert_marp_ticker
 from .nodes.marp_writer import write_marp_slides
@@ -75,6 +77,7 @@ def build_graph() -> StateGraph:
     graph.add_node("build_events_markdown", build_events_markdown)
     graph.add_node("write_article", write_article)
     graph.add_node("transform_to_markdown", transform_to_markdown)
+    graph.add_node("extract_key_insights", extract_key_insights)
     graph.add_node("write_marp_slides", write_marp_slides)
     graph.add_node("convert_marp", convert_marp)
     graph.add_node("extract_tickers", extract_tickers)
@@ -96,9 +99,10 @@ def build_graph() -> StateGraph:
     graph.add_edge("cluster_sentences", "write_marp_slides")
     graph.add_edge("cluster_sentences", "extract_tickers")
 
-    # Article branch
+    # Article branch (markdown → key_insights, derived from the finished summary)
     graph.add_edge("write_article", "transform_to_markdown")
-    graph.add_edge("transform_to_markdown", END)
+    graph.add_edge("transform_to_markdown", "extract_key_insights")
+    graph.add_edge("extract_key_insights", END)
 
     # Marp branch
     graph.add_edge("write_marp_slides", "convert_marp")
@@ -126,6 +130,7 @@ def run_pipeline(
         - marp_markdown
         - ticker_insights
         - ticker_marp_markdown
+        - key_insights
     """
     app = build_graph()
 
@@ -144,4 +149,5 @@ def run_pipeline(
         "marp_markdown": result.get("marp_markdown", ""),
         "ticker_insights": result.get("ticker_insights"),
         "ticker_marp_markdown": result.get("ticker_marp_markdown", ""),
+        "key_insights": result.get("key_insights", []),
     }

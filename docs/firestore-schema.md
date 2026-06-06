@@ -32,6 +32,7 @@ uv run python services/podcast/scripts/publish_contract.py \
 | § 2.3 #1 `released_at_ms` | ✓ written on new episodes | [models/podcast_models.py:_compute_released_at_ms](../services/podcast/src/models/podcast_models.py) |
 | § 2.3 #3 `modified_*` preservation | ✓ writes use `merge=True`; no overwrite | [service/upload_to_firebase.py](../services/podcast/src/service/upload_to_firebase.py) |
 | § 2.3 #5 `spotify_release_date` as string | ✓ normalized on write | same |
+| § 2 `key_insights` (3–8 plain-text zh-TW) | ✓ generated in pipeline + written on new episodes; backfill script for existing | [content_builder/nodes/key_insights_extractor.py](../services/podcast/src/podcast/content_builder/nodes/key_insights_extractor.py), [models/podcast_models.py](../services/podcast/src/models/podcast_models.py), [scripts/backfill_key_insights.py](../services/podcast/scripts/backfill_key_insights.py) |
 | § 3 `tickers/{ticker}/episodes/*` index | ✓ existing | [service/upload_to_firebase.py](../services/podcast/src/service/upload_to_firebase.py) |
 | § 3 `tags/{tag}/episodes/*` index | ✓ existing | same |
 | § 4 `ticker_insights/{episode_id}/tickers/{ticker}` | ✓ new (B1) | [exporters/ticker_insights.py](../services/podcast/src/podcast/exporters/ticker_insights.py) |

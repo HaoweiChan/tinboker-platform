@@ -36,6 +36,7 @@ _MODEL_MAP: dict[str, str] = {
     "writer": os.getenv("WRITER_MODEL", _DEFAULT_MODEL),
     "marp_writer": os.getenv("MARP_WRITER_MODEL", _DEFAULT_MODEL),
     "ticker_extractor": os.getenv("TICKER_EXTRACTOR_MODEL", _DEFAULT_MODEL),
+    "key_insights_extractor": os.getenv("KEY_INSIGHTS_EXTRACTOR_MODEL", _DEFAULT_MODEL),
 }
 
 _TEMPERATURE_MAP: dict[str, float] = {
@@ -43,6 +44,7 @@ _TEMPERATURE_MAP: dict[str, float] = {
     "writer": 0.4,
     "marp_writer": 0.4,
     "ticker_extractor": 0.1,
+    "key_insights_extractor": 0.3,
 }
 
 # Max output tokens for OpenRouter models (Gemini handles this via its own defaults).
@@ -52,6 +54,7 @@ _MAX_TOKENS_MAP: dict[str, int] = {
     "writer": 8192,
     "marp_writer": 8192,
     "ticker_extractor": 2048,
+    "key_insights_extractor": 1024,
 }
 
 

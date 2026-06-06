@@ -86,6 +86,9 @@ class PipelineState(TypedDict, total=False):
     # After markdown transform
     markdown_report: str
 
+    # 3–8 plain-text zh-TW takeaways derived from markdown_report
+    key_insights: list[str]
+
     # Events markdown (parallel branch)
     events_markdown: str
 

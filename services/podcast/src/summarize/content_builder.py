@@ -42,7 +42,7 @@ def analyze_transcript_with_workflow_api(
 
     Returns:
         Dictionary with markdown_report, events_markdown, marp_markdown,
-        ticker_insights, ticker_marp_markdown.
+        ticker_insights, ticker_marp_markdown, key_insights.
 
     Raises:
         ValueError: If GOOGLE_API_KEY is not set
@@ -81,4 +81,5 @@ def analyze_transcript_with_workflow_api(
         "marp_markdown": result.get("marp_markdown") or None,
         "ticker_insights": result.get("ticker_insights") or None,
         "ticker_marp_markdown": result.get("ticker_marp_markdown") or None,
+        "key_insights": result.get("key_insights") or [],
     }

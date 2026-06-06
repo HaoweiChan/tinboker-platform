@@ -104,6 +104,7 @@ class SummarizeService:
                     marp_markdown = api_result.get("marp_markdown")
                     ticker_insights = api_result.get("ticker_insights")
                     ticker_marp_markdown = api_result.get("ticker_marp_markdown")
+                    key_insights = api_result.get("key_insights")
                 else:
                     # Backward compatibility: if API returns string, use it as markdown_report
                     summary_text = api_result
@@ -112,6 +113,7 @@ class SummarizeService:
                     marp_markdown = None
                     ticker_insights = None
                     ticker_marp_markdown = None
+                    key_insights = None
                 
                 # SVG and tickers remain as placeholders (Workflow API doesn't provide them)
                 from .placeholders import extract_placeholder_tickers, generate_placeholder_svg
@@ -119,10 +121,15 @@ class SummarizeService:
                 related_tickers = extract_placeholder_tickers()
                 
                 print("✓ Successfully generated summary using Workflow API")
+                if key_insights:
+                    print(f"  ✓ Also received key_insights ({len(key_insights)} items)")
                 result = {
                     'summary_text': summary_text,
                     'svg_content': svg_content,
-                    'related_tickers': related_tickers
+                    'related_tickers': related_tickers,
+                    # 3–8 plain-text zh-TW takeaways for the episode doc (may be empty
+                    # if extraction failed; downstream only writes it when non-empty).
+                    'key_insights': key_insights or []
                 }
                 
                 # Add events_markdown if available

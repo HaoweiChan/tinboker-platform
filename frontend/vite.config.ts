@@ -9,11 +9,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // autoUpdate: a new deploy activates immediately (skipWaiting + clientsClaim)
-      // and the page reloads via the controllerchange listener in PWAUpdatePrompt,
-      // so users never get stuck on a stale bundle. The old 'prompt' flow left the
-      // new SW waiting and didn't reliably activate it, so deploys never reached users.
-      registerType: 'autoUpdate',
+      // 'prompt': when a new deploy is detected we surface a styled toast
+      // (PWAUpdatePrompt) whose 更新 button calls updateServiceWorker(true) → posts
+      // SKIP_WAITING → the new SW activates → controllerchange reloads the page.
+      // skipWaiting/clientsClaim are intentionally OFF so the waiting SW activates
+      // only when the user taps 更新 (the button is the control). The earlier broken
+      // prompt never posted SKIP_WAITING, so its button did nothing; this flow does.
+      registerType: 'prompt',
       includeAssets: ['favicon.png', 'robots.txt', 'sitemap.xml'],
       manifest: {
         name: 'TinBoker - 聽播客',
@@ -42,8 +44,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        skipWaiting: true,
-        clientsClaim: true,
+        // OFF for the prompt flow: the new SW waits until the user taps 更新
+        // (updateServiceWorker(true) posts SKIP_WAITING), then claims + reloads.
+        skipWaiting: false,
+        clientsClaim: false,
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024, // 6 MB to handle large bundles
         runtimeCaching: [

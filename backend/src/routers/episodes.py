@@ -84,13 +84,14 @@ async def get_ticker_sentiments(body: TickerSentimentsRequest):
 @cdn_cache_trending
 async def get_recent_buzz(
     days: int = Query(default=30, ge=1, le=90, description="Rolling window in days"),
-    limit: int = Query(default=10, ge=1, le=50, description="Max tickers to return"),
+    limit: int = Query(default=10, ge=1, le=200, description="Max tickers to return (rail uses 10; StockIndex uses 200)"),
 ):
     """Genuine 'what people are discussing lately' from the recent launch feed.
 
     Returns {tickers: [{ticker, count, sentiment_label, last_mentioned}], distinct_count,
     episode_count} computed from the recent (zh-TW-scoped, recency-filtered) episodes —
-    NOT the all-time agents-precomputed trending_tickers. Powers the homepage right rail.
+    NOT the all-time agents-precomputed trending_tickers. Powers the homepage right rail
+    and the /stock index (所有個股) — both reflect real recent mention counts.
     """
     try:
         return await trending_service.get_recent_buzz(days=days, limit=limit)

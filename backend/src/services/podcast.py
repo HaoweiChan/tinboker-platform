@@ -590,14 +590,10 @@ class PodcastService:
                 direction="DESCENDING", limit=fetch_limit,
             )
 
-            dicts = []
-            for ref in episode_refs:
-                eid = ref.get('episode_id')
-                if eid:
-                    doc = self.firestore_service.get_document("episodes", eid)
-                    if doc:
-                        dicts.append(doc)
-
+            eids = [ref.get('episode_id') for ref in episode_refs if ref.get('episode_id')]
+            dicts = await asyncio.to_thread(
+                self.firestore_service.get_documents_batch, "episodes", eids,
+            ) if eids else []
             episodes = await asyncio.gather(
                 *[self.transformer.to_episode(d, enrich_content=enrich_content) for d in dicts]
             )
@@ -673,26 +669,22 @@ class PodcastService:
         self, tag: str, limit: int = 50, offset: int = 0,
         enrich_content: bool = False,
     ) -> List[Episode]:
-        """Get episodes for a specific tag"""
+        """Get episodes for a specific tag (batch-read for performance)."""
         try:
             allowed = await self._allowed_podcast_names()
             cutoff = self._recency_cutoff_ms()
             scoping_active = allowed is not None or cutoff is not None
             fetch_limit = max((limit + offset) * 5, 100) if scoping_active else (limit + offset)
-            episode_refs = self.firestore_service.get_subcollection_documents(
+            episode_refs = await asyncio.to_thread(
+                self.firestore_service.get_subcollection_documents,
                 collection="tags", parent_doc_id=tag.lower(),
                 subcollection="episodes", order_by="created_time",
                 direction="DESCENDING", limit=fetch_limit,
             )
-
-            dicts = []
-            for ref in episode_refs:
-                eid = ref.get('episode_id')
-                if eid:
-                    doc = self.firestore_service.get_document("episodes", eid)
-                    if doc:
-                        dicts.append(doc)
-
+            eids = [ref.get('episode_id') for ref in episode_refs if ref.get('episode_id')]
+            dicts = await asyncio.to_thread(
+                self.firestore_service.get_documents_batch, "episodes", eids,
+            ) if eids else []
             episodes = await asyncio.gather(
                 *[self.transformer.to_episode(d, enrich_content=enrich_content) for d in dicts]
             )
@@ -700,6 +692,85 @@ class PodcastService:
             return episodes[offset:offset + limit]
         except Exception as e:
             raise Exception(f"Failed to get episodes by tag: {e}") from e
+
+    async def get_trending_tags(self, weeks: int = 6, preview_count: int = 3) -> List[dict]:
+        """Return curated tags with scoped counts, weekly sparkline data, and episode previews.
+        Results are cached for 30 minutes. Tags with 0 scoped episodes are omitted."""
+        cache_key = f"tags:trending:v1:{weeks}:{preview_count}:{self._scope_tag()}"
+        cached = await cache_get(cache_key)
+        if cached:
+            try:
+                return json.loads(cached)
+            except Exception:
+                pass
+        allowed = await self._allowed_podcast_names()
+        cutoff = self._recency_cutoff_ms()
+        now_ms = int(datetime.now().timestamp() * 1000)
+        week_ms = 7 * 24 * 3600 * 1000
+        week_boundaries = [now_ms - i * week_ms for i in range(weeks + 1)]
+        sem = asyncio.Semaphore(6)
+
+        async def _process_tag(tid: str) -> Optional[dict]:
+            async with sem:
+                try:
+                    refs = await asyncio.to_thread(
+                        self.firestore_service.get_subcollection_documents,
+                        collection="tags", parent_doc_id=tid,
+                        subcollection="episodes", order_by="created_time",
+                        direction="DESCENDING", limit=200,
+                    )
+                    eids = [r.get('episode_id') for r in refs if r.get('episode_id')]
+                    if not eids:
+                        return None
+                    dicts = await asyncio.to_thread(
+                        self.firestore_service.get_documents_batch, "episodes", eids,
+                    )
+                    scoped_dicts = []
+                    for d in dicts:
+                        if not self._dict_has_content(d):
+                            continue
+                        if allowed is not None and d.get('podcast_name') not in allowed:
+                            continue
+                        if cutoff is not None and self._dict_release_ms(d) < cutoff:
+                            continue
+                        scoped_dicts.append(d)
+                    if not scoped_dicts:
+                        return None
+                    scoped_dicts.sort(key=lambda d: self._dict_release_ms(d), reverse=True)
+                    weekly = [0] * weeks
+                    for d in scoped_dicts:
+                        t = self._dict_release_ms(d)
+                        for w in range(weeks):
+                            if t >= week_boundaries[w + 1]:
+                                weekly[w] += 1
+                                break
+                    previews = []
+                    for d in scoped_dicts[:preview_count]:
+                        previews.append({
+                            "id": d.get("id", ""),
+                            "title": d.get("episode_title", ""),
+                            "podcast_name": d.get("podcast_name", ""),
+                            "released_at_ms": self._dict_release_ms(d),
+                            "key_insights": (d.get("key_insights") or [])[:3],
+                            "related_tickers": (d.get("related_tickers") or [])[:4],
+                        })
+                    return {
+                        "id": tid, "name": tid,
+                        "scoped_count": len(scoped_dicts),
+                        "weekly_counts": weekly,
+                        "recent_episodes": previews,
+                    }
+                except Exception:
+                    logger.warning("Failed to process trending tag %s", tid, exc_info=True)
+                    return None
+
+        results = await asyncio.gather(*[_process_tag(t) for t in self._TOPIC_TAGS])
+        tags = sorted([r for r in results if r], key=lambda x: x["scoped_count"], reverse=True)
+        try:
+            await cache_set(cache_key, json.dumps(tags), 1800)
+        except Exception:
+            pass
+        return tags
 
     # ── Search ───────────────────────────────────────────────────────
 

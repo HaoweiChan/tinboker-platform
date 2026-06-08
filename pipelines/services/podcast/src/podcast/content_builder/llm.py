@@ -7,13 +7,14 @@ Per-role models are configured via env vars (``EXTRACTOR_MODEL``, ``WRITER_MODEL
 - ``"openrouter:deepseek/deepseek-chat"``    → OpenRouter, OpenAI-compatible API
   (``OPENROUTER_API_KEY``). The part after ``openrouter:`` is the OpenRouter model id.
 
-So you can mix providers per role, e.g. cheap structured extraction on Gemini Flash-Lite
-and the Chinese summary on an OpenRouter model — without touching code.
+Admin overrides from the platform DB (``pipeline_config_overrides`` table) take
+precedence over env vars when available. The pipeline reads them once at import time.
 """
 
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import time
@@ -26,29 +27,54 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 _PROMPTS_DIR = Path(__file__).parent / "prompts"
 _MAX_RETRIES = 2
+_log = logging.getLogger(__name__)
 
-_DEFAULT_MODEL = "gemini-2.5-flash"
+_DEFAULT_MODEL = "openrouter:xiaomi/mimo-v2.5"
 _OPENROUTER_PREFIX = "openrouter:"
 _OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
+
+def _load_db_overrides() -> dict[str, Any]:
+    """Try to load admin overrides from Postgres (best-effort, never blocks)."""
+    db_url = os.getenv("PLATFORM_DATABASE_URL") or os.getenv("EPISODE_DATABASE_URL")
+    if not db_url:
+        return {}
+    try:
+        import sqlalchemy as sa
+        engine = sa.create_engine(db_url, pool_pre_ping=True)
+        with engine.connect() as conn:
+            row = conn.execute(
+                sa.text("SELECT overrides FROM pipeline_config_overrides WHERE namespace = 'default' LIMIT 1")
+            ).fetchone()
+        engine.dispose()
+        if row and row[0]:
+            overrides = row[0] if isinstance(row[0], dict) else json.loads(row[0])
+            _log.info("Loaded pipeline config overrides from DB: %s", list(overrides.get("llm", {}).keys()))
+            return overrides
+    except Exception as exc:
+        _log.debug("Could not load pipeline overrides from DB: %s", exc)
+    return {}
+
+
+_DB_OVERRIDES = _load_db_overrides()
+_LLM_OVERRIDES = _DB_OVERRIDES.get("llm", {})
+
 _MODEL_MAP: dict[str, str] = {
-    "extractor": os.getenv("EXTRACTOR_MODEL", _DEFAULT_MODEL),
-    "writer": os.getenv("WRITER_MODEL", _DEFAULT_MODEL),
-    "marp_writer": os.getenv("MARP_WRITER_MODEL", _DEFAULT_MODEL),
-    "ticker_extractor": os.getenv("TICKER_EXTRACTOR_MODEL", _DEFAULT_MODEL),
-    "key_insights_extractor": os.getenv("KEY_INSIGHTS_EXTRACTOR_MODEL", _DEFAULT_MODEL),
+    "extractor": _LLM_OVERRIDES.get("extractor_model") or os.getenv("EXTRACTOR_MODEL", _DEFAULT_MODEL),
+    "writer": _LLM_OVERRIDES.get("writer_model") or os.getenv("WRITER_MODEL", _DEFAULT_MODEL),
+    "marp_writer": _LLM_OVERRIDES.get("marp_writer_model") or os.getenv("MARP_WRITER_MODEL", _DEFAULT_MODEL),
+    "ticker_extractor": _LLM_OVERRIDES.get("ticker_extractor_model") or os.getenv("TICKER_EXTRACTOR_MODEL", _DEFAULT_MODEL),
+    "key_insights_extractor": _LLM_OVERRIDES.get("key_insights_extractor_model") or os.getenv("KEY_INSIGHTS_EXTRACTOR_MODEL", _DEFAULT_MODEL),
 }
 
 _TEMPERATURE_MAP: dict[str, float] = {
-    "extractor": 0.1,
-    "writer": 0.4,
-    "marp_writer": 0.4,
-    "ticker_extractor": 0.1,
-    "key_insights_extractor": 0.3,
+    "extractor": _LLM_OVERRIDES.get("temperatures", {}).get("extractor", 0.1),
+    "writer": _LLM_OVERRIDES.get("temperatures", {}).get("writer", 0.4),
+    "marp_writer": _LLM_OVERRIDES.get("temperatures", {}).get("marp_writer", 0.4),
+    "ticker_extractor": _LLM_OVERRIDES.get("temperatures", {}).get("ticker_extractor", 0.1),
+    "key_insights_extractor": _LLM_OVERRIDES.get("temperatures", {}).get("key_insights_extractor", 0.3),
 }
 
-# Max output tokens for OpenRouter models (Gemini handles this via its own defaults).
-# Writer/marp roles need headroom for long Chinese prose; extraction roles don't.
 _MAX_TOKENS_MAP: dict[str, int] = {
     "extractor": 2048,
     "writer": 8192,

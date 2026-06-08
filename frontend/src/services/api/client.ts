@@ -62,9 +62,9 @@ const getBaseURL = (): string => {
     return envUrl;
   }
 
-  // Development: use local backend by default
+  // Development: use Vite proxy (empty base URL = same origin → proxy handles /api)
   if (!import.meta.env.PROD) {
-    cachedApiUrl = 'http://localhost:3000';
+    cachedApiUrl = '';
     return cachedApiUrl;
   }
 

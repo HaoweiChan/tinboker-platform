@@ -301,6 +301,38 @@ export async function getRecentBuzz(
   };
 }
 
+export interface EpisodePreview {
+  id: string;
+  title: string;
+  podcast_name: string;
+  released_at_ms?: number | null;
+  key_insights: string[];
+  related_tickers: string[];
+}
+
+export interface TrendingTag {
+  id: string;
+  name: string;
+  scoped_count: number;
+  weekly_counts: number[];
+  recent_episodes: EpisodePreview[];
+}
+
+export interface TrendingTagsResponse {
+  tags: TrendingTag[];
+}
+
+export async function getTrendingTags(
+  weeks: number = 6,
+  previewCount: number = 3,
+): Promise<TrendingTagsResponse> {
+  const response = await apiClient.get('/api/tags/trending', {
+    params: { weeks, preview_count: previewCount },
+  });
+  const d = response.data ?? {};
+  return { tags: Array.isArray(d.tags) ? d.tags : [] };
+}
+
 export async function getTags(): Promise<TagsResponse> {
   const response = await apiClient.get('/api/tags');
   if (response.data?.tags && Array.isArray(response.data.tags)) {

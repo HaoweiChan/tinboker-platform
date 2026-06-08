@@ -64,7 +64,7 @@ const getBaseURL = (): string => {
 
   // Development: use Vite proxy (empty base URL = same origin → proxy handles /api)
   if (!import.meta.env.PROD) {
-    cachedApiUrl = '';
+    cachedApiUrl = 'http://localhost:5174';
     return cachedApiUrl;
   }
 

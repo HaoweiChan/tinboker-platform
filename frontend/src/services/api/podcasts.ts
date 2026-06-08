@@ -432,3 +432,26 @@ export async function deleteEpisodeSummary(
     `/api/podcast/${podcastName}/episodes/${episodeId}/summary`
   );
 }
+
+export async function patchEpisode(
+  podcastName: string,
+  episodeId: string,
+  updates: Partial<Pick<Episode, 'summary_content' | 'key_insights' | 'related_tickers' | 'tags'>>,
+): Promise<Episode> {
+  const response = await apiClient.patch(
+    `/api/podcast/${podcastName}/episodes/${episodeId}`,
+    updates,
+  );
+  return response.data;
+}
+
+export async function getEpisodeHeavy(
+  podcastName: string,
+  episodeId: string,
+): Promise<Episode> {
+  const response = await apiClient.get(
+    `/api/podcast/${podcastName}/episodes/${episodeId}`,
+    { params: { include_heavy_content: true } },
+  );
+  return response.data;
+}

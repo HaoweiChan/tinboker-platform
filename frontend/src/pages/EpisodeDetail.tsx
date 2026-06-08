@@ -16,7 +16,10 @@ import { useTranslationMap } from '@/hooks/useTranslationMap';
 import { useEpisodeSentimentMap } from '@/hooks/useEpisodeSentimentMap';
 import { EpisodeInsightCard, type EpisodeInsight } from '@/components/episode/EpisodeInsightCard';
 import { SummaryMarkdown } from '@/components/episode/SummaryMarkdown';
+import { EpisodeDebugPanel } from '@/components/episode/EpisodeDebugPanel';
 import type { Sentiment } from '@/lib/sentiment';
+
+const IS_DEV = import.meta.env.DEV || (import.meta.env.VITE_STAGE as string) === 'DEV';
 
 // Episodes can carry dozens of tags; show only a handful so the row stays meaningful.
 const MAX_HERO_TAGS = 6;
@@ -298,6 +301,10 @@ export const EpisodeDetail: React.FC = () => {
                   ))}
                 </div>
               </section>
+            )}
+
+            {IS_DEV && episode && (
+              <EpisodeDebugPanel episode={episode} onUpdated={setEpisode} />
             )}
 
             {id && podcastName && (

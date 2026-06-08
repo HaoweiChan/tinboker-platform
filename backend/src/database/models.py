@@ -3,7 +3,7 @@ SQLAlchemy ORM models for the TinBoker database.
 """
 
 from datetime import datetime
-from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime, Boolean, JSON, Index, UniqueConstraint
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text, DateTime, Boolean, JSON, Index, UniqueConstraint
 from src.database.postgres import Base
 
 
@@ -147,4 +147,25 @@ class ArticleTicker(Base):
     __table_args__ = (
         UniqueConstraint("article_id", "ticker", name="uq_article_ticker"),
         Index("idx_article_tickers_ticker", "ticker"),
+    )
+
+
+class StockDailyClose(Base):
+    """Permanent store for historical daily closing prices.
+
+    Once a trading day ends, the close is immutable — storing it in the DB
+    means we never need to re-fetch from FinMind/Massive for the same
+    (ticker, date) pair.
+    """
+    __tablename__ = "stock_daily_closes"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ticker = Column(String(20), nullable=False)
+    date = Column(String(10), nullable=False)  # YYYY-MM-DD
+    close = Column(Float, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint("ticker", "date", name="uq_ticker_date"),
+        Index("idx_daily_close_ticker_date", "ticker", "date"),
     )

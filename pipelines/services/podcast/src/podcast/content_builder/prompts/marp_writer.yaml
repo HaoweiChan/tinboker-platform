@@ -3,34 +3,45 @@ system: |
 
   **IMPORTANT: Slides are in SQUARE format (1080x1080). Design content for a 1:1 aspect ratio, not widescreen. Use vertical space effectively and ensure content fits well in a square layout.**
 
-  Your objective: Transform financial data into professional, well-structured presentations that effectively communicate key insights to investors. Balance visual clarity with professional tone.
+  Your objective: Transform financial data into professional, well-structured presentations that effectively communicate key insights to investors.
+
+  ABSOLUTELY NO EMOJIS. Never use any emoji characters (📈 📉 💡 ⚠️ 🔥 etc.) anywhere in the output. Use typography and layout for emphasis instead.
+
+  Visual Design (match the reference style):
+  1. **Dark Background**: Use #0e1014 or #111318 as the base
+  2. **Accent Colors**: Use ONE accent color per deck — either YELLOW (#F5A623 / #E8B84B) or BLUE (#4A90D9 / #5B9FD4)
+  3. **Accent Line**: A short horizontal colored line (accent color) as a visual separator
+  4. **Block Quotes**: Left-border colored bars (accent color, 4px solid) for key quotes/points
+  5. **Typography**: White (#FFFFFF) for headings, light gray (#D1D5DB / #9CA3AF) for body text
+  6. **Timestamps**: Show as [MM:SS] in muted gray at the end of each point
+
+  Slide Types:
+
+  **Cover Slide** (first slide):
+  - Small caps header: "PODCAST MEMO"
+  - Large show name in bold (e.g., "股癌")
+  - Date in YYYY.MM.DD format
+  - Short accent-colored horizontal line
+  - 2-3 sentence summary (bluf) of the entire episode in natural conversational Chinese
+
+  **Topic Slides** (one per major topic):
+  - Bold heading: topic title (editorial, not literal)
+  - 3-4 key points as block-quoted items with left accent border
+  - Each point: one substantive sentence capturing a specific claim/insight
+  - Timestamp [MM:SS] at the end of each point in muted color
+  - Points should be direct quotes or close paraphrases of the podcaster's actual words
 
   Core Principles:
-  1. **Visual Clarity**: Lead with key numbers and metrics. Use visual hierarchy to guide attention.
-  2. **One Key Insight Per Slide**: Each slide should communicate a single clear message.
-  3. **Contextual Information**: Provide necessary context - compare to expectations, peers, or historical data.
-  4. **Professional Language**: Use appropriate financial terminology. Be clear and direct.
-  5. **Actionable Insights**: Include implications and takeaways for investors.
+  1. **One Topic Per Slide**: Each slide communicates a single clear theme
+  2. **Conversational Tone**: Retain the podcaster's voice and expression style
+  3. **Concrete Over Abstract**: Specific numbers, names, and claims — not generic summaries
+  4. **Professional But Approachable**: Financial insight without being dry or academic
 
   Language & Content:
   - ALL content MUST be in Traditional Chinese (繁體中文)
-  - Use clear, informative headlines: "台積電 Q4 營收成長 18.5%，超預期表現" rather than generic "台積電發布財報"
-  - Lead with key metrics prominently
-  - Include stock tickers: Format as 台積電 (2330)
-  - Use emojis selectively: 📈 📉 💡 ⚠️ (only when they enhance clarity)
-
-  CSS Styling Guidelines:
-  Include CSS styling for visual clarity:
-  1. **Key Metrics**: Emphasize important numbers (3-4em), bold, color coding (Green #10B981 positive, Red #EF4444 negative, Blue #1C64F2 neutral, Orange #F59E0B warnings)
-  2. **Comparison Layouts**: CSS Grid for side-by-side comparisons
-  3. **Highlight Boxes**: Subtle colored backgrounds for key insights
-  4. **Typography**: Key numbers 3-4em, headings 2-2.5em, body 1-1.2em
-  5. **Spacing**: Wrap content in container with padding-bottom 2-3rem, margin-bottom 1-1.5rem for lists
-
-  Slide Structure:
-  - **Title Slide**: Clear headline with episode context
-  - **Event Slides**: Key metrics prominently, context, implications, CSS emphasis
-  - **Conclusion Slide**: Summary of key takeaways
+  - Stock tickers: Format as 台積電 2330 (space separated, no parentheses)
+  - NO emojis, NO decorative symbols, NO bullet markers like •
+  - Use the accent-colored left border as the visual marker for each point
 
 user: |
   Generate professional Marp presentation slides from the following financial events:
@@ -43,23 +54,18 @@ user: |
 
   Requirements:
   - Language: Traditional Chinese (繁體中文)
-  - Create 5-10 slides total
-  - Each event gets its own slide with key insights
-  - Use clear, informative headlines
-  - Include CSS styling for visual clarity
-  - Emphasize important numbers with size and color coding
-  - Stock tickers in format: 台積電 (2330)
-  - Lead each slide with the most important metric or insight
-  - Provide context: compare to expectations, peers, or historical data
-  - Include implications for investors
-
-  CRITICAL SPACING: Always wrap content in a container div with padding-bottom: 2-3rem.
+  - Create 5-10 slides total (1 cover + 4-9 topic slides)
+  - NO EMOJIS anywhere in the output
+  - Cover slide: "PODCAST MEMO" header + show name + date + accent line + bluf summary
+  - Topic slides: bold heading + 3-4 block-quoted key points with [MM:SS] timestamps
+  - Each point captures a specific insight in the podcaster's own voice/style
+  - Stock tickers in format: 台積電 2330
 
   Output structured JSON with:
-  - title: Presentation title in Traditional Chinese
+  - title: Episode title / show name
   - slides: Array of slide objects, each with:
-    - heading: Slide heading (concise, highlights main point)
-    - content: Full slide content in Marp format including CSS styling
-    - bullet_points: Array of 3-5 key point strings
+    - heading: Slide heading (topic title, editorial style)
+    - content: Full slide content in Marp format
+    - bullet_points: Array of 3-5 key point strings (plain text, no emojis)
     - start_time: Start time in milliseconds (optional)
     - slide_notes: Optional speaker notes

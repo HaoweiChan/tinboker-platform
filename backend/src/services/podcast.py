@@ -926,6 +926,35 @@ class PodcastService:
             logger.error(f"Failed to delete modified summary: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to delete modified summary: {str(e)}")
 
+    async def patch_episode_fields(
+        self, podcast_name: str, episode_id: str,
+        updates: dict,
+    ) -> Episode:
+        """Patch allowed fields directly in Firestore (dev debug editor)."""
+        from fastapi import HTTPException
+        allowed = {"summary_content", "key_insights", "related_tickers", "tags"}
+        bad_keys = set(updates.keys()) - allowed
+        if bad_keys:
+            raise HTTPException(status_code=422, detail=f"Fields not patchable: {', '.join(sorted(bad_keys))}")
+        if not updates:
+            raise HTTPException(status_code=422, detail="No fields to update")
+        episode_dict = self.firestore_service.get_document("episodes", episode_id)
+        if not episode_dict:
+            raise HTTPException(status_code=404, detail=f"Episode {episode_id} not found")
+        if episode_dict.get("podcast_name") != podcast_name:
+            raise HTTPException(status_code=404, detail=f"Episode {episode_id} not found for podcast {podcast_name}")
+        try:
+            await asyncio.to_thread(
+                self.firestore_service.set_document, "episodes", episode_id, updates, True,
+            )
+            await self._invalidate_episode_cache(podcast_name, episode_id)
+            return await self.get_episode_by_id(podcast_name, episode_id, apply_scope=False)
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Failed to patch episode fields: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to patch episode: {str(e)}")
+
     async def _invalidate_episode_cache(self, podcast_name: str, episode_id: str):
         """Invalidate all caches related to an episode"""
         await cache_delete(f"podcast:{podcast_name}:episode:{episode_id}")

@@ -175,6 +175,47 @@ def _episode_sentences(doc: dict[str, Any]) -> list[dict[str, Any]]:
     return doc.get("sentences") or doc.get("transcript_sentences") or []
 
 
+def _derive_sentences_from_transcript(
+    transcript: str, duration_ms: Optional[int] = None, target_chars: int = 45
+) -> list[dict[str, Any]]:
+    """Build a sentence array from a plain transcript when none is stored inline.
+
+    Many already-published episodes keep only the flat ``transcript`` text (no
+    sentence-level array). ASR output here has no punctuation, so we group the
+    whitespace-separated phrases into ~``target_chars`` chunks (readable,
+    segmentable units) and — when the episode duration is known — spread
+    proportional timestamps across it so the clusterer/events glue runs unchanged.
+    The timestamps are approximate (linear in transcript position), so #time
+    anchors derived from them are best-effort.
+    """
+    tokens = [u for u in re.split(r"\s+", (transcript or "").strip()) if u]
+    chunks: list[str] = []
+    buf = ""
+    for tok in tokens:
+        buf = f"{buf} {tok}".strip() if buf else tok
+        if len(buf) >= target_chars:
+            chunks.append(buf)
+            buf = ""
+    if buf:
+        chunks.append(buf)
+
+    n = len(chunks)
+    # Always assign monotonic timestamps: the clusterer drops events without a
+    # start/end, so derived sentences need *some* timing. Proportional to the real
+    # duration when known, else a synthetic per-chunk interval (value is arbitrary
+    # but ordered — callers should not surface #time anchors from synthetic times).
+    span = float(duration_ms) if duration_ms else n * 1000.0
+    out: list[dict[str, Any]] = []
+    for i, content in enumerate(chunks):
+        out.append({
+            "index": i,
+            "content": content,
+            "start": int(i / n * span) if n else 0,
+            "end": int((i + 1) / n * span) if n else 0,
+        })
+    return out
+
+
 # --- Per-step prompt building + glue ----------------------------------------
 
 def _build_messages(step: str, state: dict[str, Any]) -> list[dict[str, str]]:
@@ -350,16 +391,21 @@ def start(podcast_name: str, episode_id: str) -> dict[str, Any]:
             f"Episode '{episode_id}' belongs to '{doc.get('podcast_name')}', not '{podcast_name}'."
         )
 
+    transcript = doc.get("transcript") or ""
     sentences = _episode_sentences(doc)
+    derived_sentences = False
+    if not sentences and transcript.strip():
+        # Already-published episodes often keep only the flat transcript text.
+        sentences = _derive_sentences_from_transcript(transcript, doc.get("spotify_duration_ms"))
+        derived_sentences = True
     if not sentences:
         raise RegenError(
-            f"Episode '{episode_id}' has no stored transcript (sentences). "
+            f"Episode '{episode_id}' has no stored transcript. "
             "Transcription is out of scope — run the normal pipeline (Whisper) first."
         )
 
     episode_title = doc.get("episode_title") or doc.get("title") or "Episode"
     source = doc.get("podcast_name") or "Podcast"
-    transcript = doc.get("transcript") or ""
 
     draft = {
         "episode_id": episode_id,
@@ -390,12 +436,16 @@ def start(podcast_name: str, episode_id: str) -> dict[str, Any]:
         "episode_title": episode_title,
         "source": source,
         "sentence_count": len(sentences),
+        "derived_sentences": derived_sentences,
         "transcript_preview": (transcript[:600] + "…") if len(transcript) > 600 else transcript,
         "current_content": draft["current_content"],
         "step_order": {"required": REQUIRED_STEPS, "optional": OPTIONAL_STEPS},
         "next_prompt": _prompt_payload(STEP_EXTRACTOR, draft["state"]),
         "note": "Read each prompt, GENERATE the output yourself, then submit_role(...). "
-                "Fetch any step's prompt with get_role_prompt.",
+                "Fetch any step's prompt with get_role_prompt."
+                + (" NOTE: this episode had no sentence-level transcript, so sentences "
+                   "were derived from the flat transcript with approximate timestamps — "
+                   "#time anchors are best-effort." if derived_sentences else ""),
     }
 
 

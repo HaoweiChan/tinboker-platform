@@ -10,6 +10,7 @@ import { getPodcastByName, getPodcastEpisodes, type Podcast, type Episode as Api
 import { fetchWithFallback } from '@/services/api/migration';
 import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import { useStockPriceSinceMap } from '@/hooks/useStockPriceSinceMap';
+import { useTranslationMap } from '@/hooks/useTranslationMap';
 import { useAppStore, useSubscriptions } from '@/store/useAppStore';
 
 export const PodcasterPage: React.FC = () => {
@@ -21,6 +22,12 @@ export const PodcasterPage: React.FC = () => {
   const episodeTickers = useMemo(() => episodes.flatMap((ep) => ep.related_tickers ?? []), [episodes]);
   const priceMap = useStockPriceMap(episodeTickers);
   const priceSinceMap = useStockPriceSinceMap(episodes);
+  const rawTranslationMap = useTranslationMap(episodeTickers);
+  const translationMap = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const [k, v] of rawTranslationMap) m.set(k, v.displayName);
+    return m;
+  }, [rawTranslationMap]);
   const [loading, setLoading] = useState(true);
 
   const name = decodeURIComponent(id || '');
@@ -109,7 +116,7 @@ export const PodcasterPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {episodes.map((ep) => (
-              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap, podcastImageMap, undefined, undefined, priceSinceMap)} />
+              <EpisodeCardV2 key={ep.id} {...apiEpisodeToCardV2(ep, priceMap, podcastImageMap, translationMap, undefined, priceSinceMap)} />
             ))}
           </div>
         )}

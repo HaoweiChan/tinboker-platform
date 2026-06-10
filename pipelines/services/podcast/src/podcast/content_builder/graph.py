@@ -37,10 +37,10 @@ from .nodes.events_markdown import build_events_markdown
 from .nodes.extractor import extract_events
 from .nodes.key_insights_extractor import extract_key_insights
 from .nodes.markdown_transform import transform_to_markdown
-from .nodes.tags_tickers import derive_tags_tickers
 from .nodes.marp_converter import convert_marp, convert_marp_ticker
 from .nodes.marp_writer import write_marp_slides
 from .nodes.social_cards_builder import build_social_cards
+from .nodes.tags_tickers import derive_tags_tickers
 from .nodes.ticker_extractor import extract_tickers
 from .nodes.writer import write_article
 from .state import PipelineState

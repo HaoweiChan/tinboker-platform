@@ -37,10 +37,10 @@ from .nodes.events_markdown import build_events_markdown
 from .nodes.extractor import extract_events
 from .nodes.key_insights_extractor import extract_key_insights
 from .nodes.markdown_transform import transform_to_markdown
-from .nodes.tags_tickers import derive_tags_tickers
 from .nodes.marp_converter import convert_marp, convert_marp_ticker
 from .nodes.marp_writer import write_marp_slides
 from .nodes.social_cards_builder import build_social_cards
+from .nodes.tags_tickers import derive_tags_tickers
 from .nodes.ticker_extractor import extract_tickers
 from .nodes.writer import write_article
 from .state import PipelineState
@@ -145,14 +145,20 @@ def run_pipeline(
 
     result = app.invoke(initial_state)
 
+    related_tickers = result.get("related_tickers", [])
+    ticker_insights = result.get("ticker_insights")
+    if ticker_insights and not related_tickers:
+        from src.podcast.exporters.ticker_insights import iter_insight_tickers
+        related_tickers = sorted(set(iter_insight_tickers(ticker_insights)))
+
     return {
         "markdown_report": result.get("markdown_report", ""),
         "events_markdown": result.get("events_markdown", ""),
         "marp_markdown": result.get("marp_markdown", ""),
-        "ticker_insights": result.get("ticker_insights"),
+        "ticker_insights": ticker_insights,
         "ticker_marp_markdown": result.get("ticker_marp_markdown", ""),
         "key_insights": result.get("key_insights", []),
         "tags": result.get("tags", []),
-        "related_tickers": result.get("related_tickers", []),
+        "related_tickers": related_tickers,
         "social_cards": result.get("social_cards", []),
     }

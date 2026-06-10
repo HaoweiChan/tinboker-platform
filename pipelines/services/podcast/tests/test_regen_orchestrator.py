@@ -10,7 +10,6 @@ postprocess refactor against drift.
 import json
 
 import pytest
-
 from src.podcast.content_builder.nodes import (
     extractor,
     key_insights_extractor,
@@ -18,8 +17,8 @@ from src.podcast.content_builder.nodes import (
     ticker_extractor,
     writer,
 )
-from src.podcast.content_builder.nodes.marp_converter import convert_marp
 from src.podcast.content_builder.nodes.markdown_transform import transform_to_markdown
+from src.podcast.content_builder.nodes.marp_converter import convert_marp
 from src.podcast.regen import orchestrator as orch
 
 
@@ -174,7 +173,7 @@ def test_unknown_step_rejected():
 
 
 def test_step_aliases_accepted():
-    draft = _new_draft()
+    _new_draft()
     orch.submit("ep_test", "extractor", {"events": [{"section_topic": "台積電", "start_index": 0, "end_index": 2}]})
     # "tickers" -> ticker_extractor, "slides" -> marp_writer
     assert orch.get_prompt("ep_test", "tickers")["step"] == "ticker_extractor"

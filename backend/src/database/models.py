@@ -171,6 +171,26 @@ class StockDailyClose(Base):
     )
 
 
+class TagRegistry(Base):
+    """Admin-managed tag registry.
+
+    tier='trending' → shown in topics cloud; tier='hidden' → not shown.
+    Auto-discovered tags from Firestore default to 'hidden'.
+    """
+    __tablename__ = "tag_registry"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    slug = Column(String(100), nullable=False, unique=True, index=True)
+    display_zh = Column(Text, nullable=False)
+    tier = Column(String(20), nullable=False, default="trending", index=True)
+    updated_by = Column(String(100), nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self) -> str:
+        return f"<TagRegistry(slug='{self.slug}', tier='{self.tier}')>"
+
+
 class PipelineConfigOverride(Base):
     """Admin-editable pipeline config overrides.
 

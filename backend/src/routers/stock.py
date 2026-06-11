@@ -27,6 +27,22 @@ router = APIRouter(prefix="/api/stocks", tags=["stocks"])
 stock_service = StockService()
 
 
+def _has_cjk(text: Optional[str]) -> bool:
+    if not text:
+        return False
+    return any(
+        "㐀" <= ch <= "鿿" or "豈" <= ch <= "﫿"
+        for ch in text
+    )
+
+
+def _translation_display_name(row: StockTranslation) -> str:
+    pref = getattr(row, "name_preference", None) or "auto"
+    if _has_cjk(row.name_zh_tw) and pref != "en":
+        return row.name_zh_tw or row.ticker
+    return row.name_en or row.ticker
+
+
 @router.get("", response_model=List[dict])
 async def get_sorted_stocks(
     sort_by: str = Query(default="ticker", description="Sort field"),
@@ -60,24 +76,32 @@ async def get_batch_prices(
 ):
     """
     Get changePercent for multiple tickers in one request.
-    Uses the same per-ticker Redis cache as /{ticker}/basic.
-    Returns {TICKER: changePercent} — null if not found.
+
+    Serves end-of-day change% from the warm stock_daily_closes table (no external API),
+    falling back to the live per-ticker path only for tickers not yet stored.
+    Returns {TICKER: changePercent} — null if unavailable.
     """
     ticker_list = [t.strip().upper() for t in tickers.split(',') if t.strip()][:100]
     if not ticker_list:
         return {}
 
-    async def _fetch_with_timeout(t: str):
-        try:
-            return await asyncio.wait_for(stock_service.get_stock_basic_info_async(t), timeout=8)
-        except (asyncio.TimeoutError, Exception):
-            return None
+    from src.services.stock_close_refresh import get_eod_change_pct
 
-    results = await asyncio.gather(*[_fetch_with_timeout(t) for t in ticker_list])
-    return {
-        ticker: (info.get('changePercent') if isinstance(info, dict) else None)
-        for ticker, info in zip(ticker_list, results)
-    }
+    async def _change(t: str):
+        # 1. EOD change from Postgres — no external call, immune to the free-tier limits.
+        eod = await get_eod_change_pct(t)
+        if eod is not None:
+            return eod
+        # 2. Fallback for not-yet-stored tickers: the live (rate-limited) path, which
+        #    itself serves last-known-good when the upstream is throttled.
+        try:
+            info = await asyncio.wait_for(stock_service.get_stock_basic_info_async(t), timeout=8)
+        except (asyncio.TimeoutError, Exception):
+            info = None
+        return info.get('changePercent') if isinstance(info, dict) else None
+
+    results = await asyncio.gather(*[_change(t) for t in ticker_list])
+    return {ticker: pct for ticker, pct in zip(ticker_list, results)}
 
 
 class TickerDatePair(BaseModel):
@@ -264,32 +288,32 @@ async def get_batch_summary(
     Returns a list of {ticker, name, market, brand_color}; entries missing in upstream
     data still appear with name=ticker so callers can render.
     """
-    ticker_list = [t.strip().upper() for t in tickers.split(',') if t.strip()][:100]
-    if not ticker_list:
+    requested_tickers = [t.strip().upper() for t in tickers.split(',') if t.strip()][:100]
+    if not requested_tickers:
         return []
+    lookup_tickers = [t.split(".")[0] for t in requested_tickers]
 
-    # Fetch brand colors from translations table (one query)
-    translations = db.query(StockTranslation).filter(
-        StockTranslation.ticker.in_(ticker_list)
-    ).all()
-    brand_colors: dict[str, str] = {
-        t.ticker: t.brand_color for t in translations if t.brand_color
-    }
-
-    basic_results = await asyncio.gather(
-        *[stock_service.get_stock_basic_info_async(t) for t in ticker_list],
-        return_exceptions=True,
+    rows = (
+        db.query(StockTranslation)
+        .filter(StockTranslation.ticker.in_(lookup_tickers))
+        .all()
     )
+    translations: dict[str, StockTranslation] = {}
+    for row in rows:
+        inferred_market = infer_market(row.ticker)
+        existing = translations.get(row.ticker)
+        if existing is None or row.market == inferred_market:
+            translations[row.ticker] = row
 
     out = []
-    for ticker, info in zip(ticker_list, basic_results):
-        market = infer_market(ticker)
-        name = info.get("name") if isinstance(info, dict) else None
+    for requested, lookup in zip(requested_tickers, lookup_tickers):
+        market = infer_market(lookup)
+        row = translations.get(lookup)
         out.append({
-            "ticker": ticker,
-            "name": name or ticker,
+            "ticker": requested,
+            "name": _translation_display_name(row) if row else lookup,
             "market": market,
-            "brand_color": brand_colors.get(ticker),
+            "brand_color": row.brand_color if row else None,
         })
     return out
 
@@ -455,6 +479,4 @@ async def websocket_ohlcv(websocket: WebSocket, ticker: str):
         # Cleanup subscription
         if subscriber:
             await subscriber.stop()
-
-
 

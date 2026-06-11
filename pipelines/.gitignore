@@ -63,3 +63,6 @@ gcp-service-account.json
 .agents/
 .codex/
 progress.txt
+
+# Seed-episode working data (transcripts + MP3s) — local-only, never commit
+services/podcast/scripts/seed_data/

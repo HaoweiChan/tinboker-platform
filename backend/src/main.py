@@ -85,24 +85,21 @@ async def lifespan(app: FastAPI):
     await RedisClient.initialize()
     await init_search_index()
 
-    # Seed missing translations and backfill brand colors (insert-only, never overwrites)
+    # Seed missing translations (names only). Brand colors live in stock_translations
+    # and are maintained through the admin/bulk endpoints, not code-side seed data.
     try:
-        from src.data.brand_colors import BRAND_COLORS
         from src.data.seed_data import TRANSLATIONS
         from src.data.us_stocks import US_STOCK_TRANSLATIONS
         from src.database.postgres import get_session
         from src.services.translation_service import TranslationService
         for session in get_session():
             svc = TranslationService(session)
-            tw_inserted = svc.backfill_translations(TRANSLATIONS, BRAND_COLORS)
+            tw_inserted = svc.backfill_translations(TRANSLATIONS)
             if tw_inserted:
                 print(f"Backfilled {tw_inserted} new TW/core stock translation(s).")
-            us_inserted = svc.backfill_translations(US_STOCK_TRANSLATIONS, BRAND_COLORS)
+            us_inserted = svc.backfill_translations(US_STOCK_TRANSLATIONS)
             if us_inserted:
                 print(f"Backfilled {us_inserted} new US stock translation(s).")
-            updated = svc.backfill_brand_colors(BRAND_COLORS)
-            if updated:
-                print(f"Backfilled brand_color for {updated} stock translation(s).")
             break
     except Exception as e:
         print(f"Warning: translation seed/backfill skipped: {e}")
@@ -117,8 +114,13 @@ async def lifespan(app: FastAPI):
             if inserted:
                 print(f"Seeded {inserted} new content source(s).")
             break
-    except Exception as e:
-        print(f"Warning: content source seed skipped: {e}")
+    except Exception:
+        # An empty content_sources table makes the release allowlist resolve to 0
+        # podcasts (blank home feed), so a silently-skipped seed is a real outage —
+        # log the full traceback instead of a one-line warning.
+        import traceback
+        print("ERROR: content source seed FAILED — release allowlist will be empty:")
+        traceback.print_exc()
 
     # Seed tag registry (insert-only when table is empty).
     try:
@@ -150,6 +152,18 @@ async def lifespan(app: FastAPI):
 
     asyncio.create_task(_backfill_covers_bg())
 
+    # Keep the permanent stock_daily_closes table warm for trending tickers so the
+    # homepage can serve EOD prices from Postgres instead of hammering the rate-limited
+    # FinMind/Massive free tiers per request. Slow + throttled; must not block startup.
+    async def _refresh_closes_bg():
+        try:
+            from src.services.stock_close_refresh import run_periodic_refresh
+            await run_periodic_refresh(interval_hours=6.0)
+        except Exception as e:
+            print(f"Warning: stock close refresher stopped: {e}")
+
+    asyncio.create_task(_refresh_closes_bg())
+
     yield
 
     # --- Shutdown ---
@@ -180,11 +194,18 @@ app = FastAPI(
 
 
 # CORS Configuration
-# Support Vercel and Cloudflare Pages preview URLs with regex pattern matching
+# In non-prod, allow Vercel/Cloudflare Pages preview URLs so PR previews can hit the
+# dev/staging API. In production this wildcard is DISABLED: with allow_credentials=True
+# any attacker-deployed *.pages.dev / *.vercel.app site would otherwise be a trusted
+# credentialed origin. Prod is restricted to the explicit CORS_ORIGINS allowlist only.
+_preview_origin_regex = (
+    None if settings.is_production
+    else r"https://.*\.(vercel\.app|pages\.dev)$"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_origin_regex=r"https://.*\.(vercel\.app|pages\.dev)$",  # Allow Vercel and Cloudflare Pages previews
+    allow_origin_regex=_preview_origin_regex,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"],
     allow_headers=["*"],  # Allow all headers (including X-Silent-Error, etc.)
@@ -251,22 +272,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/health")
 async def health_check():
     """Health check endpoint with component status."""
-    import os
     redis_available = await RedisClient.is_available()
     
     # Check Redis configuration
     redis_url = settings.redis_connection_string
     redis_url_configured = redis_url is not None
-    redis_url_from_env = "REDIS_URL" in os.environ
-    
-    # Mask password in URL for logging
-    redis_url_display = None
-    if redis_url:
-        if "@" in redis_url and ":" in redis_url.split("@")[0]:
-            parts = redis_url.split("@")
-            redis_url_display = f"redis://:***@{parts[1]}" if len(parts) > 1 else redis_url
-        else:
-            redis_url_display = redis_url
     
     # Check database connectivity
     db_status = {"status": "unknown", "type": "unknown"}
@@ -431,4 +441,3 @@ if __name__ == "__main__":
             port=settings.port,
             timeout_graceful_shutdown=5,
         )
-

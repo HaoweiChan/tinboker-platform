@@ -4,12 +4,23 @@ Integration tests for graph API endpoints
 import pytest
 from fastapi.testclient import TestClient
 from src.main import app
+from src.auth.admin_auth import get_content_write_access, AdminAccess
 
 
 @pytest.fixture
 def client(test_db):
-    """Create test client"""
-    return TestClient(app)
+    """Create test client.
+
+    Graph mutations (POST/PUT/DELETE) require content-write access; override the
+    dependency so these functional tests can exercise them. Auth enforcement itself
+    is covered by test_create_graph_requires_auth (which uses an un-overridden client).
+    """
+    app.dependency_overrides[get_content_write_access] = lambda: AdminAccess(
+        email="test-admin@tinboker.local", user_id="test-admin"
+    )
+    test_client = TestClient(app)
+    yield test_client
+    app.dependency_overrides.pop(get_content_write_access, None)
 
 
 @pytest.fixture
@@ -82,6 +93,14 @@ class TestGraphAPI:
         """Test GET /api/graphs/{graph_id} with non-existent ID"""
         response = client.get("/api/graphs/nonexistent")
         assert response.status_code == 404
+
+    def test_create_graph_requires_auth(self, test_db, sample_graph_create):
+        """Graph mutations must reject anonymous callers (no content-write override)."""
+        anon = TestClient(app)
+        assert anon.post("/api/graphs", json=sample_graph_create).status_code in (401, 403)
+        assert anon.delete("/api/graphs/whatever").status_code in (401, 403)
+        # Reads stay public.
+        assert anon.get("/api/graphs").status_code == 200
     
     def test_create_graph(self, client, test_db, sample_graph_create):
         """Test POST /api/graphs"""

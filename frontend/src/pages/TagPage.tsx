@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Hash, Plus, Check } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 import { SEO } from '@/components/common/SEO';
 import { PageContent } from '@/components/layout/PageContent';
 import { EpisodeCardV2 } from '@/components/redesign';
@@ -13,6 +13,7 @@ import { useAppStore, useTagSubscriptions } from '@/store/useAppStore';
 import { useStockPriceMap } from '@/hooks/useStockPriceMap';
 import { useStockPriceSinceMap } from '@/hooks/useStockPriceSinceMap';
 import { useTagLabels, tagLabelFor } from '@/hooks/useTagLabels';
+import { topicVisual } from '@/lib/topicVisual';
 
 interface EpisodesByTagResponse {
   tag?: string;
@@ -82,9 +83,14 @@ export const TagPage: React.FC = () => {
       <SEO title={`#${displayLabel}`} description={`所有關於「${displayLabel}」的 Podcast 摘要與市場討論。`} />
       <PageContent>
         <div className="flex items-start gap-5 bg-card border border-border rounded-md p-5 sm:p-6 mb-[18px]">
-          <div className="w-[72px] h-[72px] rounded-md grid place-items-center bg-muted text-foreground text-2xl shrink-0">
-            <Hash size={28} />
-          </div>
+          {(() => {
+            const { Icon, gradient } = topicVisual(cleanTag);
+            return (
+              <div className="w-[72px] h-[72px] rounded-md grid place-items-center text-white shadow-sm shrink-0" style={{ background: gradient }}>
+                <Icon size={30} />
+              </div>
+            );
+          })()}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div className="min-w-0">

@@ -71,6 +71,47 @@ _SEED: list[tuple[str, str, str]] = [
 ]
 
 
+# ── Canonical extraction vocabulary (label catalogue) ────────────────
+# Mirror of the pipeline's source-of-truth tag vocabulary
+# (pipelines/services/podcast/src/podcast/content_builder/tag_vocabulary.py
+# TAG_DISPLAY). Episode tags are stored PascalCase and looked up lowercased, so
+# keys here are the lowercased slugs. This guarantees every agent-emitted tag has
+# a zh-TW label on the website even when it isn't (yet) curated in the DB table
+# above — the trending GATE still comes from the DB (`trending_slugs`); this map
+# only supplies display labels. Keep in sync when the pipeline vocabulary grows.
+_CANONICAL_DISPLAY: dict[str, str] = {
+    "ai": "AI",
+    "agenticai": "代理型 AI",
+    "llm": "大型語言模型",
+    "semiconductor": "半導體",
+    "memory": "記憶體",
+    "gpu": "GPU",
+    "datacenter": "資料中心",
+    "cloudcomputing": "雲端運算",
+    "supplychain": "供應鏈",
+    "ev": "電動車",
+    "software": "軟體",
+    "cybersecurity": "資安",
+    "biotech": "生技醫療",
+    "energy": "能源",
+    "finance": "金融",
+    "realestate": "房地產",
+    "crypto": "加密貨幣",
+    "usstocks": "美股",
+    "twstocks": "台股",
+    "hkstocks": "港股",
+    "jpstocks": "日股",
+    "macroeconomy": "總體經濟",
+    "fedrate": "聯準會利率",
+    "inflation": "通膨",
+    "marketcorrection": "股市修正",
+    "earnings": "財報",
+    "ipo": "首次公開發行",
+    "mergersacquisitions": "併購",
+    "geopolitics": "地緣政治",
+}
+
+
 def seed_if_empty(db: Session) -> None:
     """Insert seed tags when the table has no rows (first boot)."""
     if db.query(TagRegistry).first() is not None:
@@ -117,16 +158,18 @@ def display_map(db: Session, tier: Optional[str] = None) -> dict[str, str]:
 def registry_snapshot(db: Session) -> list[dict]:
     """Serializable snapshot for the /api/tags/registry endpoint.
 
-    Returns only trending tags (hidden tags don't need display labels on
-    the public site).
+    The frontend uses this purely as a slug → zh-TW label lookup (the trending
+    RANKING comes from ``trending_slugs`` / the trending API, not from here). So
+    return the FULL label catalogue — the canonical extraction vocabulary plus
+    every DB row (all tiers) — so any agent-emitted tag renders in zh-TW across
+    the site (episode hero, topic pages, episode cards), not just the curated
+    trending subset. DB rows win over the canonical baseline (admin curation
+    overrides) and carry their real tier.
     """
-    rows = (
-        db.query(TagRegistry)
-        .filter(TagRegistry.tier == TIER_TRENDING)
-        .order_by(TagRegistry.slug)
-        .all()
-    )
-    return [
-        {"slug": r.slug, "display_zh": r.display_zh, "tier": r.tier}
-        for r in rows
-    ]
+    by_slug: dict[str, dict] = {
+        slug: {"slug": slug, "display_zh": zh, "tier": TIER_HIDDEN}
+        for slug, zh in _CANONICAL_DISPLAY.items()
+    }
+    for r in db.query(TagRegistry).all():
+        by_slug[r.slug] = {"slug": r.slug, "display_zh": r.display_zh, "tier": r.tier}
+    return [by_slug[slug] for slug in sorted(by_slug)]

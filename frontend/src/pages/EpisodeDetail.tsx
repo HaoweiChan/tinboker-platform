@@ -163,17 +163,20 @@ export const EpisodeDetail: React.FC = () => {
   }, [id, podcastName]);
 
   const chapters = useMemo<TimestampedSection[]>(() => (episode?.events_markdown_content ? parseTimestampedSections(episode.events_markdown_content) : []), [episode]);
-  const clips = useMemo<TimestampedSection[]>(() => (episode?.sentences_markdown_content ? parseTimestampedSections(episode.sentences_markdown_content).slice(0, 8) : []), [episode]);
   const summarySections = useMemo<TimestampedSection[]>(() => {
     const content = episode?.modified_summary_content || episode?.summary_content;
     return content ? parseTimestampedSections(content) : [];
   }, [episode]);
-  // Player chapters: prefer the summary-extracted topic timestamps (the same
-  // sections shown in 摘要) over the raw transcript-derived events/sentences, so
-  // seeking lands on topic boundaries rather than per-sentence transcript timing.
+  // Player chapters: ONLY topic-level timestamps — the summary-extracted sections
+  // (same as shown in 摘要), else the events-markdown topics. We deliberately do
+  // NOT fall back to raw per-sentence transcript timings: surfacing transcript
+  // sentences as "chapters" was the bug where seeking landed on arbitrary speech
+  // fragments instead of topic boundaries. An episode with no topic timestamps
+  // (e.g. a non-financial episode that produced no clustered topics) shows no
+  // chapters rather than transcript noise.
   const playerSections = useMemo<TimestampedSection[]>(
-    () => (summarySections.length ? summarySections : chapters.length ? chapters : clips),
-    [summarySections, chapters, clips],
+    () => (summarySections.length ? summarySections : chapters),
+    [summarySections, chapters],
   );
   const tickerSymbols = useMemo(() => (Array.isArray(episode?.related_tickers) ? episode!.related_tickers.slice(0, 8) : []), [episode]);
   const priceMap = useStockPriceMap(tickerSymbols);
